@@ -1,6 +1,6 @@
 {
 	"name": "@foxxytux/buddy",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "General agent CLI with read, bash, edit, write tools and session management",
 	"type": "module",
 	"buddyConfig": {
@@ -29,9 +29,9 @@
 		"CHANGELOG.md"
 	],
 	"bundledDependencies": [
-		"@mariozechner/buddy-agent-core",
-		"@mariozechner/buddy-ai",
-		"@mariozechner/buddy-tui"
+		"@foxxytux/buddy-agent-core",
+		"@foxxytux/buddy-ai",
+		"@foxxytux/buddy-tui"
 	],
 	"scripts": {
 		"clean": "shx rm -rf dist",
