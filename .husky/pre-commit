@@ -33,7 +33,8 @@ fi
 # Restage files that were previously staged and may have been modified by formatting
 for file in $STAGED_FILES; do
   if [ -f "$file" ]; then
-    git add "$file"
+    # Only restage if the file is not ignored (prevent git add errors for intentionally ignored files)
+    git check-ignore -q "$file" || git add "$file"
   fi
 done
 

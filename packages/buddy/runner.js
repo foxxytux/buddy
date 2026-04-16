@@ -12,36 +12,47 @@ function tryExec(cmd, args, opts) {
   return r.status === 0;
 }
 
-// 1) dist/cli.js
-const distCli = join(PKG_ROOT, 'packages', 'coding-agent', 'dist', 'cli.js');
-if (fs.existsSync(distCli)) {
-  process.exit(spawnSync(process.execPath, [distCli, ...process.argv.slice(2)], { stdio: 'inherit' }).status || 0);
-}
+async function main(argv = process.argv.slice(2)) {
+  // Search for a prebuilt dist/cli.js in several likely locations
+  const candidates = [
+    join(PKG_ROOT, 'packages', 'coding-agent', 'dist', 'cli.js'),          // packaged layout
+    join(PKG_ROOT, '..', '..', 'packages', 'coding-agent', 'dist', 'cli.js'), // repo layout when running from repo root
+    join(process.cwd(), 'packages', 'coding-agent', 'dist', 'cli.js'),    // cwd-based
+    join(__dirname, '..', 'packages', 'coding-agent', 'dist', 'cli.js')   // relative to installed package
+  ];
 
-// 2) try to run with ts-node/register if installed
-try {
-  // check for local ts-node in node_modules
-  const tsnodeLocal = join(PKG_ROOT, 'node_modules', '.bin', 'ts-node');
-  if (fs.existsSync(tsnodeLocal)) {
-    process.exit(spawnSync('node', ['-r', 'ts-node/register', join(PKG_ROOT, 'packages', 'coding-agent', 'src', 'cli.ts'), ...process.argv.slice(2)], { stdio: 'inherit' }).status || 0);
+  for (const p of candidates) {
+    if (fs.existsSync(p)) {
+      return spawnSync(process.execPath, [p, ...argv], { stdio: 'inherit' }).status || 0;
+    }
   }
-} catch (e) {
-  // ignore
+
+  // If no dist CLI found, avoid requiring ts-node to prevent hard failures. Only attempt ts-node
+  // if it is resolvable from the current NODE_PATH / require paths.
+  try {
+    require.resolve('ts-node');
+    // ts-node available; run source CLI via require hook
+    return spawnSync('node', ['-r', 'ts-node/register', join(PKG_ROOT, 'packages', 'coding-agent', 'src', 'cli.ts'), ...argv], { stdio: 'inherit' }).status || 0;
+  } catch (e) {
+    // ts-node not available or not resolvable; skip
+  }
+
+  // Shell fallback: buddy-test.sh inside package
+  const sh = join(PKG_ROOT, 'packages', 'buddy', 'buddy-test.sh');
+  if (fs.existsSync(sh)) {
+    tryExec(sh, argv, { shell: true });
+    return 0;
+  }
+
+  console.error('Failed to locate runnable CLI. Ensure the package includes packages/coding-agent/dist/cli.js or install ts-node to run from source.');
+  return 1;
 }
 
-// 3) try global ts-node
-try {
-  process.exit(spawnSync('node', ['-r', 'ts-node/register', join(PKG_ROOT, 'packages', 'coding-agent', 'src', 'cli.ts'), ...process.argv.slice(2)], { stdio: 'inherit' }).status || 0);
-} catch (e) {
-  // ignore
+if (require.main === module) {
+  main(process.argv.slice(2)).then((code) => process.exit(code || 0)).catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
 }
 
-// 4) shell fallback: buddy-test.sh
-const sh = join(PKG_ROOT, 'packages', 'buddy', 'buddy-test.sh');
-if (fs.existsSync(sh)) {
-  tryExec(sh, process.argv.slice(2), { shell: true });
-  process.exit(0);
-}
-
-console.error('Failed to locate runnable CLI. Ensure the package includes packages/coding-agent/dist/cli.js or install ts-node to run from source.');
-process.exit(1);
+module.exports = { main };

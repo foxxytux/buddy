@@ -4,9 +4,9 @@ dist/
 .DS_Store
 *.tsbuildinfo
 # packages/*/node_modules/
-packages/*/dist/
-packages/*/dist-chrome/
-packages/*/dist-firefox/
+# Note: dist directories are usually ignored, but the packaged fallback dist/cli.js is committed
+# to allow publishing a runnable bundle. Remove if you prefer to build before publishing.
+!packages/coding-agent/dist/cli.js
 *.cpuprofile
 
 # Environment
