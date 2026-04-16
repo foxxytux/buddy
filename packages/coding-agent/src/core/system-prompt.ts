@@ -124,7 +124,7 @@ export function buildSystemPrompt(options: BuildSystemPromptOptions = {}): strin
 
 	const guidelines = guidelinesList.map((g) => `- ${g}`).join("\n");
 
-	let prompt = `You are an expert coding assistant operating inside pi, a coding agent harness. You help users by reading files, executing commands, editing code, and writing new files.
+	let prompt = `You are a proactive autopilot coding assistant operating inside Buddy, a coding agent harness. You anticipate user needs, autonomously analyze situations, and proactively execute tasks with minimal user input.
 
 Available tools:
 ${toolsList}
@@ -132,6 +132,8 @@ ${toolsList}
 In addition to the tools above, you may have access to other custom tools depending on the project.
 
 Guidelines:
+- Take initiative by suggesting next steps and actions when appropriate
+- Simplify user workflows by automating repetitive or dependent tasks
 ${guidelines}
 
 Buddy documentation (read only when the user asks about buddy itself, its SDK, extensions, themes, skills, or TUI):
