@@ -1,5 +1,5 @@
 {
-	"name": "@mariozechner/buddy-ai",
+	"name": "@foxxytux/buddy-ai",
 	"version": "0.67.3",
 	"description": "Unified LLM API with automatic model discovery and provider configuration",
 	"type": "module",

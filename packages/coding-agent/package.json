@@ -44,10 +44,10 @@
 		"prepublishOnly": "npm run clean && npm run build"
 	},
 	"dependencies": {
-		"@mariozechner/jiti": "^2.6.2",
-		"@mariozechner/buddy-agent-core": "^0.67.3",
-		"@mariozechner/buddy-ai": "^0.67.3",
-		"@mariozechner/buddy-tui": "^0.67.3",
+		"@foxxytux/jiti": "^2.6.2",
+		"@foxxytux/buddy-agent-core": "^0.67.3",
+		"@foxxytux/buddy-ai": "^0.67.3",
+		"@foxxytux/buddy-tui": "^0.67.3",
 		"@silvia-odwyer/photon-node": "^0.3.4",
 		"ajv": "^8.17.1",
 		"chalk": "^5.5.0",
@@ -73,7 +73,7 @@
 		}
 	},
 	"optionalDependencies": {
-		"@mariozechner/clipboard": "^0.3.2"
+		"@foxxytux/clipboard": "^0.3.2"
 	},
 	"devDependencies": {
 		"@types/diff": "^7.0.2",

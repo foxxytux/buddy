@@ -1,5 +1,5 @@
 {
-	"name": "@mariozechner/buddy-tui",
+	"name": "@foxxytux/buddy-tui",
 	"version": "0.67.3",
 	"description": "Terminal User Interface library with differential rendering for efficient text-based applications",
 	"type": "module",
