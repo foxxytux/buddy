@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// Minimal Buddy fallback CLI for packaging tests
-const fs = require('fs');
-const path = require('path');
+// Minimal Buddy fallback CLI for packaging tests (ES module)
+import fs from 'fs';
+import path from 'path';
 
 function printHelp() {
   console.log('Buddy CLI (packaged fallback)');
@@ -14,7 +14,8 @@ function printHelp() {
 const args = process.argv.slice(2);
 if (args.includes('--version') || args.includes('-v')) {
   try {
-    const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', '..', 'package.json'), 'utf8'));
+    const pkgPath = path.join(path.dirname(new URL(import.meta.url).pathname), '..', '..', '..', 'package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
     console.log(pkg.version || '0.0.0');
   } catch (e) {
     console.log('0.0.0');
