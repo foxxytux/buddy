@@ -1,5 +1,5 @@
 {
-	"name": "@mariozechner/buddy-coding-agent",
+	"name": "@foxxytux/buddy-coding-agent",
 	"version": "1.0.0",
 	"description": "General agent CLI with read, bash, edit, write tools and session management",
 	"type": "module",
