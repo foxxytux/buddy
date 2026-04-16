@@ -1,27 +1,21 @@
-#!/usr/bin/env bash
-# Robust wrapper to execute the packaged buddy-test.sh
-set -euo pipefail
-# Resolve $0 to the real path following symlinks
-SOURCE="$0"
-while [ -L "$SOURCE" ]; do
-  DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
-  SOURCE="$(readlink "$SOURCE")"
-  # if the symlink was relative, resolve it relative to the symlink dir
-  case "$SOURCE" in
-    /*) ;;
-    *) SOURCE="$DIR/$SOURCE" ;;
-  esac
-done
-# SCRIPT_DIR is the package root (one level up from bin)
-SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")/.." >/dev/null 2>&1 && pwd)"
-BUDDY_SH="$SCRIPT_DIR/buddy-test.sh"
-if [ ! -x "$BUDDY_SH" ]; then
-  # try to set executable
-  chmod +x "$BUDDY_SH" 2>/dev/null || true
-fi
-if [ -x "$BUDDY_SH" ]; then
-  exec "$BUDDY_SH" "$@"
-else
-  echo "Error: buddy-test.sh not found in package at $BUDDY_SH" >&2
-  exit 1
-fi
+#!/usr/bin/env node
+// Node wrapper to run the packaged runner.js which attempts multiple execution strategies
+const { join, dirname } = require('path');
+const fs = require('fs');
+
+// Resolve real path of this script
+let source = process.argv[1];
+try {
+  source = fs.realpathSync(source);
+} catch (e) {
+  // ignore
+}
+const scriptDir = dirname(source);
+const runner = join(scriptDir, '..', 'runner.js');
+if (fs.existsSync(runner)) {
+  const child = require('child_process').spawn(process.execPath, [runner, ...process.argv.slice(2)], { stdio: 'inherit' });
+  child.on('exit', (code) => process.exit(code));
+} else {
+  console.error('Internal error: runner.js not found in package.');
+  process.exit(1);
+}
