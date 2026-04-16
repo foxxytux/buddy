@@ -1,0 +1,15 @@
+{
+  "name": "@foxxytux/buddy",
+  "version": "0.0.3",
+  "description": "Buddy — research-focused interactive coding agent (CLI)",
+  "bin": {
+    "buddy": "bin/buddy"
+  },
+  "author": "foxxytux",
+  "license": "MIT",
+  "files": [
+    "bin/",
+    "buddy-test.sh",
+    "README.md"
+  ]
+}
