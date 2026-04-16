@@ -1,7 +1,7 @@
 {
 	"name": "@mariozechner/buddy-coding-agent",
 	"version": "1.0.0",
-	"description": "Coding agent CLI with read, bash, edit, write tools and session management",
+	"description": "General agent CLI with read, bash, edit, write tools and session management",
 	"type": "module",
 	"buddyConfig": {
 		"name": "buddy",
@@ -81,7 +81,7 @@
 		"vitest": "^3.2.4"
 	},
 	"keywords": [
-		"coding-agent",
+		"general-agent", "agent-cli",
 		"ai",
 		"llm",
 		"cli",
