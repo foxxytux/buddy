@@ -1,0 +1,77 @@
+%PDF-1.4
+1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj
+2 0 obj << /Type /Pages /Count 1 /Kids [3 0 R] >> endobj
+3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >> endobj
+4 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj
+5 0 obj << /Length 3887 >> stream
+BT
+/F1 12 Tf
+72 720 Td
+(README.md) Tj
+T*
+(<p align="center"> <a href="https://shittycodingagent.ai"> <img) Tj T*
+(src="https://shittycodingagent.ai/logo.svg" alt="buddy logo") Tj T*
+(width="128"> </a> </p> <p align="center"> <a) Tj T*
+(href="https://discord.com/invite/3cU7Bz4UPx"><img alt="Discord") Tj T*
+(src="https://img.shields.io/badge/discord-community-5865F2?style=flat-square&logo=discord&logoColor=white") Tj T*
+(/></a> <a) Tj T*
+(href="https://www.npmjs.com/package/@mariozechner/buddy-coding-agent"><img) Tj T*
+(alt="npm") Tj T*
+(src="https://img.shields.io/npm/v/@mariozechner/buddy-coding-agent?style=flat-square") Tj T*
+(/></a> <a) Tj T*
+(href="https://github.com/badlogic/buddy-mono/actions/workflows/ci.yml"><img) Tj T*
+(alt="Build status") Tj T*
+(src="https://img.shields.io/github/actions/workflow/status/badlogic/buddy-mono/ci.yml?style=flat-square&branch=main") Tj T*
+(/></a> </p> <p align="center"> <a href="https://buddy.dev">buddy.dev</a>) Tj T*
+(domain graciously donated by <br /><br /> <a href="https://exe.dev"><img) Tj T*
+(src="docs/images/exy.png" alt="Exy mascot" width="48" /><br) Tj T*
+(/>exe.dev</a> </p> New issues and PRs from new contributors are) Tj T*
+(auto-closed by default. Maintainers review auto-closed issues daily. See) Tj T*
+(CONTRIBUTING.md \(../../CONTRIBUTING.md\). --- Buddy is a minimal terminal) Tj T*
+(coding harness. Adapt buddy to your workflows, not the other way around,) Tj T*
+(without having to fork and modify buddy internals. Extend it with) Tj T*
+(TypeScript Extensions \(#extensions\), Skills \(#skills\), Prompt Templates) Tj T*
+(\(#prompt-templates\), and Themes \(#themes\). Put your extensions, skills,) Tj T*
+(prompt templates, and themes in Buddy Packages \(#buddy-packages\) and) Tj T*
+(share them with others via npm or git. Buddy ships with powerful) Tj T*
+(defaults but skips features like sub agents and plan mode. Instead, you) Tj T*
+(can ask buddy to build what you want or install a third party buddy) Tj T*
+(package that matches your workflow. Buddy runs in four modes:) Tj T*
+(interactive, print or JSON, RPC for process integration, and an SDK for) Tj T*
+(embedding in your own apps. See openclaw/openclaw) Tj T*
+(\(https://github.com/openclaw/openclaw\) for a real-world SDK integration.) Tj T*
+(Share your OSS coding agent sessions If you use buddy for open source) Tj T*
+(work, please share your coding agent sessions. Public OSS session data) Tj T*
+(helps improve models, prompts, tools, and evaluations using real) Tj T*
+(development workflows. For the full explanation, see this post on X) Tj T*
+(\(https://x.com/badlogicgames/status/2037811643774652911\). To publish) Tj T*
+(sessions, use badlogic/buddy-share-hf) Tj T*
+(\(https://github.com/badlogic/buddy-share-hf\). Read its README.md for) Tj T*
+(setup instructions. All you need is a Hugging Face account, the Hugging) Tj T*
+(Face CLI, and buddy-share-hf. You can also watch this video) Tj T*
+(\(https://x.com/badlogicgames/status/2041151967695634619\), where I show) Tj T*
+(how I publish my buddy-mono sessions. I regularly publish my own) Tj T*
+(buddy-mono work sessions here: • badlogicgames/buddy-mono on Hugging) Tj T*
+(Face \(https://huggingface.co/datasets/badlogicgames/buddy-mono\) Table of) Tj T*
+(Contents • Quick Start \(#quick-start\) • Providers & Models) Tj T*
+(\(#providers--models\) • Interactive Mode \(#interactive-mode\) - Editor) Tj T*
+(\(#editor\) - Commands \(#commands\) - Keyboard Shortcuts) Tj T*
+(\(#keyboard-shortcuts\) - Message Queue \(#message-queue\) • Sessions) Tj T*
+(\(#sessions\) - Branching \(#branching\) - Compaction \(#compaction\) •) Tj T*
+(Settings \(#settings\) • Context Files \(#context-files\) • Customization) Tj T*
+(\(#customization\) - Prompt Templates \(#prompt-templates\) - Skills) Tj T*
+(\(#skills\) - Extensions \(#extensions\) - Themes \(#themes\) - Buddy Packages) Tj T*
+ET
+endstream endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+4250
+%%EOF

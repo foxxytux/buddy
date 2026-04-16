@@ -1,0 +1,5 @@
+graph TD
+  root["Research Topic"]
+  root --> b0["Test Central Topic"]
+  root --> b1["Subtopic 1"]
+  root --> b2["Subtopic 2"]

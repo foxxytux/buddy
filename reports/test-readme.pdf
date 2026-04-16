@@ -1,0 +1,77 @@
+%PDF-1.4
+1 0 obj << /Type /Catalog /Pages 2 0 R >> endobj
+2 0 obj << /Type /Pages /Count 1 /Kids [3 0 R] >> endobj
+3 0 obj << /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >> endobj
+4 0 obj << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> endobj
+5 0 obj << /Length 3921 >> stream
+BT
+/F1 12 Tf
+72 720 Td
+(README.md) Tj
+T*
+(<p align="center"> <a href="https://shittycodingagent.ai"> <img) Tj T*
+(src="https://shittycodingagent.ai/logo.svg" alt="pi logo" width="128">) Tj T*
+(</a> </p> <p align="center"> <a) Tj T*
+(href="https://discord.com/invite/3cU7Bz4UPx"><img alt="Discord") Tj T*
+(src="https://img.shields.io/badge/discord-community-5865F2?style=flat-square&logo=discord&logoColor=white") Tj T*
+(/></a> <a) Tj T*
+(href="https://github.com/badlogic/pi-mono/actions/workflows/ci.yml"><img) Tj T*
+(alt="Build status") Tj T*
+(src="https://img.shields.io/github/actions/workflow/status/badlogic/pi-mono/ci.yml?style=flat-square&branch=main") Tj T*
+(/></a> </p> <p align="center"> <a href="https://pi.dev">pi.dev</a>) Tj T*
+(domain graciously donated by <br /><br /> <a href="https://exe.dev"><img) Tj T*
+(src="packages/coding-agent/docs/images/exy.png" alt="Exy mascot") Tj T*
+(width="48" /><br />exe.dev</a> </p> New issues and PRs from new) Tj T*
+(contributors are auto-closed by default. Maintainers review auto-closed) Tj T*
+(issues daily. See CONTRIBUTING.md \(CONTRIBUTING.md\). --- Buddy Monorepo) Tj T*
+(**Looking for the pi coding agent?** See **packages/coding-agent) Tj T*
+(\(packages/coding-agent\)** for installation and usage. Tools for building) Tj T*
+(AI agents and managing LLM deployments. Share your OSS coding agent) Tj T*
+(sessions If you use buddy or other coding agents for open source work,) Tj T*
+(please share your sessions. Public OSS session data helps improve coding) Tj T*
+(agents with real-world tasks, tool use, failures, and fixes instead of) Tj T*
+(toy benchmarks. For the full explanation, see this post on X) Tj T*
+(\(https://x.com/badlogicgames/status/2037811643774652911\). To publish) Tj T*
+(sessions, use badlogic/pi-share-hf) Tj T*
+(\(https://github.com/badlogic/pi-share-hf\). Read its README.md for setup) Tj T*
+(instructions. All you need is a Hugging Face account, the Hugging Face) Tj T*
+(CLI, and pi-share-hf. You can also watch this video) Tj T*
+(\(https://x.com/badlogicgames/status/2041151967695634619\), where I show) Tj T*
+(how I publish my pi-mono sessions. I regularly publish my own pi-mono) Tj T*
+(work sessions here: • badlogicgames/pi-mono on Hugging Face) Tj T*
+(\(https://huggingface.co/datasets/badlogicgames/pi-mono\) Packages |) Tj T*
+(Package | Description | |---------|-------------| |) Tj T*
+(**@mariozechner/buddy-ai \(packages/ai\)** | Unified multi-provider LLM) Tj T*
+(API \(OpenAI, Anthropic, Google, etc.\) | |) Tj T*
+(**@mariozechner/buddy-agent-core \(packages/agent\)** | Agent runtime with) Tj T*
+(tool calling and state management | | **@mariozechner/buddy-coding-agent) Tj T*
+(\(packages/coding-agent\)** | Interactive coding agent CLI | |) Tj T*
+(**@mariozechner/buddy-mom \(packages/mom\)** | Slack bot that delegates) Tj T*
+(messages to the buddy coding agent | | **@mariozechner/buddy-tui) Tj T*
+(\(packages/tui\)** | Terminal UI library with differential rendering | |) Tj T*
+(**@mariozechner/buddy-web-ui \(packages/web-ui\)** | Web components for AI) Tj T*
+(chat interfaces | | **@mariozechner/buddy-pods \(packages/pods\)** | CLI) Tj T*
+(for managing vLLM deployments on GPU pods | Contributing See) Tj T*
+(CONTRIBUTING.md \(CONTRIBUTING.md\) for contribution guidelines and) Tj T*
+(AGENTS.md \(AGENTS.md\) for project-specific rules \(for both humans and) Tj T*
+(agents\). Development ``bash npm install # Install all dependencies npm) Tj T*
+(run build # Build all packages npm run check # Lint, format, and type) Tj T*
+(check ./test.sh # Run tests \(skips LLM-dependent tests without API keys\)) Tj T*
+(./buddy-test.sh # Run the agent from sources \(can be run from any) Tj T*
+(directory\) ` Buddy: a friendly research and coding assistant This) Tj T*
+(repository also includes a project-local Buddy extension \(a rebranded) Tj T*
+(research agent\). To try Buddy locally: • From the repo root run the) Tj T*
+ET
+endstream endobj
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000241 00000 n 
+0000000311 00000 n 
+trailer << /Size 6 /Root 1 0 R >>
+startxref
+4284
+%%EOF

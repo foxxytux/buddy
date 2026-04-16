@@ -1,0 +1,19 @@
+{
+  "name": "buddy-extension-custom-provider-anthropic",
+  "private": true,
+  "version": "1.18.3",
+  "type": "module",
+  "scripts": {
+    "clean": "echo 'nothing to clean'",
+    "build": "echo 'nothing to build'",
+    "check": "echo 'nothing to check'"
+  },
+  "buddy": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.52.0"
+  }
+}
