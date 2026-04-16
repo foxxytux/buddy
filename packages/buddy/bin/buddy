@@ -1,7 +1,19 @@
 #!/usr/bin/env bash
-# Simple wrapper to execute the packaged buddy-test.sh
+# Robust wrapper to execute the packaged buddy-test.sh
 set -euo pipefail
-SCRIPT_DIR=$(cd "$(dirname "$0")/.." >/dev/null 2>&1 && pwd)
+# Resolve $0 to the real path following symlinks
+SOURCE="$0"
+while [ -L "$SOURCE" ]; do
+  DIR="$(cd -P "$(dirname "$SOURCE")" >/dev/null 2>&1 && pwd)"
+  SOURCE="$(readlink "$SOURCE")"
+  # if the symlink was relative, resolve it relative to the symlink dir
+  case "$SOURCE" in
+    /*) ;;
+    *) SOURCE="$DIR/$SOURCE" ;;
+  esac
+done
+# SCRIPT_DIR is the package root (one level up from bin)
+SCRIPT_DIR="$(cd -P "$(dirname "$SOURCE")/.." >/dev/null 2>&1 && pwd)"
 BUDDY_SH="$SCRIPT_DIR/buddy-test.sh"
 if [ ! -x "$BUDDY_SH" ]; then
   # try to set executable
@@ -10,6 +22,6 @@ fi
 if [ -x "$BUDDY_SH" ]; then
   exec "$BUDDY_SH" "$@"
 else
-  echo "Error: buddy-test.sh not found in package." >&2
+  echo "Error: buddy-test.sh not found in package at $BUDDY_SH" >&2
   exit 1
 fi
