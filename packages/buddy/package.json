@@ -1,9 +1,12 @@
 {
-  "name": "@foxxytux/buddy",
+  "name": "@foxxytux/buddy-legacy",
   "version": "0.0.8",
   "description": "Buddy — research-focused interactive coding agent (CLI)",
   "bin": {
     "buddy": "bin/buddy"
+  },
+  "scripts": {
+    "clean": "shx rm -rf dist"
   },
   "author": "foxxytux",
   "license": "MIT",
