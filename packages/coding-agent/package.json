@@ -1,6 +1,6 @@
 {
 	"name": "@foxxytux/buddy",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "General agent CLI with read, bash, edit, write tools and session management",
 	"type": "module",
 	"buddyConfig": {
@@ -44,7 +44,7 @@
 		"prepublishOnly": "npm run clean && npm run build"
 	},
 	"dependencies": {
-		"@foxxytux/jiti": "^2.6.2",
+		"@mariozechner/jiti": "^2.6.2",
 		"@foxxytux/buddy-agent-core": "^0.67.3",
 		"@foxxytux/buddy-ai": "^0.67.3",
 		"@foxxytux/buddy-tui": "^0.67.3",
@@ -73,7 +73,7 @@
 		}
 	},
 	"optionalDependencies": {
-		"@foxxytux/clipboard": "^0.3.2"
+		"@mariozechner/clipboard": "^0.3.2"
 	},
 	"devDependencies": {
 		"@types/diff": "^7.0.2",
