@@ -7,6 +7,7 @@
 ### Fixed
 
 - Bundled the repository's `.buddy/` extension and prompt resources with `@foxxytux/buddy-coding-agent` so packaged installs keep the `/buddy-*` commands and related prompts available.
+- Fixed packaged `.buddy/extensions` loading so the runtime resolves extension entry files instead of trying to load the extension directory itself.
 
 ## [4.1.9] - 2026-04-17
 

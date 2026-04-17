@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { ThinkingLevel } from "@foxxytux/buddy-agent-core";
 import type { Model } from "@foxxytux/buddy-ai";
@@ -74,6 +74,56 @@ export interface AgentSessionServices {
 	diagnostics: AgentSessionRuntimeDiagnostic[];
 }
 
+function discoverBundledExtensionEntries(dir: string): string[] {
+	if (!existsSync(dir)) {
+		return [];
+	}
+
+	const entries: string[] = [];
+	for (const dirent of readdirSync(dir, { withFileTypes: true })) {
+		const entryPath = join(dir, dirent.name);
+		if (dirent.isFile() || dirent.isSymbolicLink()) {
+			if (dirent.name.endsWith(".ts") || dirent.name.endsWith(".js")) {
+				entries.push(entryPath);
+			}
+			continue;
+		}
+
+		if (dirent.isDirectory()) {
+			const indexTs = join(entryPath, "index.ts");
+			const indexJs = join(entryPath, "index.js");
+			if (existsSync(indexTs)) {
+				entries.push(indexTs);
+				continue;
+			}
+			if (existsSync(indexJs)) {
+				entries.push(indexJs);
+				continue;
+			}
+
+			const packageJsonPath = join(entryPath, "package.json");
+			if (!existsSync(packageJsonPath)) {
+				continue;
+			}
+
+			try {
+				const content = readFileSync(packageJsonPath, "utf-8");
+				const pkg = JSON.parse(content) as { buddy?: { extensions?: string[] } };
+				for (const extensionPath of pkg.buddy?.extensions ?? []) {
+					const resolved = join(entryPath, extensionPath);
+					if (existsSync(resolved)) {
+						entries.push(resolved);
+					}
+				}
+			} catch {
+				// Ignore malformed package metadata and continue scanning.
+			}
+		}
+	}
+
+	return entries;
+}
+
 function applyExtensionFlagValues(
 	resourceLoader: ResourceLoader,
 	extensionFlagValues: Map<string, boolean | string> | undefined,
@@ -134,9 +184,7 @@ export async function createAgentSessionServices(
 	const agentDir = options.agentDir ?? getAgentDir();
 	const packageDir = getPackageDir();
 	const bundledBuddyDir = join(packageDir, ".buddy");
-	const bundledExtensionPaths = existsSync(join(bundledBuddyDir, "extensions"))
-		? [join(bundledBuddyDir, "extensions")]
-		: [];
+	const bundledExtensionPaths = discoverBundledExtensionEntries(join(bundledBuddyDir, "extensions"));
 	const bundledSkillPaths = existsSync(join(bundledBuddyDir, "skills")) ? [join(bundledBuddyDir, "skills")] : [];
 	const bundledPromptPaths = existsSync(join(bundledBuddyDir, "prompts")) ? [join(bundledBuddyDir, "prompts")] : [];
 	const bundledThemePaths = existsSync(join(bundledBuddyDir, "themes")) ? [join(bundledBuddyDir, "themes")] : [];
