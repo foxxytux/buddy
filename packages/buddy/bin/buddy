@@ -35,8 +35,16 @@ if (cli) {
 // Run npx from a neutral working directory (os.tmpdir()) to avoid resolving a local
 // workspace package that may name-collide with the scoped package and cause recursion.
 const os = require('os');
+const path = require('path');
 const npxArgs = ['--yes', '@foxxytux/buddy-coding-agent', ...process.argv.slice(2)];
-const npx = spawn('npx', npxArgs, { stdio: 'inherit', cwd: os.tmpdir() });
+
+// Sanitize PATH to avoid local project node_modules/.bin entries (prevents recursion)
+const env = Object.assign({}, process.env);
+if (env.PATH) {
+  env.PATH = env.PATH.split(path.delimiter).filter(p => !p.includes('node_modules' + path.sep + '.bin')).join(path.delimiter);
+}
+
+const npx = spawn('npx', npxArgs, { stdio: 'inherit', cwd: os.tmpdir(), env });
 npx.on('exit', (code) => process.exit(code));
 
 npx.on('error', (err) => {
