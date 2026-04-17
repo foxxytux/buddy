@@ -47,6 +47,7 @@ function findCli() {
 
 const cli = findCli();
 if (cli) {
+  console.error('[buddy] resolved cli:', cli);
   const child = spawn(process.execPath, [cli, ...process.argv.slice(2)], { stdio: 'inherit' });
   child.on('exit', (code) => process.exit(code));
   return;
@@ -64,6 +65,10 @@ const env = Object.assign({}, process.env);
 if (env.PATH) {
   env.PATH = env.PATH.split(path.delimiter).filter(p => !p.includes('node_modules' + path.sep + '.bin')).join(path.delimiter);
 }
+
+console.error('[buddy] falling back to npx with args:', npxArgs.join(' '));
+console.error('[buddy] npx cwd:', os.tmpdir());
+console.error('[buddy] filtered PATH:', env.PATH);
 
 const npx = spawn('npx', npxArgs, { stdio: 'inherit', cwd: os.tmpdir(), env });
 npx.on('exit', (code) => process.exit(code));
