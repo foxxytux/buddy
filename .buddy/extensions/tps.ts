@@ -1,5 +1,5 @@
-import type { AssistantMessage } from "@mariozechner/buddy-ai";
-import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
+import type { AssistantMessage } from "@foxxytux/buddy-ai";
+import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
 
 function isAssistantMessage(message: unknown): message is AssistantMessage {
 	if (!message || typeof message !== "object") return false;

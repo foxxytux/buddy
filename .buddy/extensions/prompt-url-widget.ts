@@ -1,5 +1,5 @@
-import { DynamicBorder, type ExtensionAPI, type ExtensionContext } from "@mariozechner/buddy-coding-agent";
-import { Container, Text } from "@mariozechner/buddy-tui";
+import { DynamicBorder, type ExtensionAPI, type ExtensionContext } from "@foxxytux/buddy-coding-agent";
+import { Container, Text } from "@foxxytux/buddy-tui";
 
 const PR_PROMPT_PATTERN = /^\s*You are given one or more GitHub PR URLs:\s*(\S+)/im;
 const ISSUE_PROMPT_PATTERN = /^\s*Analyze GitHub issue\(s\):\s*(\S+)/im;
@@ -32,7 +32,7 @@ function extractPromptMatch(prompt: string): PromptMatch | undefined {
 }
 
 async function fetchGhMetadata(
-	pi: ExtensionAPI,
+	buddyApi: ExtensionAPI,
 	kind: PromptMatch["kind"],
 	url: string,
 ): Promise<GhMetadata | undefined> {
@@ -40,7 +40,7 @@ async function fetchGhMetadata(
 		kind === "pr" ? ["pr", "view", url, "--json", "title,author"] : ["issue", "view", url, "--json", "title,author"];
 
 	try {
-		const result = await buddy.exec("gh", args);
+		const result = await buddyApi.exec("gh", args);
 		if (result.code !== 0 || !result.stdout) return undefined;
 		return JSON.parse(result.stdout) as GhMetadata;
 	} catch {
@@ -100,7 +100,7 @@ export default function promptUrlWidgetExtension(buddy: ExtensionAPI) {
 
 		setWidget(ctx, match);
 		applySessionName(ctx, match);
-		void fetchGhMetadata(pi, match.kind, match.url).then((meta) => {
+		void fetchGhMetadata(buddy, match.kind, match.url).then((meta) => {
 			const title = meta?.title?.trim();
 			const authorText = formatAuthor(meta?.author);
 			setWidget(ctx, match, title, authorText);
@@ -144,7 +144,7 @@ export default function promptUrlWidgetExtension(buddy: ExtensionAPI) {
 
 		setWidget(ctx, match);
 		applySessionName(ctx, match);
-		void fetchGhMetadata(pi, match.kind, match.url).then((meta) => {
+		void fetchGhMetadata(buddy, match.kind, match.url).then((meta) => {
 			const title = meta?.title?.trim();
 			const authorText = formatAuthor(meta?.author);
 			setWidget(ctx, match, title, authorText);

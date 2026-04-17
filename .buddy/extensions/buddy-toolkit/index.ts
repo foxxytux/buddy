@@ -1,14 +1,14 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { basename, extname, resolve } from "node:path";
 import JSZip from "jszip";
-import { StringEnum, Type, complete, getModel, type Model, type Api } from "@mariozechner/buddy-ai";
+import { StringEnum, Type, complete, getModel, type Model, type Api } from "@foxxytux/buddy-ai";
 import {
 	defineTool,
 	type ExtensionAPI,
 	type ExtensionCommandContext,
 	type ExtensionContext,
-} from "@mariozechner/buddy-coding-agent";
-import { Container, Text, matchesKey } from "@mariozechner/buddy-tui";
+} from "@foxxytux/buddy-coding-agent";
+import { Container, Text, matchesKey } from "@foxxytux/buddy-tui";
 
 interface TodoItem {
 	id: number;
@@ -1071,7 +1071,7 @@ export default function buddyToolkitExtension(buddy: ExtensionAPI) {
 	buddy.registerTool(plotTool);
 	buddy.registerTool(dataSummarizeTool);
 	buddy.registerTool(tableFormatTool);
-	buddy.registerTool(docExportToolFactory(pi));
+	buddy.registerTool(docExportToolFactory(buddy));
 	buddy.registerTool(contentRewriteTool);
 	buddy.registerTool(citeSourcesTool);
 	buddy.registerTool(imageGenTool);

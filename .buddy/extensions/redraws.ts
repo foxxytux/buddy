@@ -4,8 +4,8 @@
  * Exposes /tui to show TUI redraw stats.
  */
 
-import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
-import { Text } from "@mariozechner/buddy-tui";
+import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import { Text } from "@foxxytux/buddy-tui";
 
 export default function (buddy: ExtensionAPI) {
 	buddy.registerCommand("tui", {

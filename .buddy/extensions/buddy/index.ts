@@ -5,9 +5,9 @@ import {
 	type ExtensionAPI,
 	type ExtensionCommandContext,
 	type ExtensionContext,
-} from "@mariozechner/buddy-coding-agent";
-import { complete, getModel, type Model, type Api } from "@mariozechner/buddy-ai";
-import { Container, Text, matchesKey } from "@mariozechner/buddy-tui";
+} from "@foxxytux/buddy-coding-agent";
+import { complete, getModel, type Model, type Api } from "@foxxytux/buddy-ai";
+import { Container, Text, matchesKey } from "@foxxytux/buddy-tui";
 
 interface TextBlock {
 	type?: string;

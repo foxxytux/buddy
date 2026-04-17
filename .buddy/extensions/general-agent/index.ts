@@ -9,8 +9,8 @@ import {
 	defineTool,
 	type ExtensionAPI,
 	truncateHead,
-} from "@mariozechner/buddy-coding-agent";
-import { StringEnum, Type } from "@mariozechner/buddy-ai";
+} from "@foxxytux/buddy-coding-agent";
+import { StringEnum, Type } from "@foxxytux/buddy-ai";
 
 const execFile = promisify(execFileCallback);
 
