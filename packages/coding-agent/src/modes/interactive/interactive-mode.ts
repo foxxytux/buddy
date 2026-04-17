@@ -522,7 +522,7 @@ export class InteractiveMode {
 			].join("\n");
 			const onboarding = theme.fg(
 				"dim",
-				`Pi can explain its own features and look up its docs. Ask it how to use or extend Pi.`,
+				`Buddy can explain its own features and look up its docs. Ask it how to use or extend Buddy.`,
 			);
 			this.builtInHeader = new Text(`${logo}\n${instructions}\n\n${onboarding}`, 1, 0);
 
