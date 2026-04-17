@@ -1,7 +1,7 @@
 {
   "name": "buddy-extension-with-deps",
   "private": true,
-  "version": "1.31.3",
+  "version": "5.0.0",
   "type": "module",
   "scripts": {
     "clean": "echo 'nothing to clean'",
