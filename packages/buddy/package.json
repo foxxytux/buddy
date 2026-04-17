@@ -1,6 +1,6 @@
 {
   "name": "@foxxytux/buddy",
-  "version": "4.0.5",
+  "version": "4.0.6",
   "description": "Buddy — metapackage that installs the Buddy CLI and runtime packages",
   "bin": {
     "buddy": "bin/buddy"
@@ -12,9 +12,6 @@
   "license": "MIT",
   "files": [
     "bin/",
-    "buddy-test.sh",
-    "runner.js",
-    "packages/coding-agent/dist/cli.js",
     "README.md"
   ],
   "dependencies": {
@@ -48,7 +45,6 @@
     "yaml": "^2.8.2",
     "zod-to-json-schema": "^3.24.6",
     "docx-preview": "^0.3.7",
-    "pdfjs-dist": "5.4.394",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   }
 }
