@@ -7617,13 +7617,13 @@ export const MODELS = {
 			reasoning: true,
 			input: ["text"],
 			cost: {
-				input: 0.26,
-				output: 0.38,
-				cacheRead: 0.13,
+				input: 0.25899999999999995,
+				output: 0.42,
+				cacheRead: 0.135,
 				cacheWrite: 0,
 			},
 			contextWindow: 163840,
-			maxTokens: 4096,
+			maxTokens: 163840,
 		} satisfies Model<"openai-completions">,
 		"deepseek/deepseek-v3.2-exp": {
 			id: "deepseek/deepseek-v3.2-exp",
@@ -7673,7 +7673,7 @@ export const MODELS = {
 				cacheRead: 0.024999999999999998,
 				cacheWrite: 0.08333333333333334,
 			},
-			contextWindow: 1048576,
+			contextWindow: 1000000,
 			maxTokens: 8192,
 		} satisfies Model<"openai-completions">,
 		"google/gemini-2.0-flash-lite-001": {
