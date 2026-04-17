@@ -522,7 +522,7 @@ export class InteractiveMode {
 			].join("\n");
 			const onboarding = theme.fg(
 				"dim",
-				`Buddy can explain its own features and look up its docs. Ask it how to use or extend Buddy.`,
+				`Buddy — your research & coding assistant (•ᴥ•)\nType "/help" or "/buddy-help" for tips. Press ${keyText("app.interrupt")} to cancel.`,
 			);
 			this.builtInHeader = new Text(`${logo}\n${instructions}\n\n${onboarding}`, 1, 0);
 
@@ -1296,13 +1296,13 @@ export class InteractiveMode {
 
 		const extensionRunner = this.session.extensionRunner;
 		if (!extensionRunner) {
-			this.showLoadedResources({ extensions: [], force: false });
+			// Suppressed: do not auto-show loaded project resources on startup to keep UI focused.
 			this.showStartupNoticesIfNeeded();
 			return;
 		}
 
 		this.setupExtensionShortcuts(extensionRunner);
-		this.showLoadedResources({ force: false });
+		// Suppressed: do not auto-show loaded resources on startup; available via commands.
 		this.showStartupNoticesIfNeeded();
 	}
 
