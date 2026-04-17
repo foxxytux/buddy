@@ -63,7 +63,7 @@ export default function buddySetupSearch(buddy: ExtensionAPI) {
 			if (action === "Show current key (masked)") {
 				const entry = auth.get(providerId as any);
 				if (!entry) {
-					ctx.ui.notify("No key configured for " + providerId, "info");
+					ctx.ui.notify(`No key configured for ${providerId}`, "info");
 					return;
 				}
 				if (entry.type === "api_key") {
