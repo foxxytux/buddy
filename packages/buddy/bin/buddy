@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Lightweight wrapper that invokes the installed buddy-coding-agent CLI.
 // The metapackage depends on the runtime packages; this script resolves and runs
-// the coding-agent CLI entrypoint from the installed dependency.
+// the coding-agent CLI entrypoint from the installed dependency. If that fails
+// it falls back to running the runtime via npx (auto-fetch).
 const { spawn } = require('child_process');
 
 function findCli() {
@@ -24,13 +25,23 @@ function findCli() {
 }
 
 const cli = findCli();
-if (!cli) {
-  console.error('Buddy CLI runtime not found.');
-  console.error('Install the metapackage: npm i -g @foxxytux/buddy');
-  console.error('Or install the runtime packages: npm i -g @foxxytux/buddy-coding-agent @foxxytux/buddy-ai @foxxytux/buddy-tui @foxxytux/buddy-agent-core');
-  process.exit(1);
+if (cli) {
+  const child = spawn(process.execPath, [cli, ...process.argv.slice(2)], { stdio: 'inherit' });
+  child.on('exit', (code) => process.exit(code));
+  return;
 }
 
-const child = spawn(process.execPath, [cli, ...process.argv.slice(2)], { stdio: 'inherit' });
-child.on('exit', (code) => process.exit(code));
+// Fallback: try running via npx to auto-install/execute the runtime package
+const npxArgs = ['--yes', '@foxxytux/buddy-coding-agent', ...process.argv.slice(2)];
+const npx = spawn('npx', npxArgs, { stdio: 'inherit' });
+npx.on('exit', (code) => process.exit(code));
+
+npx.on('error', (err) => {
+  console.error('Buddy CLI runtime not found and npx fallback failed.');
+  console.error('Install the metapackage: npm i -g @foxxytux/buddy');
+  console.error('Or install the runtime packages: npm i -g @foxxytux/buddy-coding-agent @foxxytux/buddy-ai @foxxytux/buddy-tui @foxxytux/buddy-agent-core');
+  console.error('Error from npx:', err && err.message ? err.message : err);
+  process.exit(1);
+});
+
 module.exports = {};
