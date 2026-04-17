@@ -1,6 +1,6 @@
 {
 	"name": "@foxxytux/buddy-web-ui",
-	"version": "4.0.3",
+	"version": "4.0.4",
 	"description": "Reusable web UI components for AI chat interfaces powered by @foxxytux/buddy-ai",
 	"type": "module",
 	"main": "dist/index.js",
@@ -18,8 +18,8 @@
 	},
 	"dependencies": {
 		"@lmstudio/sdk": "^1.5.0",
-		"@foxxytux/buddy-ai": "^4.0.3",
-		"@foxxytux/buddy-tui": "^4.0.3",
+		"@foxxytux/buddy-ai": "^4.0.4",
+		"@foxxytux/buddy-tui": "^4.0.4",
 		"docx-preview": "^0.3.7",
 		"jszip": "^3.10.1",
 		"lucide": "^0.544.0",

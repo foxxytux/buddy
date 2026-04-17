@@ -1,6 +1,6 @@
 {
   "name": "@foxxytux/buddy-legacy",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "description": "Buddy — research-focused interactive coding agent (CLI)",
   "bin": {
     "buddy": "bin/buddy"
