@@ -7,9 +7,14 @@
   },
   "author": "foxxytux",
   "license": "MIT",
+  "bin": {
+    "buddy": "bin/buddy"
+  },
   "files": [
+    "bin/",
     "README.md"
-  ],  "dependencies": {
+  ],
+  "dependencies": {
     "@foxxytux/buddy-coding-agent": "^4.0.4",
     "@foxxytux/buddy-ai": "^4.0.4",
     "@foxxytux/buddy-tui": "^4.0.4",
