@@ -1,6 +1,6 @@
 {
 	"name": "@foxxytux/buddy-coding-agent",
-	"version": "4.0.0",
+	"version": "4.0.1",
 	"description": "General agent CLI with read, bash, edit, write tools and session management",
 	"type": "module",
 	"buddyConfig": {
@@ -45,9 +45,9 @@
 	},
 	"dependencies": {
 		"@mariozechner/jiti": "^2.6.2",
-		"@foxxytux/buddy-agent-core": "^4.0.0",
-		"@foxxytux/buddy-ai": "^4.0.0",
-		"@foxxytux/buddy-tui": "^4.0.0",
+		"@foxxytux/buddy-agent-core": "^4.0.1",
+		"@foxxytux/buddy-ai": "^4.0.1",
+		"@foxxytux/buddy-tui": "^4.0.1",
 		"@silvia-odwyer/photon-node": "^0.3.4",
 		"ajv": "^8.17.1",
 		"chalk": "^5.5.0",
