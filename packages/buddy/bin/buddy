@@ -6,21 +6,42 @@
 const { spawn } = require('child_process');
 
 function findCli() {
+  const path = require('path');
+  const fs = require('fs');
+
+  // 1) try normal require.resolve
   try {
     return require.resolve('@foxxytux/buddy-coding-agent/dist/cli.js');
   } catch (e) {
-    // not installed or not resolvable
+    // ignore
   }
+
+  // 2) try resolving package main and then dist/cli.js relative to that
   try {
-    // Fallback: try resolving package main and locate dist/cli.js relative to it
     const pkgMain = require.resolve('@foxxytux/buddy-coding-agent');
-    const path = require('path');
     const pkgDir = path.dirname(pkgMain);
     const candidate = path.join(pkgDir, 'dist', 'cli.js');
-    return candidate;
+    if (fs.existsSync(candidate)) return candidate;
   } catch (e) {
-    // give up
+    // ignore
   }
+
+  // 3) explicit candidates relative to this script (handles global metapackage layout)
+  const scriptDir = __dirname;
+  const explicitCandidates = [
+    path.join(scriptDir, '..', 'node_modules', '@foxxytux', 'buddy-coding-agent', 'dist', 'cli.js'),
+    path.join(scriptDir, '..', '..', 'node_modules', '@foxxytux', 'buddy-coding-agent', 'dist', 'cli.js'),
+    path.join(scriptDir, '..', 'packages', 'coding-agent', 'dist', 'cli.js'),
+    path.join(scriptDir, '..', '..', 'packages', 'coding-agent', 'dist', 'cli.js'),
+  ];
+  for (const c of explicitCandidates) {
+    try {
+      if (fs.existsSync(c)) return c;
+    } catch (e) {
+      // ignore
+    }
+  }
+
   return null;
 }
 
