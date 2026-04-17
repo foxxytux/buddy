@@ -134,12 +134,28 @@ export async function createAgentSessionServices(
 	const authStorage = options.authStorage ?? AuthStorage.create(join(agentDir, "auth.json"));
 	const settingsManager = options.settingsManager ?? SettingsManager.create(cwd, agentDir);
 	const modelRegistry = options.modelRegistry ?? ModelRegistry.create(authStorage, join(agentDir, "models.json"));
-	const resourceLoader = new DefaultResourceLoader({
+	// Load resource loader with built-in extension factories including buddy-setup-search
+	const extraFactories = [] as any[];
+	try {
+		// Keep import dynamic so this file still loads even if extension file is missing in some forks
+		// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
+		const setupFactory = require("../extensions/buddy-setup-search.js").default;
+		if (typeof setupFactory === "function") {
+			extraFactories.push(setupFactory);
+		}
+	} catch {
+		// No-op when extension file isn't present (shouldn't happen in this repo)
+	}
+
+	const mergedResourceLoaderOptions = {
 		...(options.resourceLoaderOptions ?? {}),
 		cwd,
 		agentDir,
 		settingsManager,
-	});
+		extensionFactories: [...(options.resourceLoaderOptions?.extensionFactories ?? []), ...extraFactories],
+	};
+
+	const resourceLoader = new DefaultResourceLoader(mergedResourceLoaderOptions as any);
 	await resourceLoader.reload();
 
 	const diagnostics: AgentSessionRuntimeDiagnostic[] = [];
