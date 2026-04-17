@@ -2,6 +2,8 @@
 
 Buddy is a research-first interactive coding assistant implemented as a set of packages and CLI tools under the @foxxytux scope. It provides a fast-start CLI, toolkit extensions for document and data workflows, and integrations for multiple LLM providers.
 
+Buddy is based on and forked from the "pi" coding agent project; it diverges intentionally with different defaults, themes, and tooling focused on research workflows.
+
 Install (global CLI):
 
 ```bash
