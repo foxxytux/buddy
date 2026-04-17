@@ -31,9 +31,12 @@ if (cli) {
   return;
 }
 
-// Fallback: try running via npx to auto-install/execute the runtime package
+// Fallback: try running via npx to auto-install/execute the runtime package.
+// Run npx from a neutral working directory (os.tmpdir()) to avoid resolving a local
+// workspace package that may name-collide with the scoped package and cause recursion.
+const os = require('os');
 const npxArgs = ['--yes', '@foxxytux/buddy-coding-agent', ...process.argv.slice(2)];
-const npx = spawn('npx', npxArgs, { stdio: 'inherit' });
+const npx = spawn('npx', npxArgs, { stdio: 'inherit', cwd: os.tmpdir() });
 npx.on('exit', (code) => process.exit(code));
 
 npx.on('error', (err) => {
