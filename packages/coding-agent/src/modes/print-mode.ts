@@ -2,8 +2,8 @@
  * Print mode (single-shot): Send prompts, output result, exit.
  *
  * Used for:
- * - `pi -p "prompt"` - text output
- * - `pi --mode json "prompt"` - JSON event stream
+ * - `buddy -p "prompt"` - text output
+ * - `buddy --mode json "prompt"` - JSON event stream
  */
 
 import type { AssistantMessage, ImageContent } from "@foxxytux/buddy-ai";

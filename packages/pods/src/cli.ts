@@ -16,41 +16,41 @@ const __dirname = dirname(__filename);
 const packageJson = JSON.parse(readFileSync(join(__dirname, "../package.json"), "utf-8"));
 
 function printHelp() {
-	console.log(`pi v${packageJson.version} - Manage vLLM deployments on GPU pods
+	console.log(`buddy-pods v${packageJson.version} - Manage vLLM deployments on GPU pods
 
 Pod Management:
-  pi pods setup <name> "<ssh>" --mount "<mount>"    Setup pod with mount command
+  buddy-pods pods setup <name> "<ssh>" --mount "<mount>"    Setup pod with mount command
     Options:
       --vllm release    Install latest vLLM release >=0.10.0 (default)
       --vllm nightly    Install vLLM nightly build (latest features)
       --vllm gpt-oss    Install vLLM 0.10.1+gptoss with PyTorch nightly (GPT-OSS only)
-  pi pods                                           List all pods (* = active)
-  pi pods active <name>                             Switch active pod
-  pi pods remove <name>                             Remove pod from local config
-  pi shell [<name>]                                 Open shell on pod (active or specified)
-  pi ssh [<name>] "<command>"                       Run SSH command on pod
+  buddy-pods pods                                           List all pods (* = active)
+  buddy-pods pods active <name>                             Switch active pod
+  buddy-pods pods remove <name>                             Remove pod from local config
+  buddy-pods shell [<name>]                                 Open shell on pod (active or specified)
+  buddy-pods ssh [<name>] "<command>"                       Run SSH command on pod
 
 Model Management:
-  pi start <model> --name <name> [options]          Start a model
+  buddy-pods start <model> --name <name> [options]          Start a model
     --memory <percent>   GPU memory allocation (30%, 50%, 90%)
     --context <size>     Context window (4k, 8k, 16k, 32k, 64k, 128k)
     --gpus <count>       Number of GPUs to use (predefined models only)
     --vllm <args...>     Pass remaining args to vLLM (ignores other options)
-  pi stop [<name>]                                  Stop model (or all if no name)
-  pi list                                           List running models
-  pi logs <name>                                    Stream model logs
-  pi agent <name> ["<message>"...] [options]        Chat with model using agent & tools
-  pi agent <name> [options]                         Interactive chat mode
+  buddy-pods stop [<name>]                                  Stop model (or all if no name)
+  buddy-pods list                                           List running models
+  buddy-pods logs <name>                                    Stream model logs
+  buddy-pods agent <name> ["<message>"...] [options]        Chat with model using agent & tools
+  buddy-pods agent <name> [options]                         Interactive chat mode
     --continue, -c       Continue previous session
-    --json              Output as JSONL
-    (All pi-agent options are supported)
+    --json               Output as JSONL
+    (All buddy CLI options are supported)
 
   All model commands support --pod <name> to override the active pod.
 
 Environment:
-  HF_TOKEN         HuggingFace token for model downloads
+  HF_TOKEN       HuggingFace token for model downloads
   PI_API_KEY     API key for vLLM endpoints
-  PI_CONFIG_DIR    Config directory (default: ~/.buddy)`);
+  PI_CONFIG_DIR  Config directory (default: ~/.buddy)`);
 }
 
 // Parse command line arguments
@@ -83,7 +83,7 @@ try {
 
 			if (!name || !sshCmd) {
 				console.error(
-					'Usage: pi pods setup <name> "<ssh>" [--mount "<mount>"] [--models-path <path>] [--vllm release|nightly|gpt-oss]',
+					'Usage: buddy-pods pods setup <name> "<ssh>" [--mount "<mount>"] [--models-path <path>] [--vllm release|nightly|gpt-oss]',
 				);
 				process.exit(1);
 			}
@@ -125,7 +125,7 @@ try {
 			// pi pods active <name>
 			const name = args[2];
 			if (!name) {
-				console.error("Usage: pi pods active <name>");
+				console.error("Usage: buddy-pods pods active <name>");
 				process.exit(1);
 			}
 			switchActivePod(name);
@@ -133,7 +133,7 @@ try {
 			// pi pods remove <name>
 			const name = args[2];
 			if (!name) {
-				console.error("Usage: pi pods remove <name>");
+				console.error("Usage: buddy-pods pods remove <name>");
 				process.exit(1);
 			}
 			removePodCommand(name);
@@ -172,7 +172,7 @@ try {
 					if (podName) {
 						console.error(chalk.red(`Pod '${podName}' not found`));
 					} else {
-						console.error(chalk.red("No active pod. Use 'pi pods active <name>' to set one."));
+						console.error(chalk.red("No active pod. Use 'buddy-pods pods active <name>' to set one."));
 					}
 					process.exit(1);
 				}
@@ -204,7 +204,7 @@ try {
 					podName = args[1];
 					sshCommand = args[2];
 				} else {
-					console.error('Usage: pi ssh [<name>] "<command>"');
+					console.error('Usage: buddy-pods ssh [<name>] "<command>"');
 					process.exit(1);
 				}
 
@@ -224,7 +224,7 @@ try {
 					if (podName) {
 						console.error(chalk.red(`Pod '${podName}' not found`));
 					} else {
-						console.error(chalk.red("No active pod. Use 'pi pods active <name>' to set one."));
+						console.error(chalk.red("No active pod. Use 'buddy-pods pods active <name>' to set one."));
 					}
 					process.exit(1);
 				}
@@ -319,7 +319,7 @@ try {
 				// pi logs <name>
 				const name = args[1];
 				if (!name) {
-					console.error("Usage: pi logs <name>");
+					console.error("Usage: buddy-pods logs <name>");
 					process.exit(1);
 				}
 				await viewLogs(name, { pod: podOverride });
@@ -329,7 +329,7 @@ try {
 				// pi agent <name> [messages...] [options]
 				const name = args[1];
 				if (!name) {
-					console.error("Usage: pi agent <name> [messages...] [options]");
+					console.error("Usage: buddy-pods agent <name> [messages...] [options]");
 					process.exit(1);
 				}
 
