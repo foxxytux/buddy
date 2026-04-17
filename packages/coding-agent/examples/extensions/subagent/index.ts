@@ -16,11 +16,11 @@ import { spawn } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import type { AgentToolResult } from "@mariozechner/buddy-agent-core";
-import type { Message } from "@mariozechner/buddy-ai";
-import { StringEnum } from "@mariozechner/buddy-ai";
-import { type ExtensionAPI, getMarkdownTheme, withFileMutationQueue } from "@mariozechner/buddy-coding-agent";
-import { Container, Markdown, Spacer, Text } from "@mariozechner/buddy-tui";
+import type { AgentToolResult } from "@foxxytux/buddy-agent-core";
+import type { Message } from "@foxxytux/buddy-ai";
+import { StringEnum } from "@foxxytux/buddy-ai";
+import { type ExtensionAPI, getMarkdownTheme, withFileMutationQueue } from "@foxxytux/buddy-coding-agent";
+import { Container, Markdown, Spacer, Text } from "@foxxytux/buddy-tui";
 import { Type } from "@sinclair/typebox";
 import { type AgentConfig, type AgentScope, discoverAgents } from "./agents.js";
 
@@ -428,15 +428,15 @@ const SubagentParams = Type.Object({
 	cwd: Type.Optional(Type.String({ description: "Working directory for the agent process (single mode)" })),
 });
 
-export default function (pi: ExtensionAPI) {
-	pi.registerTool({
+export default function (buddy: ExtensionAPI) {
+	buddy.registerTool({
 		name: "subagent",
 		label: "Subagent",
 		description: [
 			"Delegate tasks to specialized subagents with isolated context.",
 			"Modes: single (agent + task), parallel (tasks array), chain (sequential with {previous} placeholder).",
 			'Default agent scope is "user" (from ~/.buddy/agent/agents).',
-			'To enable project-local agents in .pi/agents, set agentScope: "both" (or "project").',
+			'To enable project-local agents in .buddy/agents, set agentScope: "both" (or "project").',
 		].join(" "),
 		parameters: SubagentParams,
 

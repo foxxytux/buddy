@@ -5,9 +5,9 @@
 import { chmodSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { Agent } from "@mariozechner/buddy-agent-core";
-import { getModel, type OAuthCredentials, type OAuthProvider } from "@mariozechner/buddy-ai";
-import { getOAuthApiKey } from "@mariozechner/buddy-ai/oauth";
+import { Agent } from "@foxxytux/buddy-agent-core";
+import { getModel, type OAuthCredentials, type OAuthProvider } from "@foxxytux/buddy-ai";
+import { getOAuthApiKey } from "@foxxytux/buddy-ai/oauth";
 import { AgentSession } from "../src/core/agent-session.js";
 import { AuthStorage } from "../src/core/auth-storage.js";
 import { createEventBus } from "../src/core/event-bus.js";

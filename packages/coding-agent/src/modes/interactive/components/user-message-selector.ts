@@ -1,4 +1,4 @@
-import { type Component, Container, getKeybindings, Spacer, Text, truncateToWidth } from "@mariozechner/buddy-tui";
+import { type Component, Container, getKeybindings, Spacer, Text, truncateToWidth } from "@foxxytux/buddy-tui";
 import { theme } from "../theme/theme.js";
 import { DynamicBorder } from "./dynamic-border.js";
 

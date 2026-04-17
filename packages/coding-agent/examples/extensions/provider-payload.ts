@@ -1,11 +1,11 @@
 import { appendFileSync } from "node:fs";
 import { join } from "node:path";
-import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
+import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
 
-export default function (pi: ExtensionAPI) {
+export default function (buddy: ExtensionAPI) {
 	const logFile = join(process.cwd(), ".pi", "provider-payload.log");
 
-	pi.on("before_provider_request", (event) => {
+	buddy.on("before_provider_request", (event) => {
 		appendFileSync(logFile, `${JSON.stringify(event.payload, null, 2)}\n\n`, "utf8");
 
 		// Optional: replace the payload instead of only logging it.

@@ -1,6 +1,6 @@
-import type { Message } from "@mariozechner/buddy-ai";
-import type { AgentMessage, MessageRenderer } from "@mariozechner/buddy-web-ui";
-import { defaultConvertToLlm, registerMessageRenderer } from "@mariozechner/buddy-web-ui";
+import type { Message } from "@foxxytux/buddy-ai";
+import type { AgentMessage, MessageRenderer } from "@foxxytux/buddy-web-ui";
+import { defaultConvertToLlm, registerMessageRenderer } from "@foxxytux/buddy-web-ui";
 import { Alert } from "@mariozechner/mini-lit/dist/Alert.js";
 import { html } from "lit";
 
@@ -18,7 +18,7 @@ export interface SystemNotificationMessage {
 
 // Extend CustomAgentMessages interface via declaration merging
 // This must target pi-agent-core where CustomAgentMessages is defined
-declare module "@mariozechner/buddy-agent-core" {
+declare module "@foxxytux/buddy-agent-core" {
 	interface CustomAgentMessages {
 		"system-notification": SystemNotificationMessage;
 	}

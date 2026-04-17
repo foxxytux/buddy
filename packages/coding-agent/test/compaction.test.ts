@@ -1,6 +1,6 @@
-import type { AgentMessage } from "@mariozechner/buddy-agent-core";
-import type { AssistantMessage, Usage } from "@mariozechner/buddy-ai";
-import { getModel } from "@mariozechner/buddy-ai";
+import type { AgentMessage } from "@foxxytux/buddy-agent-core";
+import type { AssistantMessage, Usage } from "@foxxytux/buddy-ai";
+import { getModel } from "@foxxytux/buddy-ai";
 import { readFileSync } from "fs";
 import { join } from "path";
 import { beforeEach, describe, expect, it } from "vitest";

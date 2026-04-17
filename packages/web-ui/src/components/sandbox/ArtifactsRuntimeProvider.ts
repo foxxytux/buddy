@@ -1,4 +1,4 @@
-import type { AgentMessage } from "@mariozechner/buddy-agent-core";
+import type { AgentMessage } from "@foxxytux/buddy-agent-core";
 import {
 	ARTIFACTS_RUNTIME_PROVIDER_DESCRIPTION_RO,
 	ARTIFACTS_RUNTIME_PROVIDER_DESCRIPTION_RW,

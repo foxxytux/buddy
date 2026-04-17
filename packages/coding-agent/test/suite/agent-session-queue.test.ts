@@ -1,6 +1,6 @@
-import type { AgentTool } from "@mariozechner/buddy-agent-core";
-import { fauxAssistantMessage, fauxToolCall } from "@mariozechner/buddy-ai";
-import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
+import { fauxAssistantMessage, fauxToolCall } from "@foxxytux/buddy-ai";
+import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
 import { Type } from "@sinclair/typebox";
 import { afterEach, describe, expect, it } from "vitest";
 import { createHarness, getAssistantTexts, getMessageText, getUserTexts, type Harness } from "./harness.js";
@@ -10,7 +10,7 @@ async function createWaitingHarness(
 		tools?: AgentTool[];
 		extensionFactories?: Harness["session"]["extensionRunner"] extends never
 			? never
-			: Array<(pi: ExtensionAPI) => void>;
+			: Array<(buddy: ExtensionAPI) => void>;
 	} = {},
 ): Promise<{
 	harness: Harness;
@@ -70,8 +70,8 @@ describe("AgentSession queue characterization", () => {
 		const commandRuns: string[] = [];
 		const harness = await createHarness({
 			extensionFactories: [
-				(pi) => {
-					pi.registerCommand("testcmd", {
+				(buddy) => {
+					buddy.registerCommand("testcmd", {
 						description: "Test command",
 						handler: async (args) => {
 							commandRuns.push(args);
@@ -387,8 +387,8 @@ describe("AgentSession queue characterization", () => {
 	it("throws when queueing an extension command with steer", async () => {
 		const harness = await createHarness({
 			extensionFactories: [
-				(pi) => {
-					pi.registerCommand("testcmd", {
+				(buddy) => {
+					buddy.registerCommand("testcmd", {
 						description: "Test command",
 						handler: async () => {},
 					});
@@ -405,8 +405,8 @@ describe("AgentSession queue characterization", () => {
 	it("throws when queueing an extension command with followUp", async () => {
 		const harness = await createHarness({
 			extensionFactories: [
-				(pi) => {
-					pi.registerCommand("testcmd", {
+				(buddy) => {
+					buddy.registerCommand("testcmd", {
 						description: "Test command",
 						handler: async () => {},
 					});

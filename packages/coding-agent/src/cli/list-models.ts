@@ -2,8 +2,8 @@
  * List available models with optional fuzzy search
  */
 
-import type { Api, Model } from "@mariozechner/buddy-ai";
-import { fuzzyFilter } from "@mariozechner/buddy-tui";
+import type { Api, Model } from "@foxxytux/buddy-ai";
+import { fuzzyFilter } from "@foxxytux/buddy-tui";
 import chalk from "chalk";
 import type { ModelRegistry } from "../core/model-registry.js";
 

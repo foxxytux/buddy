@@ -284,7 +284,7 @@ describe("CombinedAutocompleteProvider", () => {
 			setupFolder(baseDir, {
 				dirs: [".pi", ".github", ".git"],
 				files: {
-					".pi/config.json": "{}",
+					".buddy/config.json": "{}",
 					".github/workflows/ci.yml": "name: ci",
 					".git/config": "[core]",
 				},

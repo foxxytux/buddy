@@ -425,18 +425,18 @@ const pdfExtractTool = defineTool({
 	},
 });
 
-export default function generalAgentExtension(pi: ExtensionAPI) {
-	pi.registerTool(docListTool);
-	pi.registerTool(docReadTool);
-	pi.registerTool(docSearchTool);
-	pi.registerTool(docRetrieveTool);
-	pi.registerTool(webSearchTool);
-	pi.registerTool(scholarSearchTool);
-	pi.registerTool(webFetchTool);
-	pi.registerTool(webCrawlTool);
-	pi.registerTool(pdfExtractTool);
+export default function generalAgentExtension(buddy: ExtensionAPI) {
+	buddy.registerTool(docListTool);
+	buddy.registerTool(docReadTool);
+	buddy.registerTool(docSearchTool);
+	buddy.registerTool(docRetrieveTool);
+	buddy.registerTool(webSearchTool);
+	buddy.registerTool(scholarSearchTool);
+	buddy.registerTool(webFetchTool);
+	buddy.registerTool(webCrawlTool);
+	buddy.registerTool(pdfExtractTool);
 
-	pi.registerCommand("general-agent-help", {
+	buddy.registerCommand("general-agent-help", {
 		description: "Show the project-local general-agent extension setup notes.",
 		handler: async (_args, ctx) => {
 			ctx.ui.notify(
@@ -451,7 +451,7 @@ export default function generalAgentExtension(pi: ExtensionAPI) {
 	});
 
 	// Persist detected plan steps as a session custom entry so buddy-toolkit can pick them up
-	pi.on("agent_end", async (event, ctx) => {
+	buddy.on("agent_end", async (event, ctx) => {
 		const messages = event.messages as any[];
 		const lastAssistant = [...messages].reverse().find((m) => m.role === "assistant" && Array.isArray(m.content));
 		if (!lastAssistant) return;
@@ -460,7 +460,7 @@ export default function generalAgentExtension(pi: ExtensionAPI) {
 		if (extracted.length === 0) return;
 		// Convert to Buddy todo format
 		const todos = extracted.map((it, i) => ({ id: i + 1, text: it.text, done: false }));
-		pi.appendEntry("buddy-todos", { todos });
+		buddy.appendEntry("buddy-todos", { todos });
 		if (ctx.hasUI) {
 			ctx.ui.notify(`Detected ${todos.length} plan steps; saved as Buddy todos. Use /buddy-todos to view.`, "info");
 		}

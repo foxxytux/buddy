@@ -1,6 +1,6 @@
-import type { AgentTool } from "@mariozechner/buddy-agent-core";
-import { fauxAssistantMessage, fauxToolCall } from "@mariozechner/buddy-ai";
-import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
+import { fauxAssistantMessage, fauxToolCall } from "@foxxytux/buddy-ai";
+import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
 import { Type } from "@sinclair/typebox";
 import { afterEach, describe, expect, it } from "vitest";
 import { createHarness, getAssistantTexts, getUserTexts, type Harness } from "../harness.js";

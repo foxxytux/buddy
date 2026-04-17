@@ -1,6 +1,6 @@
-import type { AgentTool } from "@mariozechner/buddy-agent-core";
-import type { ImageContent, TextContent } from "@mariozechner/buddy-ai";
-import { Text } from "@mariozechner/buddy-tui";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
+import type { ImageContent, TextContent } from "@foxxytux/buddy-ai";
+import { Text } from "@foxxytux/buddy-tui";
 import { type Static, Type } from "@sinclair/typebox";
 import { constants } from "fs";
 import { access as fsAccess, readFile as fsReadFile } from "fs/promises";

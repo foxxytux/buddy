@@ -1,6 +1,6 @@
 import { join } from "node:path";
-import type { ThinkingLevel } from "@mariozechner/buddy-agent-core";
-import type { Model } from "@mariozechner/buddy-ai";
+import type { ThinkingLevel } from "@foxxytux/buddy-agent-core";
+import type { Model } from "@foxxytux/buddy-ai";
 import { getAgentDir } from "../config.js";
 import { AuthStorage } from "./auth-storage.js";
 import type { SessionStartEvent, ToolDefinition } from "./extensions/index.js";

@@ -158,7 +158,7 @@ If no `buddy` manifest is present, buddy auto-discovers resources from these dir
 
 Third party runtime dependencies belong in `dependencies` in `package.json`. Dependencies that do not register extensions, skills, prompt templates, or themes also belong in `dependencies`. When buddy installs a package from npm or git, it runs `npm install`, so those dependencies are installed automatically.
 
-Buddy bundles core packages for extensions and skills. If you import any of these, list them in `peerDependencies` with a `"*"` range and do not bundle them: `@mariozechner/buddy-ai`, `@mariozechner/buddy-agent-core`, `@mariozechner/buddy-coding-agent`, `@mariozechner/buddy-tui`, `@sinclair/typebox`.
+Buddy bundles core packages for extensions and skills. If you import any of these, list them in `peerDependencies` with a `"*"` range and do not bundle them: `@foxxytux/buddy-ai`, `@foxxytux/buddy-agent-core`, `@foxxytux/buddy-coding-agent`, `@foxxytux/buddy-tui`, `@sinclair/typebox`.
 
 Other buddy packages must be bundled in your tarball. Add them to `dependencies` and `bundledDependencies`, then reference their resources through `node_modules/` paths. Buddy loads packages with separate module roots, so separate installs do not collide or share modules.
 

@@ -1,5 +1,5 @@
-import type { AgentTool } from "@mariozechner/buddy-agent-core";
-import { fauxAssistantMessage, fauxThinking, fauxToolCall } from "@mariozechner/buddy-ai";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
+import { fauxAssistantMessage, fauxThinking, fauxToolCall } from "@foxxytux/buddy-ai";
 import { Type } from "@sinclair/typebox";
 import { afterEach, describe, expect, it } from "vitest";
 import { createHarness, type Harness } from "./harness.js";

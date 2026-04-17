@@ -1,4 +1,4 @@
-import { type AssistantMessage, type AssistantMessageEvent, EventStream, getModel } from "@mariozechner/buddy-ai";
+import { type AssistantMessage, type AssistantMessageEvent, EventStream, getModel } from "@foxxytux/buddy-ai";
 import { describe, expect, it } from "vitest";
 import { Agent } from "../src/index.js";
 

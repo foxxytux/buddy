@@ -1,5 +1,5 @@
-import type { AgentMessage, AgentTool } from "@mariozechner/buddy-agent-core";
-import type { ToolResultMessage } from "@mariozechner/buddy-ai";
+import type { AgentMessage, AgentTool } from "@foxxytux/buddy-agent-core";
+import type { ToolResultMessage } from "@foxxytux/buddy-ai";
 import { html, LitElement } from "lit";
 import { property, state } from "lit/decorators.js";
 

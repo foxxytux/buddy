@@ -32,7 +32,7 @@ npx tsx examples/sdk/01-minimal.ts
 ## Quick Reference
 
 ```typescript
-import { getModel } from "@mariozechner/buddy-ai";
+import { getModel } from "@foxxytux/buddy-ai";
 import {
   AuthStorage,
   createAgentSession,
@@ -43,7 +43,7 @@ import {
   codingTools,
   readOnlyTools,
   readTool, bashTool, editTool, writeTool,
-} from "@mariozechner/buddy-coding-agent";
+} from "@foxxytux/buddy-coding-agent";
 
 // Auth and models setup
 const authStorage = AuthStorage.create();

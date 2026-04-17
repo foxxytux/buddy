@@ -1,5 +1,5 @@
-import type { AgentTool } from "@mariozechner/buddy-agent-core";
-import { Box, Container, Spacer, Text } from "@mariozechner/buddy-tui";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
+import { Box, Container, Spacer, Text } from "@foxxytux/buddy-tui";
 import { type Static, Type } from "@sinclair/typebox";
 import { constants } from "fs";
 import { access as fsAccess, readFile as fsReadFile, writeFile as fsWriteFile } from "fs/promises";

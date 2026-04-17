@@ -5,8 +5,8 @@
  * Multiple questions: tab bar navigation between questions
  */
 
-import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
-import { Editor, type EditorTheme, Key, matchesKey, Text, truncateToWidth } from "@mariozechner/buddy-tui";
+import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import { Editor, type EditorTheme, Key, matchesKey, Text, truncateToWidth } from "@foxxytux/buddy-tui";
 import { Type } from "@sinclair/typebox";
 
 // Types
@@ -73,8 +73,8 @@ function errorResult(
 	};
 }
 
-export default function questionnaire(pi: ExtensionAPI) {
-	pi.registerTool({
+export default function questionnaire(buddy: ExtensionAPI) {
+	buddy.registerTool({
 		name: "questionnaire",
 		label: "Questionnaire",
 		description:

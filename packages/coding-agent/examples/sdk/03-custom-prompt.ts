@@ -4,7 +4,7 @@
  * Shows how to replace or modify the default system prompt.
  */
 
-import { createAgentSession, DefaultResourceLoader, SessionManager } from "@mariozechner/buddy-coding-agent";
+import { createAgentSession, DefaultResourceLoader, SessionManager } from "@foxxytux/buddy-coding-agent";
 
 // Option 1: Replace prompt entirely
 const loader1 = new DefaultResourceLoader({

@@ -1,4 +1,4 @@
-import type { Message } from "@mariozechner/buddy-ai";
+import type { Message } from "@foxxytux/buddy-ai";
 import { describe, expect, it } from "vitest";
 import { serializeConversation } from "../src/core/compaction/utils.js";
 

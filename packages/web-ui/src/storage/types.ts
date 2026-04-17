@@ -1,5 +1,5 @@
-import type { AgentMessage, ThinkingLevel } from "@mariozechner/buddy-agent-core";
-import type { Model } from "@mariozechner/buddy-ai";
+import type { AgentMessage, ThinkingLevel } from "@foxxytux/buddy-agent-core";
+import type { Model } from "@foxxytux/buddy-ai";
 
 /**
  * Transaction interface for atomic operations across stores.

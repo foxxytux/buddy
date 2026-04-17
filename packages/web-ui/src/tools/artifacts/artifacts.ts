@@ -1,7 +1,7 @@
 import { icon } from "@mariozechner/mini-lit";
 import "@mariozechner/mini-lit/dist/MarkdownBlock.js";
-import type { Agent, AgentMessage, AgentTool } from "@mariozechner/buddy-agent-core";
-import { StringEnum, type ToolCall } from "@mariozechner/buddy-ai";
+import type { Agent, AgentMessage, AgentTool } from "@foxxytux/buddy-agent-core";
+import { StringEnum, type ToolCall } from "@foxxytux/buddy-ai";
 import { Button } from "@mariozechner/mini-lit/dist/Button.js";
 import { type Static, Type } from "@sinclair/typebox";
 import { html, LitElement, type TemplateResult } from "lit";

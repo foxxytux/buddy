@@ -5,7 +5,7 @@ import {
 	type KeyId,
 	TUI_KEYBINDINGS,
 	KeybindingsManager as TuiKeybindingsManager,
-} from "@mariozechner/buddy-tui";
+} from "@foxxytux/buddy-tui";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { getAgentDir } from "../config.js";
@@ -43,7 +43,7 @@ export interface AppKeybindings {
 
 export type AppKeybinding = keyof AppKeybindings;
 
-declare module "@mariozechner/buddy-tui" {
+declare module "@foxxytux/buddy-tui" {
 	interface Keybindings extends AppKeybindings {}
 }
 

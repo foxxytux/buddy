@@ -1,5 +1,5 @@
+import type { Model } from "@foxxytux/buddy-ai";
 import { LMStudioClient } from "@lmstudio/sdk";
-import type { Model } from "@mariozechner/buddy-ai";
 import { Ollama } from "ollama/browser";
 
 /**

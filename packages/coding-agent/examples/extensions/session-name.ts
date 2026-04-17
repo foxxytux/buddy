@@ -7,19 +7,19 @@
  * Usage: /session-name [name] - set or show session name
  */
 
-import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
+import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
 
-export default function (pi: ExtensionAPI) {
-	pi.registerCommand("session-name", {
+export default function (buddy: ExtensionAPI) {
+	buddy.registerCommand("session-name", {
 		description: "Set or show session name (usage: /session-name [new name])",
 		handler: async (args, ctx) => {
 			const name = args.trim();
 
 			if (name) {
-				pi.setSessionName(name);
+				buddy.setSessionName(name);
 				ctx.ui.notify(`Session named: ${name}`, "info");
 			} else {
-				const current = pi.getSessionName();
+				const current = buddy.getSessionName();
 				ctx.ui.notify(current ? `Session: ${current}` : "No session name set", "info");
 			}
 		},

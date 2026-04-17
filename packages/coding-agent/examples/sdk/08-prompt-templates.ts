@@ -10,7 +10,7 @@ import {
 	DefaultResourceLoader,
 	type PromptTemplate,
 	SessionManager,
-} from "@mariozechner/buddy-coding-agent";
+} from "@foxxytux/buddy-coding-agent";
 
 // Define custom templates
 const deployTemplate: PromptTemplate = {
@@ -33,7 +33,7 @@ const loader = new DefaultResourceLoader({
 });
 await loader.reload();
 
-// Discover templates from cwd/.pi/prompts/ and ~/.buddy/agent/prompts/
+// Discover templates from cwd/.buddy/prompts/ and ~/.buddy/agent/prompts/
 const discovered = loader.getPrompts().prompts;
 console.log("Discovered prompt templates:");
 for (const template of discovered) {

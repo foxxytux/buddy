@@ -1,4 +1,4 @@
-import type { AgentMessage } from "@mariozechner/buddy-agent-core";
+import type { AgentMessage } from "@foxxytux/buddy-agent-core";
 import type { TemplateResult } from "lit";
 
 // Extract role type from AppMessage union

@@ -34,7 +34,7 @@ Source on GitHub ([buddy-mono](https://github.com/badlogic/buddy-mono)):
 - [`packages/ai/src/types.ts`](https://github.com/badlogic/buddy-mono/blob/main/packages/ai/src/types.ts) - Base message types (UserMessage, AssistantMessage, ToolResultMessage)
 - [`packages/agent/src/types.ts`](https://github.com/badlogic/buddy-mono/blob/main/packages/agent/src/types.ts) - AgentMessage union type
 
-For TypeScript definitions in your project, inspect `node_modules/@mariozechner/buddy-coding-agent/dist/` and `node_modules/@mariozechner/buddy-ai/dist/`.
+For TypeScript definitions in your project, inspect `node_modules/@foxxytux/buddy-coding-agent/dist/` and `node_modules/@foxxytux/buddy-ai/dist/`.
 
 ## Message Types
 

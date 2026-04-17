@@ -5,7 +5,7 @@ Deploy and manage LLMs on GPU pods with automatic vLLM configuration for agentic
 ## Installation
 
 ```bash
-npm install -g @mariozechner/buddy-pods
+npm install -g @foxxytux/buddy-pods
 ```
 
 ## What is pi?
@@ -312,7 +312,7 @@ response = client.chat.completions.create(
 
 ```bash
 # Install globally to get pi-agent command
-npm install -g @mariozechner/buddy-pods
+npm install -g @foxxytux/buddy-pods
 
 # Use with OpenAI
 pi-agent --api-key sk-... "What is machine learning?"
@@ -503,7 +503,7 @@ ls -la ~/.buddy/sessions/
 
 - `HF_TOKEN` - HuggingFace token for model downloads
 - `PI_API_KEY` - API key for vLLM endpoints
-- `PI_CONFIG_DIR` - Config directory (default: `~/.pi`)
+- `PI_CONFIG_DIR` - Config directory (default: `~/.buddy`)
 - `OPENAI_API_KEY` - Used by `pi-agent` when no `--api-key` provided
 
 ## License

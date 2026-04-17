@@ -1,4 +1,4 @@
-import { Text, type TUI } from "@mariozechner/buddy-tui";
+import { Text, type TUI } from "@foxxytux/buddy-tui";
 import { Type } from "@sinclair/typebox";
 import stripAnsi from "strip-ansi";
 import { beforeAll, describe, expect, test } from "vitest";

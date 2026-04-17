@@ -9,11 +9,11 @@ import { createRequire } from "node:module";
 import * as os from "node:os";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import * as _bundledPiAgentCore from "@mariozechner/buddy-agent-core";
-import * as _bundledPiAi from "@mariozechner/buddy-ai";
-import * as _bundledPiAiOauth from "@mariozechner/buddy-ai/oauth";
-import type { KeyId } from "@mariozechner/buddy-tui";
-import * as _bundledPiTui from "@mariozechner/buddy-tui";
+import * as _bundledPiAgentCore from "@foxxytux/buddy-agent-core";
+import * as _bundledPiAi from "@foxxytux/buddy-ai";
+import * as _bundledPiAiOauth from "@foxxytux/buddy-ai/oauth";
+import type { KeyId } from "@foxxytux/buddy-tui";
+import * as _bundledPiTui from "@foxxytux/buddy-tui";
 import { createJiti } from "@mariozechner/jiti";
 // Static imports of packages that extensions may use.
 // These MUST be static so Bun bundles them into the compiled binary.
@@ -21,7 +21,7 @@ import { createJiti } from "@mariozechner/jiti";
 import * as _bundledTypebox from "@sinclair/typebox";
 import { getAgentDir, isBunBinary } from "../../config.js";
 // NOTE: This import works because loader.ts exports are NOT re-exported from index.ts,
-// avoiding a circular dependency. Extensions can import from @mariozechner/buddy-coding-agent.
+// avoiding a circular dependency. Extensions can import from @foxxytux/buddy-coding-agent.
 import * as _bundledPiCodingAgent from "../../index.js";
 import { createEventBus, type EventBus } from "../event-bus.js";
 import type { ExecOptions } from "../exec.js";
@@ -42,11 +42,11 @@ import type {
 /** Modules available to extensions via virtualModules (for compiled Bun binary) */
 const VIRTUAL_MODULES: Record<string, unknown> = {
 	"@sinclair/typebox": _bundledTypebox,
-	"@mariozechner/buddy-agent-core": _bundledPiAgentCore,
-	"@mariozechner/buddy-tui": _bundledPiTui,
-	"@mariozechner/buddy-ai": _bundledPiAi,
-	"@mariozechner/buddy-ai/oauth": _bundledPiAiOauth,
-	"@mariozechner/buddy-coding-agent": _bundledPiCodingAgent,
+	"@foxxytux/buddy-agent-core": _bundledPiAgentCore,
+	"@foxxytux/buddy-tui": _bundledPiTui,
+	"@foxxytux/buddy-ai": _bundledPiAi,
+	"@foxxytux/buddy-ai/oauth": _bundledPiAiOauth,
+	"@foxxytux/buddy-coding-agent": _bundledPiCodingAgent,
 };
 
 const require = createRequire(import.meta.url);
@@ -75,14 +75,11 @@ function getAliases(): Record<string, string> {
 	};
 
 	_aliases = {
-		"@mariozechner/buddy-coding-agent": packageIndex,
-		"@mariozechner/buddy-agent-core": resolveWorkspaceOrImport(
-			"agent/dist/index.js",
-			"@mariozechner/buddy-agent-core",
-		),
-		"@mariozechner/buddy-tui": resolveWorkspaceOrImport("tui/dist/index.js", "@mariozechner/buddy-tui"),
-		"@mariozechner/buddy-ai": resolveWorkspaceOrImport("ai/dist/index.js", "@mariozechner/buddy-ai"),
-		"@mariozechner/buddy-ai/oauth": resolveWorkspaceOrImport("ai/dist/oauth.js", "@mariozechner/buddy-ai/oauth"),
+		"@foxxytux/buddy-coding-agent": packageIndex,
+		"@foxxytux/buddy-agent-core": resolveWorkspaceOrImport("agent/dist/index.js", "@foxxytux/buddy-agent-core"),
+		"@foxxytux/buddy-tui": resolveWorkspaceOrImport("tui/dist/index.js", "@foxxytux/buddy-tui"),
+		"@foxxytux/buddy-ai": resolveWorkspaceOrImport("ai/dist/index.js", "@foxxytux/buddy-ai"),
+		"@foxxytux/buddy-ai/oauth": resolveWorkspaceOrImport("ai/dist/oauth.js", "@foxxytux/buddy-ai/oauth"),
 		"@sinclair/typebox": typeboxRoot,
 	};
 

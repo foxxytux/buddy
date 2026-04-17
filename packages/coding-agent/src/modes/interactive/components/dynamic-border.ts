@@ -1,4 +1,4 @@
-import type { Component } from "@mariozechner/buddy-tui";
+import type { Component } from "@foxxytux/buddy-tui";
 import { theme } from "../theme/theme.js";
 
 /**

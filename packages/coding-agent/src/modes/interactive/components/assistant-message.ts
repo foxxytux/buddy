@@ -1,5 +1,5 @@
-import type { AssistantMessage } from "@mariozechner/buddy-ai";
-import { Container, Markdown, type MarkdownTheme, Spacer, Text } from "@mariozechner/buddy-tui";
+import type { AssistantMessage } from "@foxxytux/buddy-ai";
+import { Container, Markdown, type MarkdownTheme, Spacer, Text } from "@foxxytux/buddy-tui";
 import { getMarkdownTheme, theme } from "../theme/theme.js";
 
 /**

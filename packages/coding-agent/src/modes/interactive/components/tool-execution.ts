@@ -1,13 +1,4 @@
-import {
-	Box,
-	type Component,
-	Container,
-	getCapabilities,
-	Image,
-	Spacer,
-	Text,
-	type TUI,
-} from "@mariozechner/buddy-tui";
+import { Box, type Component, Container, getCapabilities, Image, Spacer, Text, type TUI } from "@foxxytux/buddy-tui";
 import type { ToolDefinition, ToolRenderContext } from "../../../core/extensions/types.js";
 import { allToolDefinitions } from "../../../core/tools/index.js";
 import { getTextOutput as getRenderedTextOutput } from "../../../core/tools/render-utils.js";

@@ -1,5 +1,5 @@
-import { Agent, type ThinkingLevel } from "@mariozechner/buddy-agent-core";
-import { getModel } from "@mariozechner/buddy-ai";
+import { Agent, type ThinkingLevel } from "@foxxytux/buddy-agent-core";
+import { getModel } from "@foxxytux/buddy-ai";
 import { describe, expect, it } from "vitest";
 import { AgentSession } from "../src/core/agent-session.js";
 import { AuthStorage } from "../src/core/auth-storage.js";

@@ -4,13 +4,13 @@
  * Adjusts command, cwd, and env before execution.
  *
  * Usage:
- *   pi -e ./bash-spawn-hook.ts
+ *   buddy -e ./bash-spawn-hook.ts
  */
 
-import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
-import { createBashTool } from "@mariozechner/buddy-coding-agent";
+import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import { createBashTool } from "@foxxytux/buddy-coding-agent";
 
-export default function (pi: ExtensionAPI) {
+export default function (buddy: ExtensionAPI) {
 	const cwd = process.cwd();
 
 	const bashTool = createBashTool(cwd, {
@@ -21,7 +21,7 @@ export default function (pi: ExtensionAPI) {
 		}),
 	});
 
-	pi.registerTool({
+	buddy.registerTool({
 		...bashTool,
 		execute: async (id, params, signal, onUpdate, _ctx) => {
 			return bashTool.execute(id, params, signal, onUpdate);

@@ -1,5 +1,5 @@
-import type { Api, Context, Model, SimpleStreamOptions } from "@mariozechner/buddy-ai";
-import { streamSimple } from "@mariozechner/buddy-ai";
+import type { Api, Context, Model, SimpleStreamOptions } from "@foxxytux/buddy-ai";
+import { streamSimple } from "@foxxytux/buddy-ai";
 
 /**
  * Centralized proxy decision logic.

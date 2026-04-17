@@ -1,4 +1,4 @@
-import { fuzzyMatch } from "@mariozechner/buddy-tui";
+import { fuzzyMatch } from "@foxxytux/buddy-tui";
 import type { SessionInfo } from "../../../core/session-manager.js";
 
 export type SortMode = "threaded" | "recent" | "relevance";

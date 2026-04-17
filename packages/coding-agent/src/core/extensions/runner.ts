@@ -2,9 +2,9 @@
  * Extension runner - executes extensions and manages their lifecycle.
  */
 
-import type { AgentMessage } from "@mariozechner/buddy-agent-core";
-import type { ImageContent, Model } from "@mariozechner/buddy-ai";
-import type { KeyId } from "@mariozechner/buddy-tui";
+import type { AgentMessage } from "@foxxytux/buddy-agent-core";
+import type { ImageContent, Model } from "@foxxytux/buddy-ai";
+import type { KeyId } from "@foxxytux/buddy-tui";
 import { type Theme, theme } from "../../modes/interactive/theme/theme.js";
 import type { ResourceDiagnostic } from "../diagnostics.js";
 import type { KeybindingsConfig } from "../keybindings.js";

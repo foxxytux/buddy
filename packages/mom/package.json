@@ -1,5 +1,5 @@
 {
-	"name": "@mariozechner/buddy-mom",
+	"name": "@foxxytux/buddy-mom",
 	"version": "0.67.3",
 	"description": "Slack bot that delegates messages to the pi coding agent",
 	"type": "module",
@@ -20,9 +20,9 @@
 	},
 	"dependencies": {
 		"@anthropic-ai/sandbox-runtime": "^0.0.16",
-		"@mariozechner/buddy-agent-core": "^0.67.3",
-		"@mariozechner/buddy-ai": "^0.67.3",
-		"@mariozechner/buddy-coding-agent": "^0.67.3",
+		"@foxxytux/buddy-agent-core": "^0.67.3",
+		"@foxxytux/buddy-ai": "^0.67.3",
+		"@foxxytux/buddy-coding-agent": "^0.67.3",
 		"@sinclair/typebox": "^0.34.0",
 		"@slack/socket-mode": "^2.0.0",
 		"@slack/web-api": "^7.0.0",

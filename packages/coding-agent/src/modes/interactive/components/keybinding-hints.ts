@@ -2,7 +2,7 @@
  * Utilities for formatting keybinding hints in the UI.
  */
 
-import { getKeybindings, type Keybinding, type KeyId } from "@mariozechner/buddy-tui";
+import { getKeybindings, type Keybinding, type KeyId } from "@foxxytux/buddy-tui";
 import { theme } from "../theme/theme.js";
 
 function formatKeys(keys: KeyId[]): string {

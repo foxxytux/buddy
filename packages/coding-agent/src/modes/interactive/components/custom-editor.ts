@@ -1,4 +1,4 @@
-import { Editor, type EditorOptions, type EditorTheme, type TUI } from "@mariozechner/buddy-tui";
+import { Editor, type EditorOptions, type EditorTheme, type TUI } from "@foxxytux/buddy-tui";
 import type { AppKeybinding, KeybindingsManager } from "../../../core/keybindings.js";
 
 /**

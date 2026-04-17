@@ -5,13 +5,13 @@
  * Requires: npm install in this directory
  */
 
-import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
+import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
 import { Type } from "@sinclair/typebox";
 import ms from "ms";
 
-export default function (pi: ExtensionAPI) {
+export default function (buddy: ExtensionAPI) {
 	// Register a tool that uses ms
-	pi.registerTool({
+	buddy.registerTool({
 		name: "parse_duration",
 		label: "Parse Duration",
 		description: "Parse a human-readable duration string (e.g., '2 days', '1h', '5m') to milliseconds",

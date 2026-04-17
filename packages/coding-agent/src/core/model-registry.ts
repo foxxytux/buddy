@@ -16,8 +16,8 @@ import {
 	registerApiProvider,
 	resetApiProviders,
 	type SimpleStreamOptions,
-} from "@mariozechner/buddy-ai";
-import { registerOAuthProvider, resetOAuthProviders } from "@mariozechner/buddy-ai/oauth";
+} from "@foxxytux/buddy-ai";
+import { registerOAuthProvider, resetOAuthProviders } from "@foxxytux/buddy-ai/oauth";
 import { type Static, Type } from "@sinclair/typebox";
 import AjvModule from "ajv";
 import { existsSync, readFileSync } from "fs";

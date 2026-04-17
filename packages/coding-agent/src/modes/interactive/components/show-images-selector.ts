@@ -1,4 +1,4 @@
-import { Container, type SelectItem, SelectList, type SelectListLayoutOptions } from "@mariozechner/buddy-tui";
+import { Container, type SelectItem, SelectList, type SelectListLayoutOptions } from "@foxxytux/buddy-tui";
 import { getSelectListTheme } from "../theme/theme.js";
 import { DynamicBorder } from "./dynamic-border.js";
 

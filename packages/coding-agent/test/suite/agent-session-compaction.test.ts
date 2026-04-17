@@ -1,4 +1,4 @@
-import { type AssistantMessage, fauxAssistantMessage, type Model } from "@mariozechner/buddy-ai";
+import { type AssistantMessage, fauxAssistantMessage, type Model } from "@foxxytux/buddy-ai";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createHarness, type Harness } from "./harness.js";
 

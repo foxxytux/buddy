@@ -1,18 +1,18 @@
-# @mariozechner/buddy-agent-core
+# @foxxytux/buddy-agent-core
 
-Stateful agent with tool execution and event streaming. Built on `@mariozechner/buddy-ai`.
+Stateful agent with tool execution and event streaming. Built on `@foxxytux/buddy-ai`.
 
 ## Installation
 
 ```bash
-npm install @mariozechner/buddy-agent-core
+npm install @foxxytux/buddy-agent-core
 ```
 
 ## Quick Start
 
 ```typescript
-import { Agent } from "@mariozechner/buddy-agent-core";
-import { getModel } from "@mariozechner/buddy-ai";
+import { Agent } from "@foxxytux/buddy-agent-core";
+import { getModel } from "@foxxytux/buddy-ai";
 
 const agent = new Agent({
   initialState: {
@@ -332,7 +332,7 @@ Follow-up messages are checked only when there are no more tool calls and no ste
 Extend `AgentMessage` via declaration merging:
 
 ```typescript
-declare module "@mariozechner/buddy-agent-core" {
+declare module "@foxxytux/buddy-agent-core" {
   interface CustomAgentMessages {
     notification: { role: "notification"; text: string; timestamp: number };
   }
@@ -404,7 +404,7 @@ Thrown errors are caught by the agent and reported to the LLM as tool errors wit
 For browser apps that proxy through a backend:
 
 ```typescript
-import { Agent, streamProxy } from "@mariozechner/buddy-agent-core";
+import { Agent, streamProxy } from "@foxxytux/buddy-agent-core";
 
 const agent = new Agent({
   streamFn: (model, context, options) =>
@@ -421,7 +421,7 @@ const agent = new Agent({
 For direct control without the Agent class:
 
 ```typescript
-import { agentLoop, agentLoopContinue } from "@mariozechner/buddy-agent-core";
+import { agentLoop, agentLoopContinue } from "@foxxytux/buddy-agent-core";
 
 const context: AgentContext = {
   systemPrompt: "You are helpful.",

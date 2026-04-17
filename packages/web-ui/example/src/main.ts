@@ -1,6 +1,6 @@
 import "@mariozechner/mini-lit/dist/ThemeToggle.js";
-import { Agent, type AgentMessage } from "@mariozechner/buddy-agent-core";
-import { getModel } from "@mariozechner/buddy-ai";
+import { Agent, type AgentMessage } from "@foxxytux/buddy-agent-core";
+import { getModel } from "@foxxytux/buddy-ai";
 import {
 	type AgentState,
 	ApiKeyPromptDialog,
@@ -18,7 +18,7 @@ import {
 	SettingsDialog,
 	SettingsStore,
 	setAppStorage,
-} from "@mariozechner/buddy-web-ui";
+} from "@foxxytux/buddy-web-ui";
 import { html, render } from "lit";
 import { Bell, History, Plus, Settings } from "lucide";
 import "./app.css";

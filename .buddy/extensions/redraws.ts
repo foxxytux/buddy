@@ -7,8 +7,8 @@
 import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
 import { Text } from "@mariozechner/buddy-tui";
 
-export default function (pi: ExtensionAPI) {
-	pi.registerCommand("tui", {
+export default function (buddy: ExtensionAPI) {
+	buddy.registerCommand("tui", {
 		description: "Show TUI stats",
 		handler: async (_args, ctx) => {
 			if (!ctx.hasUI) return;

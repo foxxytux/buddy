@@ -7,8 +7,8 @@ import * as crypto from "node:crypto";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import type { AgentMessage } from "@mariozechner/buddy-agent-core";
-import type { AssistantMessage, ImageContent, Message, Model, OAuthProviderId } from "@mariozechner/buddy-ai";
+import type { AgentMessage } from "@foxxytux/buddy-agent-core";
+import type { AssistantMessage, ImageContent, Message, Model, OAuthProviderId } from "@foxxytux/buddy-ai";
 import type {
 	AutocompleteItem,
 	EditorComponent,
@@ -19,7 +19,7 @@ import type {
 	OverlayHandle,
 	OverlayOptions,
 	SlashCommand,
-} from "@mariozechner/buddy-tui";
+} from "@foxxytux/buddy-tui";
 import {
 	CombinedAutocompleteProvider,
 	type Component,
@@ -35,7 +35,7 @@ import {
 	TruncatedText,
 	TUI,
 	visibleWidth,
-} from "@mariozechner/buddy-tui";
+} from "@foxxytux/buddy-tui";
 import { spawn, spawnSync } from "child_process";
 import {
 	APP_NAME,
@@ -680,7 +680,7 @@ export class InteractiveMode {
 		if (process.env.PI_SKIP_VERSION_CHECK || process.env.PI_OFFLINE) return undefined;
 
 		try {
-			const response = await fetch("https://registry.npmjs.org/@mariozechner/buddy-coding-agent/latest", {
+			const response = await fetch("https://registry.npmjs.org/@foxxytux/buddy-coding-agent/latest", {
 				signal: AbortSignal.timeout(10000),
 			});
 			if (!response.ok) return undefined;
@@ -3176,7 +3176,7 @@ export class InteractiveMode {
 	}
 
 	showNewVersionNotification(newVersion: string): void {
-		const action = theme.fg("accent", getUpdateInstruction("@mariozechner/buddy-coding-agent"));
+		const action = theme.fg("accent", getUpdateInstruction("@foxxytux/buddy-coding-agent"));
 		const updateInstruction = theme.fg("muted", `New version ${newVersion} is available. `) + action;
 		const changelogUrl = theme.fg(
 			"accent",

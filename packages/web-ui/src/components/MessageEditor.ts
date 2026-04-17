@@ -1,4 +1,4 @@
-import type { Model } from "@mariozechner/buddy-ai";
+import type { Model } from "@foxxytux/buddy-ai";
 import { icon } from "@mariozechner/mini-lit";
 import { Button } from "@mariozechner/mini-lit/dist/Button.js";
 import { Select, type SelectOption } from "@mariozechner/mini-lit/dist/Select.js";
@@ -9,7 +9,7 @@ import { Brain, Loader2, Paperclip, Send, Sparkles, Square } from "lucide";
 import { type Attachment, loadAttachment } from "../utils/attachment-utils.js";
 import { i18n } from "../utils/i18n.js";
 import "./AttachmentTile.js";
-import type { ThinkingLevel } from "@mariozechner/buddy-agent-core";
+import type { ThinkingLevel } from "@foxxytux/buddy-agent-core";
 
 @customElement("message-editor")
 export class MessageEditor extends LitElement {

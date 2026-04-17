@@ -1,4 +1,4 @@
-import type { TUI } from "@mariozechner/buddy-tui";
+import type { TUI } from "@foxxytux/buddy-tui";
 import stripAnsi from "strip-ansi";
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import { ModelSelectorComponent } from "../../../src/modes/interactive/components/model-selector.js";

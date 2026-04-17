@@ -5,7 +5,7 @@
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { Agent } from "@mariozechner/buddy-agent-core";
+import { Agent } from "@foxxytux/buddy-agent-core";
 import {
 	type AssistantMessage,
 	type AssistantMessageEvent,
@@ -13,7 +13,7 @@ import {
 	getModel,
 	type ImageContent,
 	type TextContent,
-} from "@mariozechner/buddy-ai";
+} from "@foxxytux/buddy-ai";
 import { Type } from "@sinclair/typebox";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { AgentSession } from "../src/core/agent-session.js";

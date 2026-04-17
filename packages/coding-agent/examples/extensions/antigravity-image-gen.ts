@@ -11,7 +11,7 @@
  *
  * Save modes (tool param, env var, or config file):
  *   save=none     - Don't save to disk (default)
- *   save=project  - Save to <repo>/.pi/generated-images/
+ *   save=project  - Save to <repo>/.buddy/generated-images/
  *   save=global   - Save to ~/.buddy/agent/generated-images/
  *   save=custom   - Save to saveDir param or PI_IMAGE_SAVE_DIR
  *
@@ -21,7 +21,7 @@
  *
  * Config files (project overrides global):
  *   ~/.buddy/agent/extensions/antigravity-image-gen.json
- *   <repo>/.pi/extensions/antigravity-image-gen.json
+ *   <repo>/.buddy/extensions/antigravity-image-gen.json
  *   Example: { "save": "global" }
  */
 
@@ -29,8 +29,8 @@ import { randomUUID } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { StringEnum } from "@mariozechner/buddy-ai";
-import { type ExtensionAPI, getAgentDir, withFileMutationQueue } from "@mariozechner/buddy-coding-agent";
+import { StringEnum } from "@foxxytux/buddy-ai";
+import { type ExtensionAPI, getAgentDir, withFileMutationQueue } from "@foxxytux/buddy-coding-agent";
 import { type Static, Type } from "@sinclair/typebox";
 
 const PROVIDER = "google-antigravity";
@@ -350,8 +350,8 @@ async function getCredentials(ctx: {
 	return parseOAuthCredentials(apiKey);
 }
 
-export default function antigravityImageGen(pi: ExtensionAPI) {
-	pi.registerTool({
+export default function antigravityImageGen(buddy: ExtensionAPI) {
+	buddy.registerTool({
 		name: "generate_image",
 		label: "Generate image",
 		description:

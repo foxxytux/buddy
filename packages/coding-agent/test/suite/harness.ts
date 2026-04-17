@@ -5,10 +5,10 @@
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { AgentMessage, AgentTool } from "@mariozechner/buddy-agent-core";
-import { Agent } from "@mariozechner/buddy-agent-core";
-import type { FauxModelDefinition, FauxProviderRegistration, FauxResponseStep, Model } from "@mariozechner/buddy-ai";
-import { registerFauxProvider } from "@mariozechner/buddy-ai";
+import type { AgentMessage, AgentTool } from "@foxxytux/buddy-agent-core";
+import { Agent } from "@foxxytux/buddy-agent-core";
+import type { FauxModelDefinition, FauxProviderRegistration, FauxResponseStep, Model } from "@foxxytux/buddy-ai";
+import { registerFauxProvider } from "@foxxytux/buddy-ai";
 import { AgentSession, type AgentSessionEvent } from "../../src/core/agent-session.js";
 import { AuthStorage } from "../../src/core/auth-storage.js";
 import type { ExtensionRunner } from "../../src/core/extensions/index.js";

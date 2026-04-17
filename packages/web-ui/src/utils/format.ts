@@ -1,4 +1,4 @@
-import type { Usage } from "@mariozechner/buddy-ai";
+import type { Usage } from "@foxxytux/buddy-ai";
 import { i18n } from "@mariozechner/mini-lit";
 
 export function formatCost(cost: number): string {

@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, realpathSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { fauxAssistantMessage, registerFauxProvider } from "@mariozechner/buddy-ai";
+import { fauxAssistantMessage, registerFauxProvider } from "@foxxytux/buddy-ai";
 import { afterEach, describe, expect, it } from "vitest";
 import {
 	type CreateAgentSessionRuntimeFactory,
@@ -57,8 +57,8 @@ describe("AgentSessionRuntime characterization", () => {
 			thinkingLevel: options?.bootstrapThinkingLevel === false ? undefined : undefined,
 			resourceLoaderOptions: {
 				extensionFactories: [
-					(pi: ExtensionAPI) => {
-						pi.registerProvider(faux.getModel().provider, {
+					(buddy: ExtensionAPI) => {
+						buddy.registerProvider(faux.getModel().provider, {
 							baseUrl: faux.getModel().baseUrl,
 							apiKey: "faux-key",
 							api: faux.api,
@@ -73,7 +73,7 @@ describe("AgentSessionRuntime characterization", () => {
 								maxTokens: registeredModel.maxTokens,
 							})),
 						});
-						extensionFactory(pi);
+						extensionFactory(buddy);
 					},
 				],
 				noSkills: true,
@@ -118,11 +118,11 @@ describe("AgentSessionRuntime characterization", () => {
 
 	it("emits session_before_switch and session_start for new and resume flows", async () => {
 		const events: RecordedSessionEvent[] = [];
-		const { runtime } = await createRuntimeForTest((pi: ExtensionAPI) => {
-			pi.on("session_before_switch", (event) => {
+		const { runtime } = await createRuntimeForTest((buddy: ExtensionAPI) => {
+			buddy.on("session_before_switch", (event) => {
 				events.push(event);
 			});
-			pi.on("session_start", (event) => {
+			buddy.on("session_start", (event) => {
 				events.push(event);
 			});
 		});
@@ -159,14 +159,14 @@ describe("AgentSessionRuntime characterization", () => {
 	it("honors session_before_switch cancellation for new and resume", async () => {
 		const events: RecordedSessionEvent[] = [];
 		let cancelReason: "new" | "resume" | undefined;
-		const { runtime } = await createRuntimeForTest((pi: ExtensionAPI) => {
-			pi.on("session_before_switch", (event) => {
+		const { runtime } = await createRuntimeForTest((buddy: ExtensionAPI) => {
+			buddy.on("session_before_switch", (event) => {
 				events.push(event);
 				if (event.reason === cancelReason) {
 					return { cancel: true };
 				}
 			});
-			pi.on("session_start", (event) => {
+			buddy.on("session_start", (event) => {
 				events.push(event);
 			});
 		});
@@ -194,15 +194,15 @@ describe("AgentSessionRuntime characterization", () => {
 	it("emits session_before_fork and session_start and honors cancellation", async () => {
 		const events: RecordedSessionEvent[] = [];
 		let cancelNextFork = false;
-		const { runtime } = await createRuntimeForTest((pi: ExtensionAPI) => {
-			pi.on("session_before_fork", (event) => {
+		const { runtime } = await createRuntimeForTest((buddy: ExtensionAPI) => {
+			buddy.on("session_before_fork", (event) => {
 				events.push(event);
 				if (cancelNextFork) {
 					cancelNextFork = false;
 					return { cancel: true };
 				}
 			});
-			pi.on("session_start", (event) => {
+			buddy.on("session_start", (event) => {
 				events.push(event);
 			});
 		});
@@ -246,8 +246,8 @@ describe("AgentSessionRuntime characterization", () => {
 			authStorage: otherAuthStorage,
 			resourceLoaderOptions: {
 				extensionFactories: [
-					(pi: ExtensionAPI) => {
-						pi.registerProvider(faux.getModel().provider, {
+					(buddy: ExtensionAPI) => {
+						buddy.registerProvider(faux.getModel().provider, {
 							baseUrl: faux.getModel().baseUrl,
 							apiKey: "faux-key",
 							api: faux.api,
@@ -319,8 +319,8 @@ describe("AgentSessionRuntime characterization", () => {
 			authStorage: otherAuthStorage,
 			resourceLoaderOptions: {
 				extensionFactories: [
-					(pi: ExtensionAPI) => {
-						pi.registerProvider(faux.getModel().provider, {
+					(buddy: ExtensionAPI) => {
+						buddy.registerProvider(faux.getModel().provider, {
 							baseUrl: faux.getModel().baseUrl,
 							apiKey: "faux-key",
 							api: faux.api,

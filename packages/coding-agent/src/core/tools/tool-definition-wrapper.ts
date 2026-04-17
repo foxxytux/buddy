@@ -1,4 +1,4 @@
-import type { AgentTool } from "@mariozechner/buddy-agent-core";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
 import type { ExtensionContext, ToolDefinition } from "../extensions/types.js";
 
 /** Wrap a ToolDefinition into an AgentTool for the core runtime. */

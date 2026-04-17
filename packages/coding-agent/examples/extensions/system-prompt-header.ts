@@ -3,15 +3,15 @@
  *
  * Demonstrates ctx.getSystemPrompt() for accessing the effective system prompt.
  */
-import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
+import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
 
-export default function (pi: ExtensionAPI) {
-	pi.on("agent_start", (_event, ctx) => {
+export default function (buddy: ExtensionAPI) {
+	buddy.on("agent_start", (_event, ctx) => {
 		const prompt = ctx.getSystemPrompt();
 		ctx.ui.setStatus("system-prompt", `System: ${prompt.length} chars`);
 	});
 
-	pi.on("session_shutdown", (_event, ctx) => {
+	buddy.on("session_shutdown", (_event, ctx) => {
 		ctx.ui.setStatus("system-prompt", undefined);
 	});
 }

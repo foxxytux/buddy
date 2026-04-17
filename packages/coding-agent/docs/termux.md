@@ -17,7 +17,7 @@ pkg update && pkg upgrade
 pkg install nodejs termux-api git
 
 # Install buddy
-npm install -g @mariozechner/buddy-coding-agent
+npm install -g @foxxytux/buddy-coding-agent
 
 # Create config directory
 mkdir -p ~/.buddy/agent

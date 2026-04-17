@@ -1,4 +1,4 @@
-import type { Model } from "@mariozechner/buddy-ai";
+import type { Model } from "@foxxytux/buddy-ai";
 import { describe, expect, test } from "vitest";
 import {
 	defaultModelPerProvider,

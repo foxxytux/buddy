@@ -8,14 +8,14 @@
  * Token stats come from ctx.sessionManager/ctx.model (already accessible).
  */
 
-import type { AssistantMessage } from "@mariozechner/buddy-ai";
-import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
-import { truncateToWidth, visibleWidth } from "@mariozechner/buddy-tui";
+import type { AssistantMessage } from "@foxxytux/buddy-ai";
+import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import { truncateToWidth, visibleWidth } from "@foxxytux/buddy-tui";
 
-export default function (pi: ExtensionAPI) {
+export default function (buddy: ExtensionAPI) {
 	let enabled = false;
 
-	pi.registerCommand("footer", {
+	buddy.registerCommand("footer", {
 		description: "Toggle custom footer",
 		handler: async (_args, ctx) => {
 			enabled = !enabled;

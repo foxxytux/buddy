@@ -5,7 +5,7 @@
  * from cwd and ~/.buddy/agent. Model chosen from settings or first available.
  */
 
-import { createAgentSession } from "@mariozechner/buddy-coding-agent";
+import { createAgentSession } from "@foxxytux/buddy-coding-agent";
 
 const { session } = await createAgentSession();
 

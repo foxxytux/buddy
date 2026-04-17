@@ -1,9 +1,9 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { Api, Context, Model, OpenAICompletionsCompat } from "@mariozechner/buddy-ai";
-import { getApiProvider } from "@mariozechner/buddy-ai";
-import { getOAuthProvider } from "@mariozechner/buddy-ai/oauth";
+import type { Api, Context, Model, OpenAICompletionsCompat } from "@foxxytux/buddy-ai";
+import { getApiProvider } from "@foxxytux/buddy-ai";
+import { getOAuthProvider } from "@foxxytux/buddy-ai/oauth";
 import { afterEach, beforeEach, describe, expect, test } from "vitest";
 import { AuthStorage } from "../src/core/auth-storage.js";
 import { clearApiKeyCache, ModelRegistry } from "../src/core/model-registry.js";

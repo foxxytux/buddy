@@ -152,8 +152,8 @@ async function summarizeConversation(ctx: ExtensionCommandContext): Promise<stri
 		.trim();
 }
 
-export default function buddyExtension(pi: ExtensionAPI) {
-	pi.registerCommand("buddy-help", {
+export default function buddyExtension(buddy: ExtensionAPI) {
+	buddy.registerCommand("buddy-help", {
 		description: "Show Buddy capabilities and setup notes.",
 		handler: async (_args, ctx) => {
 			ctx.ui.notify(
@@ -163,7 +163,7 @@ export default function buddyExtension(pi: ExtensionAPI) {
 		},
 	});
 
-	pi.registerCommand("buddy-mascot", {
+	buddy.registerCommand("buddy-mascot", {
 		description: "Show Buddy mascot and quick tips.",
 		handler: async (_args, ctx) => {
 			if (!ctx.hasUI) {
@@ -200,7 +200,7 @@ export default function buddyExtension(pi: ExtensionAPI) {
 		},
 	});
 
-	pi.registerCommand("buddy-summarize", {
+	buddy.registerCommand("buddy-summarize", {
 		description: "Summarize the current conversation.",
 		handler: async (_args, ctx) => {
 			if (!ctx.hasUI) return;
@@ -229,7 +229,7 @@ export default function buddyExtension(pi: ExtensionAPI) {
 		},
 	});
 
-	pi.registerCommand("buddy-cite", {
+	buddy.registerCommand("buddy-cite", {
 		description: "Format a quick citation for a URL or workspace file.",
 		handler: async (args, ctx) => {
 			const target = args[0]?.trim();
@@ -258,14 +258,14 @@ export default function buddyExtension(pi: ExtensionAPI) {
 		},
 	});
 
-	pi.registerCommand("buddy-setup-search", {
+	buddy.registerCommand("buddy-setup-search", {
 		description: "Configure web search provider and API key for Buddy.",
 		handler: async (_args, ctx) => {
 			await configureSearchProvider(ctx);
 		},
 	});
 
-	pi.on("session_start", async (_event, ctx) => {
+	buddy.on("session_start", async (_event, ctx) => {
 		await hydrateSearchProviderEnv();
 		if (!ctx.hasUI) return;
 		ctx.ui.setWidget("buddy-mascot", (_tui, theme) => {

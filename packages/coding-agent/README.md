@@ -1,19 +1,3 @@
-<p align="center">
-  <a href="https://shittycodingagent.ai">
-    <img src="https://shittycodingagent.ai/logo.svg" alt="buddy logo" width="128">
-  </a>
-</p>
-<p align="center">
-  <a href="https://discord.com/invite/3cU7Bz4UPx"><img alt="Discord" src="https://img.shields.io/badge/discord-community-5865F2?style=flat-square&logo=discord&logoColor=white" /></a>
-  <a href="https://www.npmjs.com/package/@mariozechner/buddy-coding-agent"><img alt="npm" src="https://img.shields.io/npm/v/@mariozechner/buddy-coding-agent?style=flat-square" /></a>
-  <a href="https://github.com/badlogic/buddy-mono/actions/workflows/ci.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/badlogic/buddy-mono/ci.yml?style=flat-square&branch=main" /></a>
-</p>
-<p align="center">
-  <a href="https://buddy.dev">buddy.dev</a> domain graciously donated by
-  <br /><br />
-  <a href="https://exe.dev"><img src="docs/images/exy.png" alt="Exy mascot" width="48" /><br />exe.dev</a>
-</p>
-
 > New issues and PRs from new contributors are auto-closed by default. Maintainers review auto-closed issues daily. See [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ---
@@ -69,7 +53,7 @@ I regularly publish my own `buddy-mono` work sessions here:
 ## Quick Start
 
 ```bash
-npm install -g @mariozechner/buddy-coding-agent
+npm install -g @foxxytux/buddy-coding-agent
 ```
 
 Authenticate with an API key:
@@ -404,7 +388,7 @@ See [docs/packages.md](docs/packages.md).
 ### SDK
 
 ```typescript
-import { AuthStorage, createAgentSession, ModelRegistry, SessionManager } from "@mariozechner/buddy-coding-agent";
+import { AuthStorage, createAgentSession, ModelRegistry, SessionManager } from "@foxxytux/buddy-coding-agent";
 
 const authStorage = AuthStorage.create();
 const modelRegistry = ModelRegistry.create(authStorage);
@@ -611,6 +595,6 @@ MIT
 
 ## See Also
 
-- [@mariozechner/buddy-ai](https://www.npmjs.com/package/@mariozechner/buddy-ai): Core LLM toolkit
-- [@mariozechner/buddy-agent](https://www.npmjs.com/package/@mariozechner/buddy-agent): Agent framework
-- [@mariozechner/buddy-tui](https://www.npmjs.com/package/@mariozechner/buddy-tui): Terminal UI components
+- [@foxxytux/buddy-ai](https://www.npmjs.com/package/@foxxytux/buddy-ai): Core LLM toolkit
+- [@foxxytux/buddy-agent-core](https://www.npmjs.com/package/@foxxytux/buddy-agent-core): Agent framework
+- [@foxxytux/buddy-tui](https://www.npmjs.com/package/@foxxytux/buddy-tui): Terminal UI components

@@ -40,7 +40,7 @@ async function fetchGhMetadata(
 		kind === "pr" ? ["pr", "view", url, "--json", "title,author"] : ["issue", "view", url, "--json", "title,author"];
 
 	try {
-		const result = await pi.exec("gh", args);
+		const result = await buddy.exec("gh", args);
 		if (result.code !== 0 || !result.stdout) return undefined;
 		return JSON.parse(result.stdout) as GhMetadata;
 	} catch {
@@ -58,7 +58,7 @@ function formatAuthor(author?: GhMetadata["author"]): string | undefined {
 	return undefined;
 }
 
-export default function promptUrlWidgetExtension(pi: ExtensionAPI) {
+export default function promptUrlWidgetExtension(buddy: ExtensionAPI) {
 	const setWidget = (ctx: ExtensionContext, match: PromptMatch, title?: string, authorText?: string) => {
 		ctx.ui.setWidget("prompt-url", (_tui, thm) => {
 			const titleText = title ? thm.fg("accent", title) : thm.fg("accent", match.url);
@@ -81,17 +81,17 @@ export default function promptUrlWidgetExtension(pi: ExtensionAPI) {
 		const trimmedTitle = title?.trim();
 		const fallbackName = `${label}: ${match.url}`;
 		const desiredName = trimmedTitle ? `${label}: ${trimmedTitle} (${match.url})` : fallbackName;
-		const currentName = pi.getSessionName()?.trim();
+		const currentName = buddy.getSessionName()?.trim();
 		if (!currentName) {
-			pi.setSessionName(desiredName);
+			buddy.setSessionName(desiredName);
 			return;
 		}
 		if (currentName === match.url || currentName === fallbackName) {
-			pi.setSessionName(desiredName);
+			buddy.setSessionName(desiredName);
 		}
 	};
 
-	pi.on("before_agent_start", async (event, ctx) => {
+	buddy.on("before_agent_start", async (event, ctx) => {
 		if (!ctx.hasUI) return;
 		const match = extractPromptMatch(event.prompt);
 		if (!match) {
@@ -108,7 +108,7 @@ export default function promptUrlWidgetExtension(pi: ExtensionAPI) {
 		});
 	});
 
-	pi.on("session_switch", async (_event, ctx) => {
+	buddy.on("session_switch", async (_event, ctx) => {
 		rebuildFromSession(ctx);
 	});
 
@@ -152,7 +152,7 @@ export default function promptUrlWidgetExtension(pi: ExtensionAPI) {
 		});
 	};
 
-	pi.on("session_start", async (_event, ctx) => {
+	buddy.on("session_start", async (_event, ctx) => {
 		rebuildFromSession(ctx);
 	});
 }

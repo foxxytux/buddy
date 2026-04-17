@@ -1,5 +1,5 @@
-import type { AgentTool } from "@mariozechner/buddy-agent-core";
-import { Text } from "@mariozechner/buddy-tui";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
+import { Text } from "@foxxytux/buddy-tui";
 import { type Static, Type } from "@sinclair/typebox";
 import { existsSync, readdirSync, statSync } from "fs";
 import nodePath from "path";

@@ -1,5 +1,5 @@
-import type { AgentMessage } from "@mariozechner/buddy-agent-core";
-import type { ImageContent, Message, TextContent } from "@mariozechner/buddy-ai";
+import type { AgentMessage } from "@foxxytux/buddy-agent-core";
+import type { ImageContent, Message, TextContent } from "@foxxytux/buddy-ai";
 import { randomUUID } from "crypto";
 import {
 	appendFileSync,

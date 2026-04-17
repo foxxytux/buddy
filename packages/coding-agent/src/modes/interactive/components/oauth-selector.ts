@@ -1,6 +1,6 @@
-import type { OAuthProviderInterface } from "@mariozechner/buddy-ai";
-import { getOAuthProviders } from "@mariozechner/buddy-ai/oauth";
-import { Container, getKeybindings, Spacer, TruncatedText } from "@mariozechner/buddy-tui";
+import type { OAuthProviderInterface } from "@foxxytux/buddy-ai";
+import { getOAuthProviders } from "@foxxytux/buddy-ai/oauth";
+import { Container, getKeybindings, Spacer, TruncatedText } from "@foxxytux/buddy-tui";
 import type { AuthStorage } from "../../../core/auth-storage.js";
 import { theme } from "../theme/theme.js";
 import { DynamicBorder } from "./dynamic-border.js";

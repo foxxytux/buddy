@@ -1,5 +1,5 @@
-import type { AgentTool } from "@mariozechner/buddy-agent-core";
-import type { ToolResultMessage } from "@mariozechner/buddy-ai";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
+import type { ToolResultMessage } from "@foxxytux/buddy-ai";
 import { i18n } from "@mariozechner/mini-lit";
 import { type Static, Type } from "@sinclair/typebox";
 import { html } from "lit";

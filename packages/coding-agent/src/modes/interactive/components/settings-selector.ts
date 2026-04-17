@@ -1,5 +1,5 @@
-import type { ThinkingLevel } from "@mariozechner/buddy-agent-core";
-import type { Transport } from "@mariozechner/buddy-ai";
+import type { ThinkingLevel } from "@foxxytux/buddy-agent-core";
+import type { Transport } from "@foxxytux/buddy-ai";
 import {
 	Container,
 	getCapabilities,
@@ -10,7 +10,7 @@ import {
 	SettingsList,
 	Spacer,
 	Text,
-} from "@mariozechner/buddy-tui";
+} from "@foxxytux/buddy-tui";
 import { getSelectListTheme, getSettingsListTheme, theme } from "../theme/theme.js";
 import { DynamicBorder } from "./dynamic-border.js";
 

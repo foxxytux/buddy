@@ -1,4 +1,4 @@
-import type { ToolResultMessage } from "@mariozechner/buddy-ai";
+import type { ToolResultMessage } from "@foxxytux/buddy-ai";
 import type { TemplateResult } from "lit";
 
 export interface ToolRenderResult {

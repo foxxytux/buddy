@@ -5,39 +5,39 @@
  * Tool selection persists across session reloads and respects branch navigation.
  *
  * Usage:
- * 1. Copy this file to ~/.buddy/agent/extensions/ or your project's .pi/extensions/
+ * 1. Copy this file to ~/.buddy/agent/extensions/ or your project's .buddy/extensions/
  * 2. Use /tools to open the tool selector
  */
 
-import type { ExtensionAPI, ExtensionContext, ToolInfo } from "@mariozechner/buddy-coding-agent";
-import { getSettingsListTheme } from "@mariozechner/buddy-coding-agent";
-import { Container, type SettingItem, SettingsList } from "@mariozechner/buddy-tui";
+import type { ExtensionAPI, ExtensionContext, ToolInfo } from "@foxxytux/buddy-coding-agent";
+import { getSettingsListTheme } from "@foxxytux/buddy-coding-agent";
+import { Container, type SettingItem, SettingsList } from "@foxxytux/buddy-tui";
 
 // State persisted to session
 interface ToolsState {
 	enabledTools: string[];
 }
 
-export default function toolsExtension(pi: ExtensionAPI) {
+export default function toolsExtension(buddy: ExtensionAPI) {
 	// Track enabled tools
 	let enabledTools: Set<string> = new Set();
 	let allTools: ToolInfo[] = [];
 
 	// Persist current state
 	function persistState() {
-		pi.appendEntry<ToolsState>("tools-config", {
+		buddy.appendEntry<ToolsState>("tools-config", {
 			enabledTools: Array.from(enabledTools),
 		});
 	}
 
 	// Apply current tool selection
 	function applyTools() {
-		pi.setActiveTools(Array.from(enabledTools));
+		buddy.setActiveTools(Array.from(enabledTools));
 	}
 
 	// Find the last tools-config entry in the current branch
 	function restoreFromBranch(ctx: ExtensionContext) {
-		allTools = pi.getAllTools();
+		allTools = buddy.getAllTools();
 
 		// Get entries in current branch only
 		const branchEntries = ctx.sessionManager.getBranch();
@@ -59,16 +59,16 @@ export default function toolsExtension(pi: ExtensionAPI) {
 			applyTools();
 		} else {
 			// No saved state - sync with currently active tools
-			enabledTools = new Set(pi.getActiveTools());
+			enabledTools = new Set(buddy.getActiveTools());
 		}
 	}
 
 	// Register /tools command
-	pi.registerCommand("tools", {
+	buddy.registerCommand("tools", {
 		description: "Enable/disable tools",
 		handler: async (_args, ctx) => {
 			// Refresh tool list
-			allTools = pi.getAllTools();
+			allTools = buddy.getAllTools();
 
 			await ctx.ui.custom((tui, theme, _kb, done) => {
 				// Build settings items for each tool
@@ -130,12 +130,12 @@ export default function toolsExtension(pi: ExtensionAPI) {
 	});
 
 	// Restore state on session start
-	pi.on("session_start", async (_event, ctx) => {
+	buddy.on("session_start", async (_event, ctx) => {
 		restoreFromBranch(ctx);
 	});
 
 	// Restore state when navigating the session tree
-	pi.on("session_tree", async (_event, ctx) => {
+	buddy.on("session_tree", async (_event, ctx) => {
 		restoreFromBranch(ctx);
 	});
 }

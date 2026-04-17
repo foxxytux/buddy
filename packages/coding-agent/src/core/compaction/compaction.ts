@@ -5,9 +5,9 @@
  * and after compaction the session is reloaded.
  */
 
-import type { AgentMessage } from "@mariozechner/buddy-agent-core";
-import type { AssistantMessage, Model, Usage } from "@mariozechner/buddy-ai";
-import { completeSimple } from "@mariozechner/buddy-ai";
+import type { AgentMessage } from "@foxxytux/buddy-agent-core";
+import type { AssistantMessage, Model, Usage } from "@foxxytux/buddy-ai";
+import { completeSimple } from "@foxxytux/buddy-ai";
 import {
 	convertToLlm,
 	createBranchSummaryMessage,

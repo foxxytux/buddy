@@ -1,4 +1,4 @@
-import type { Transport } from "@mariozechner/buddy-ai";
+import type { Transport } from "@foxxytux/buddy-ai";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import lockfile from "proper-lockfile";

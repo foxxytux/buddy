@@ -50,7 +50,7 @@ Model Management:
 Environment:
   HF_TOKEN         HuggingFace token for model downloads
   PI_API_KEY     API key for vLLM endpoints
-  PI_CONFIG_DIR    Config directory (default: ~/.pi)`);
+  PI_CONFIG_DIR    Config directory (default: ~/.buddy)`);
 }
 
 // Parse command line arguments

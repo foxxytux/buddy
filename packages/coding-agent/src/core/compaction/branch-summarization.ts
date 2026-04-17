@@ -5,9 +5,9 @@
  * a summary of the branch being left so context isn't lost.
  */
 
-import type { AgentMessage } from "@mariozechner/buddy-agent-core";
-import type { Model } from "@mariozechner/buddy-ai";
-import { completeSimple } from "@mariozechner/buddy-ai";
+import type { AgentMessage } from "@foxxytux/buddy-agent-core";
+import type { Model } from "@foxxytux/buddy-ai";
+import { completeSimple } from "@foxxytux/buddy-ai";
 import {
 	convertToLlm,
 	createBranchSummaryMessage,

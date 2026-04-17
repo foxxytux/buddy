@@ -1,4 +1,4 @@
-import type { AgentState } from "@mariozechner/buddy-agent-core";
+import type { AgentState } from "@foxxytux/buddy-agent-core";
 import { Store } from "../store.js";
 import type { SessionData, SessionMetadata, StoreConfig } from "../types.js";
 

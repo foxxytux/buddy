@@ -5,8 +5,8 @@
  * When --ssh is provided, read/write/edit/bash run on the remote.
  *
  * Usage:
- *   pi -e ./ssh.ts --ssh user@host
- *   pi -e ./ssh.ts --ssh user@host:/remote/path
+ *   buddy -e ./ssh.ts --ssh user@host
+ *   buddy -e ./ssh.ts --ssh user@host:/remote/path
  *
  * Requirements:
  *   - SSH key-based auth (no password prompts)
@@ -14,7 +14,7 @@
  */
 
 import { spawn } from "node:child_process";
-import type { ExtensionAPI } from "@mariozechner/buddy-coding-agent";
+import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
 import {
 	type BashOperations,
 	createBashTool,
@@ -24,7 +24,7 @@ import {
 	type EditOperations,
 	type ReadOperations,
 	type WriteOperations,
-} from "@mariozechner/buddy-coding-agent";
+} from "@foxxytux/buddy-coding-agent";
 
 function sshExec(remote: string, command: string): Promise<Buffer> {
 	return new Promise((resolve, reject) => {
@@ -111,8 +111,8 @@ function createRemoteBashOps(remote: string, remoteCwd: string, localCwd: string
 	};
 }
 
-export default function (pi: ExtensionAPI) {
-	pi.registerFlag("ssh", { description: "SSH remote: user@host or user@host:/path", type: "string" });
+export default function (buddy: ExtensionAPI) {
+	buddy.registerFlag("ssh", { description: "SSH remote: user@host or user@host:/path", type: "string" });
 
 	const localCwd = process.cwd();
 	const localRead = createReadTool(localCwd);
@@ -125,7 +125,7 @@ export default function (pi: ExtensionAPI) {
 
 	const getSsh = () => resolvedSsh;
 
-	pi.registerTool({
+	buddy.registerTool({
 		...localRead,
 		async execute(id, params, signal, onUpdate, _ctx) {
 			const ssh = getSsh();
@@ -139,7 +139,7 @@ export default function (pi: ExtensionAPI) {
 		},
 	});
 
-	pi.registerTool({
+	buddy.registerTool({
 		...localWrite,
 		async execute(id, params, signal, onUpdate, _ctx) {
 			const ssh = getSsh();
@@ -153,7 +153,7 @@ export default function (pi: ExtensionAPI) {
 		},
 	});
 
-	pi.registerTool({
+	buddy.registerTool({
 		...localEdit,
 		async execute(id, params, signal, onUpdate, _ctx) {
 			const ssh = getSsh();
@@ -167,7 +167,7 @@ export default function (pi: ExtensionAPI) {
 		},
 	});
 
-	pi.registerTool({
+	buddy.registerTool({
 		...localBash,
 		async execute(id, params, signal, onUpdate, _ctx) {
 			const ssh = getSsh();
@@ -181,9 +181,9 @@ export default function (pi: ExtensionAPI) {
 		},
 	});
 
-	pi.on("session_start", async (_event, ctx) => {
+	buddy.on("session_start", async (_event, ctx) => {
 		// Resolve SSH config now that CLI flags are available
-		const arg = pi.getFlag("ssh") as string | undefined;
+		const arg = buddy.getFlag("ssh") as string | undefined;
 		if (arg) {
 			if (arg.includes(":")) {
 				const [remote, path] = arg.split(":");
@@ -200,14 +200,14 @@ export default function (pi: ExtensionAPI) {
 	});
 
 	// Handle user ! commands via SSH
-	pi.on("user_bash", (_event) => {
+	buddy.on("user_bash", (_event) => {
 		const ssh = getSsh();
 		if (!ssh) return; // No SSH, use local execution
 		return { operations: createRemoteBashOps(ssh.remote, ssh.remoteCwd, localCwd) };
 	});
 
 	// Replace local cwd with remote cwd in system prompt
-	pi.on("before_agent_start", async (event) => {
+	buddy.on("before_agent_start", async (event) => {
 		const ssh = getSsh();
 		if (ssh) {
 			const modified = event.systemPrompt.replace(

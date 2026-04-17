@@ -766,7 +766,7 @@ const tableFormatTool = defineTool({
 	},
 });
 
-const docExportToolFactory = (pi: ExtensionAPI) =>
+const docExportToolFactory = (buddy: ExtensionAPI) =>
 	defineTool({
 		name: "doc_export",
 		label: "Doc Export",
@@ -794,7 +794,7 @@ const docExportToolFactory = (pi: ExtensionAPI) =>
 			}
 
 			try {
-				const result = await pi.exec("pandoc", args);
+				const result = await buddy.exec("pandoc", args);
 				if (result.code === 0) {
 					return {
 						content: [{ type: "text", text: `Exported document to ${outputPath}` }],
@@ -1066,31 +1066,31 @@ async function showTodoDialog(ctx: ExtensionCommandContext): Promise<void> {
 	});
 }
 
-export default function buddyToolkitExtension(pi: ExtensionAPI) {
-	pi.registerTool(todoUpdateTool);
-	pi.registerTool(plotTool);
-	pi.registerTool(dataSummarizeTool);
-	pi.registerTool(tableFormatTool);
-	pi.registerTool(docExportToolFactory(pi));
-	pi.registerTool(contentRewriteTool);
-	pi.registerTool(citeSourcesTool);
-	pi.registerTool(imageGenTool);
-	pi.registerTool(mindmapGenTool);
-	pi.registerTool(sentimentAnalyzeTool);
-	pi.registerTool(entityExtractTool);
+export default function buddyToolkitExtension(buddy: ExtensionAPI) {
+	buddy.registerTool(todoUpdateTool);
+	buddy.registerTool(plotTool);
+	buddy.registerTool(dataSummarizeTool);
+	buddy.registerTool(tableFormatTool);
+	buddy.registerTool(docExportToolFactory(pi));
+	buddy.registerTool(contentRewriteTool);
+	buddy.registerTool(citeSourcesTool);
+	buddy.registerTool(imageGenTool);
+	buddy.registerTool(mindmapGenTool);
+	buddy.registerTool(sentimentAnalyzeTool);
+	buddy.registerTool(entityExtractTool);
 
-	pi.registerCommand("buddy-todos", {
+	buddy.registerCommand("buddy-todos", {
 		description: "Show the Buddy todo list used for long-running agent loops.",
 		handler: async (_args, ctx) => {
 			await showTodoDialog(ctx);
 		},
 	});
 
-	pi.on("session_start", async (_event, ctx) => {
+	buddy.on("session_start", async (_event, ctx) => {
 		reconstructTodos(ctx);
 	});
 
-	pi.on("session_tree", async (_event, ctx) => {
+	buddy.on("session_tree", async (_event, ctx) => {
 		reconstructTodos(ctx);
 	});
 }

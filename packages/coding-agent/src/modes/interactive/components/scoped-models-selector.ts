@@ -1,4 +1,4 @@
-import type { Model } from "@mariozechner/buddy-ai";
+import type { Model } from "@foxxytux/buddy-ai";
 import {
 	Container,
 	type Focusable,
@@ -9,7 +9,7 @@ import {
 	matchesKey,
 	Spacer,
 	Text,
-} from "@mariozechner/buddy-tui";
+} from "@foxxytux/buddy-tui";
 import { theme } from "../theme/theme.js";
 import { DynamicBorder } from "./dynamic-border.js";
 

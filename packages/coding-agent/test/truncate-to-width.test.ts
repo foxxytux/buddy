@@ -1,4 +1,4 @@
-import { truncateToWidth, visibleWidth } from "@mariozechner/buddy-tui";
+import { truncateToWidth, visibleWidth } from "@foxxytux/buddy-tui";
 import { describe, expect, it } from "vitest";
 
 /**

@@ -1,7 +1,7 @@
 // Main chat interface
 
-export type { Agent, AgentMessage, AgentState, ThinkingLevel } from "@mariozechner/buddy-agent-core";
-export type { Model } from "@mariozechner/buddy-ai";
+export type { Agent, AgentMessage, AgentState, ThinkingLevel } from "@foxxytux/buddy-agent-core";
+export type { Model } from "@foxxytux/buddy-ai";
 export { ChatPanel } from "./ChatPanel.js";
 // Components
 export { AgentInterface } from "./components/AgentInterface.js";

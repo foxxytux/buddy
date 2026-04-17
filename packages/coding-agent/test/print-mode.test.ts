@@ -1,4 +1,4 @@
-import type { AssistantMessage, ImageContent } from "@mariozechner/buddy-ai";
+import type { AssistantMessage, ImageContent } from "@foxxytux/buddy-ai";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { runPrintMode } from "../src/modes/print-mode.js";
 

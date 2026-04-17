@@ -10,7 +10,7 @@ import {
 	streamSimple,
 	type ToolResultMessage,
 	validateToolArguments,
-} from "@mariozechner/buddy-ai";
+} from "@foxxytux/buddy-ai";
 import type {
 	AgentContext,
 	AgentEvent,

@@ -11,8 +11,8 @@ import {
 	type OAuthCredentials,
 	type OAuthLoginCallbacks,
 	type OAuthProviderId,
-} from "@mariozechner/buddy-ai";
-import { getOAuthApiKey, getOAuthProvider, getOAuthProviders } from "@mariozechner/buddy-ai/oauth";
+} from "@foxxytux/buddy-ai";
+import { getOAuthApiKey, getOAuthProvider, getOAuthProviders } from "@foxxytux/buddy-ai/oauth";
 import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import lockfile from "proper-lockfile";

@@ -7,7 +7,7 @@
  *
  * Config files (merged, project takes precedence):
  * - ~/.buddy/agent/presets.json (global)
- * - <cwd>/.pi/presets.json (project-local)
+ * - <cwd>/.buddy/presets.json (project-local)
  *
  * Example presets.json:
  * ```json
@@ -40,9 +40,9 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { ExtensionAPI, ExtensionContext } from "@mariozechner/buddy-coding-agent";
-import { DynamicBorder, getAgentDir } from "@mariozechner/buddy-coding-agent";
-import { Container, Key, type SelectItem, SelectList, Text } from "@mariozechner/buddy-tui";
+import type { ExtensionAPI, ExtensionContext } from "@foxxytux/buddy-coding-agent";
+import { DynamicBorder, getAgentDir } from "@foxxytux/buddy-coding-agent";
+import { Container, Key, type SelectItem, SelectList, Text } from "@foxxytux/buddy-tui";
 
 // Preset configuration
 interface Preset {
@@ -97,13 +97,13 @@ function loadPresets(cwd: string): PresetsConfig {
 	return { ...globalPresets, ...projectPresets };
 }
 
-export default function presetExtension(pi: ExtensionAPI) {
+export default function presetExtension(buddy: ExtensionAPI) {
 	let presets: PresetsConfig = {};
 	let activePresetName: string | undefined;
 	let activePreset: Preset | undefined;
 
 	// Register --preset CLI flag
-	pi.registerFlag("preset", {
+	buddy.registerFlag("preset", {
 		description: "Preset configuration to use",
 		type: "string",
 	});
@@ -116,7 +116,7 @@ export default function presetExtension(pi: ExtensionAPI) {
 		if (preset.provider && preset.model) {
 			const model = ctx.modelRegistry.find(preset.provider, preset.model);
 			if (model) {
-				const success = await pi.setModel(model);
+				const success = await buddy.setModel(model);
 				if (!success) {
 					ctx.ui.notify(`Preset "${name}": No API key for ${preset.provider}/${preset.model}`, "warning");
 				}
@@ -127,12 +127,12 @@ export default function presetExtension(pi: ExtensionAPI) {
 
 		// Apply thinking level if specified
 		if (preset.thinkingLevel) {
-			pi.setThinkingLevel(preset.thinkingLevel);
+			buddy.setThinkingLevel(preset.thinkingLevel);
 		}
 
 		// Apply tools if specified
 		if (preset.tools && preset.tools.length > 0) {
-			const allToolNames = pi.getAllTools().map((t) => t.name);
+			const allToolNames = buddy.getAllTools().map((t) => t.name);
 			const validTools = preset.tools.filter((t) => allToolNames.includes(t));
 			const invalidTools = preset.tools.filter((t) => !allToolNames.includes(t));
 
@@ -141,7 +141,7 @@ export default function presetExtension(pi: ExtensionAPI) {
 			}
 
 			if (validTools.length > 0) {
-				pi.setActiveTools(validTools);
+				buddy.setActiveTools(validTools);
 			}
 		}
 
@@ -183,7 +183,10 @@ export default function presetExtension(pi: ExtensionAPI) {
 		const presetNames = Object.keys(presets);
 
 		if (presetNames.length === 0) {
-			ctx.ui.notify("No presets defined. Add presets to ~/.buddy/agent/presets.json or .pi/presets.json", "warning");
+			ctx.ui.notify(
+				"No presets defined. Add presets to ~/.buddy/agent/presets.json or .buddy/presets.json",
+				"warning",
+			);
 			return;
 		}
 
@@ -251,7 +254,7 @@ export default function presetExtension(pi: ExtensionAPI) {
 			// Clear preset and restore defaults
 			activePresetName = undefined;
 			activePreset = undefined;
-			pi.setActiveTools(["read", "bash", "edit", "write"]);
+			buddy.setActiveTools(["read", "bash", "edit", "write"]);
 			ctx.ui.notify("Preset cleared, defaults restored", "info");
 			updateStatus(ctx);
 			return;
@@ -283,7 +286,10 @@ export default function presetExtension(pi: ExtensionAPI) {
 	async function cyclePreset(ctx: ExtensionContext): Promise<void> {
 		const presetNames = getPresetOrder();
 		if (presetNames.length === 0) {
-			ctx.ui.notify("No presets defined. Add presets to ~/.buddy/agent/presets.json or .pi/presets.json", "warning");
+			ctx.ui.notify(
+				"No presets defined. Add presets to ~/.buddy/agent/presets.json or .buddy/presets.json",
+				"warning",
+			);
 			return;
 		}
 
@@ -296,7 +302,7 @@ export default function presetExtension(pi: ExtensionAPI) {
 		if (nextName === "(none)") {
 			activePresetName = undefined;
 			activePreset = undefined;
-			pi.setActiveTools(["read", "bash", "edit", "write"]);
+			buddy.setActiveTools(["read", "bash", "edit", "write"]);
 			ctx.ui.notify("Preset cleared, defaults restored", "info");
 			updateStatus(ctx);
 			return;
@@ -310,7 +316,7 @@ export default function presetExtension(pi: ExtensionAPI) {
 		updateStatus(ctx);
 	}
 
-	pi.registerShortcut(Key.ctrlShift("u"), {
+	buddy.registerShortcut(Key.ctrlShift("u"), {
 		description: "Cycle presets",
 		handler: async (ctx) => {
 			await cyclePreset(ctx);
@@ -318,7 +324,7 @@ export default function presetExtension(pi: ExtensionAPI) {
 	});
 
 	// Register /preset command
-	pi.registerCommand("preset", {
+	buddy.registerCommand("preset", {
 		description: "Switch preset configuration",
 		handler: async (args, ctx) => {
 			// If preset name provided, apply directly
@@ -344,7 +350,7 @@ export default function presetExtension(pi: ExtensionAPI) {
 	});
 
 	// Inject preset instructions into system prompt
-	pi.on("before_agent_start", async (event) => {
+	buddy.on("before_agent_start", async (event) => {
 		if (activePreset?.instructions) {
 			return {
 				systemPrompt: `${event.systemPrompt}\n\n${activePreset.instructions}`,
@@ -353,12 +359,12 @@ export default function presetExtension(pi: ExtensionAPI) {
 	});
 
 	// Initialize on session start
-	pi.on("session_start", async (_event, ctx) => {
+	buddy.on("session_start", async (_event, ctx) => {
 		// Load presets from config files
 		presets = loadPresets(ctx.cwd);
 
 		// Check for --preset flag
-		const presetFlag = pi.getFlag("preset");
+		const presetFlag = buddy.getFlag("preset");
 		if (typeof presetFlag === "string" && presetFlag) {
 			const preset = presets[presetFlag];
 			if (preset) {
@@ -389,9 +395,9 @@ export default function presetExtension(pi: ExtensionAPI) {
 	});
 
 	// Persist preset state
-	pi.on("turn_start", async () => {
+	buddy.on("turn_start", async () => {
 		if (activePresetName) {
-			pi.appendEntry("preset-state", { name: activePresetName });
+			buddy.appendEntry("preset-state", { name: activePresetName });
 		}
 	});
 }
