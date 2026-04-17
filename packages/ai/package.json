@@ -1,6 +1,6 @@
 {
 	"name": "@foxxytux/buddy-ai",
-	"version": "4.0.1",
+	"version": "4.0.2",
 	"description": "Unified LLM API with automatic model discovery and provider configuration",
 	"type": "module",
 	"main": "./dist/index.js",
