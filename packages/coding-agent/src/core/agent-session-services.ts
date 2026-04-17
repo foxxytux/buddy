@@ -1,7 +1,8 @@
+import { existsSync } from "node:fs";
 import { join } from "node:path";
 import type { ThinkingLevel } from "@foxxytux/buddy-agent-core";
 import type { Model } from "@foxxytux/buddy-ai";
-import { getAgentDir } from "../config.js";
+import { getAgentDir, getPackageDir } from "../config.js";
 import { AuthStorage } from "./auth-storage.js";
 import type { SessionStartEvent, ToolDefinition } from "./extensions/index.js";
 import { ModelRegistry } from "./model-registry.js";
@@ -131,6 +132,14 @@ export async function createAgentSessionServices(
 ): Promise<AgentSessionServices> {
 	const cwd = options.cwd;
 	const agentDir = options.agentDir ?? getAgentDir();
+	const packageDir = getPackageDir();
+	const bundledBuddyDir = join(packageDir, ".buddy");
+	const bundledExtensionPaths = existsSync(join(bundledBuddyDir, "extensions"))
+		? [join(bundledBuddyDir, "extensions")]
+		: [];
+	const bundledSkillPaths = existsSync(join(bundledBuddyDir, "skills")) ? [join(bundledBuddyDir, "skills")] : [];
+	const bundledPromptPaths = existsSync(join(bundledBuddyDir, "prompts")) ? [join(bundledBuddyDir, "prompts")] : [];
+	const bundledThemePaths = existsSync(join(bundledBuddyDir, "themes")) ? [join(bundledBuddyDir, "themes")] : [];
 	const authStorage = options.authStorage ?? AuthStorage.create(join(agentDir, "auth.json"));
 	const settingsManager = options.settingsManager ?? SettingsManager.create(cwd, agentDir);
 	const modelRegistry = options.modelRegistry ?? ModelRegistry.create(authStorage, join(agentDir, "models.json"));
@@ -152,10 +161,20 @@ export async function createAgentSessionServices(
 		cwd,
 		agentDir,
 		settingsManager,
+		additionalExtensionPaths: [
+			...bundledExtensionPaths,
+			...(options.resourceLoaderOptions?.additionalExtensionPaths ?? []),
+		],
+		additionalSkillPaths: [...bundledSkillPaths, ...(options.resourceLoaderOptions?.additionalSkillPaths ?? [])],
+		additionalPromptTemplatePaths: [
+			...bundledPromptPaths,
+			...(options.resourceLoaderOptions?.additionalPromptTemplatePaths ?? []),
+		],
+		additionalThemePaths: [...bundledThemePaths, ...(options.resourceLoaderOptions?.additionalThemePaths ?? [])],
 		extensionFactories: [...(options.resourceLoaderOptions?.extensionFactories ?? []), ...extraFactories],
 	};
 
-	const resourceLoader = new DefaultResourceLoader(mergedResourceLoaderOptions as any);
+	const resourceLoader = new DefaultResourceLoader(mergedResourceLoaderOptions);
 	await resourceLoader.reload();
 
 	const diagnostics: AgentSessionRuntimeDiagnostic[] = [];

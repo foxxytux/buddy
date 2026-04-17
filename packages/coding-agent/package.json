@@ -23,6 +23,7 @@
 		}
 	},
 	"files": [
+		".buddy",
 		"dist",
 		"docs",
 		"examples",
