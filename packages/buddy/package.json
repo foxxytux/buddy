@@ -1,7 +1,7 @@
 {
-  "name": "@foxxytux/buddy-legacy",
-  "version": "4.0.4",
-  "description": "Buddy — research-focused interactive coding agent (CLI)",
+  "name": "@foxxytux/buddy",
+  "version": "4.0.5",
+  "description": "Buddy — metapackage that installs the Buddy CLI and runtime packages",
   "bin": {
     "buddy": "bin/buddy"
   },
@@ -16,5 +16,39 @@
     "runner.js",
     "packages/coding-agent/dist/cli.js",
     "README.md"
-  ]
+  ],
+  "dependencies": {
+    "@foxxytux/buddy-coding-agent": "^4.0.4",
+    "@foxxytux/buddy-ai": "^4.0.4",
+    "@foxxytux/buddy-tui": "^4.0.4",
+    "@foxxytux/buddy-agent-core": "^4.0.4",
+    "@foxxytux/buddy-web-ui": "^4.0.4",
+    "@foxxytux/buddy-mom": "^4.0.4",
+    "@foxxytux/buddy-pods": "^4.0.4",
+
+    "@sinclair/typebox": "^0.34.41",
+    "undici": "^7.19.1",
+    "chalk": "^5.6.2",
+    "openai": "6.26.0",
+    "jszip": "^3.10.1",
+    "pdfjs-dist": "5.4.394",
+    "uuid": "^11.1.0",
+    "marked": "^15.0.12",
+    "get-east-asian-width": "^1.4.0",
+    "proxy-agent": "^6.5.0",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "partial-json": "^0.1.7",
+    "file-type": "^21.1.1",
+    "glob": "^13.0.1",
+    "ignore": "^7.0.5",
+    "minimatch": "^10.2.3",
+    "proper-lockfile": "^4.1.2",
+    "strip-ansi": "^7.1.0",
+    "yaml": "^2.8.2",
+    "zod-to-json-schema": "^3.24.6",
+    "docx-preview": "^0.3.7",
+    "pdfjs-dist": "5.4.394",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  }
 }
