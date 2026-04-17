@@ -12,12 +12,6 @@ A single metapackage is available that installs the Buddy CLI and its runtime de
 npm i -g @foxxytux/buddy
 ```
 
-If you prefer a smaller footprint for local testing, install the minimal runtime packages the CLI requires to run:
-
-```bash
-npm i -g @foxxytux/buddy-coding-agent @foxxytux/buddy-ai @foxxytux/buddy-tui @foxxytux/buddy-agent-core
-```
-
 Quickstart (local development)
 
 - Clone or use your local copy:
@@ -41,7 +35,7 @@ Repository layout (high level)
 
 - packages/agent — @foxxytux/buddy-agent-core: core agent runtime and transports
 - packages/ai — @foxxytux/buddy-ai: unified LLM provider layer
-- packages/buddy — @foxxytux/buddy-legacy: legacy CLI packaging helper
+- packages/buddy — @foxxytux/buddy: metapackage and CLI wrapper
 - packages/coding-agent — @foxxytux/buddy-coding-agent: main CLI and runtime for Buddy
 - packages/mom — @foxxytux/buddy-mom: Slack bot integration
 - packages/pods — @foxxytux/buddy-pods: vLLM / deployment helper CLI
