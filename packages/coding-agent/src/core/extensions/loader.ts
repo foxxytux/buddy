@@ -290,6 +290,14 @@ function createExtensionAPI(
 }
 
 async function loadExtensionModule(extensionPath: string) {
+	// Make DynamicBorder available to extensions that reference it without imports.
+	// Some user extensions (and older examples) rely on a global DynamicBorder symbol.
+	// jiti creates a separate module cache, so provide the class on globalThis before
+	// evaluating extension code to avoid ReferenceError during module execution.
+	if (!(globalThis as any).DynamicBorder) {
+		(globalThis as any).DynamicBorder = (_bundledPiCodingAgent as any).DynamicBorder;
+	}
+
 	const jiti = createJiti(import.meta.url, {
 		moduleCache: false,
 		// In Bun binary: use virtualModules for bundled packages (no filesystem resolution)
