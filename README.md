@@ -4,10 +4,26 @@ Buddy is a research-first interactive coding assistant implemented as a set of p
 
 Buddy is based on and forked from the "pi" coding agent project; it diverges intentionally with different defaults, themes, and tooling focused on research workflows.
 
-Install (global CLI):
+Install (global CLI and runtime)
+
+It is recommended to install the CLI together with its runtime packages. Install all published @foxxytux packages required by the CLI globally:
 
 ```bash
-npm i -g @foxxytux/buddy-coding-agent
+npm i -g \
+  @foxxytux/buddy-coding-agent \
+  @foxxytux/buddy-ai \
+  @foxxytux/buddy-tui \
+  @foxxytux/buddy-agent-core \
+  @foxxytux/buddy-web-ui \
+  @foxxytux/buddy-mom \
+  @foxxytux/buddy-pods \
+  @foxxytux/buddy-legacy
+```
+
+If you prefer a smaller footprint for local testing, install the minimal runtime packages the CLI requires to run:
+
+```bash
+npm i -g @foxxytux/buddy-coding-agent @foxxytux/buddy-ai @foxxytux/buddy-tui @foxxytux/buddy-agent-core
 ```
 
 Quickstart (local development)
