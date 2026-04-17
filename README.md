@@ -40,7 +40,6 @@ Repository layout (high level)
 - packages/mom — @foxxytux/buddy-mom: Slack bot integration
 - packages/pods — @foxxytux/buddy-pods: vLLM / deployment helper CLI
 - packages/tui — @foxxytux/buddy-tui: terminal UI components
-- packages/web-ui — @foxxytux/buddy-web-ui: web components and example app
 
 Key features
 
@@ -60,6 +59,48 @@ Configuration
 
 - Interactive configuration is available via the `/buddy-setup-search` extension command; keys persist to `~/.buddy/agent/auth.json`.
 
+## Syncing with Upstream (pi-mono)
+
+Because Buddy is a fork, you can pull in upstream changes without losing your custom branding and features:
+
+```bash
+# 1. Run the sync script (fetches upstream, creates a backup branch, and rebases Buddy changes)
+npm run sync:upstream
+
+# 2. If there are merge conflicts, resolve them, then:
+git add <resolved-files>
+git rebase --continue
+
+# 3. Fast-forward main to the new sync branch
+git switch main
+git merge --ff-only sync/main-<timestamp>
+
+# 4. Run checks to ensure everything works
+npm run check
+
+# 5. Push updated code to your GitHub repo
+git push origin HEAD
+```
+
+See [docs/upstream-sync.md](docs/upstream-sync.md) for full details.
+
+## Publishing to npm
+
+Releasing all packages in lockstep:
+
+```bash
+# 1. Ensure you are logged in to npm with access to @foxxytux
+export NPM_TOKEN="your_automation_token"
+
+# 2. Run the release script (bumps version, updates changelogs, tags, and publishes)
+npm run release:patch    # for bug fixes
+# OR
+npm run release:minor    # for new features
+
+# 3. Push the new tags to GitHub
+git push origin --tags
+```
+
 Developer notes
 
 - Build and publish are driven from the monorepo root. The `publish` script calls `npm publish -ws` and publishes workspace packages by their package.json `name` fields.
@@ -73,5 +114,3 @@ Troubleshooting
 License
 
 MIT
-
-If you want this README change committed and pushed, I can do that for you. The repository already contains workspace packages; update instructions were set to the actual CLI package @foxxytux/buddy-coding-agent.
