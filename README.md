@@ -1,5 +1,12 @@
 # Buddy — research-focused interactive coding agent
 
+Install (global CLI):
+
+```bash
+npm i -g @foxxytux/buddy
+```
+
+
 Package: @foxxytux/buddy
 
 This project is a fork and rebrand of the "pi" coding agent. It diverges intentionally: Buddy aims to provide a research-first interactive assistant with additional toolkit features, a different default theme, and distinct UX and persistence choices.
