@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Declared `jszip` in `@foxxytux/buddy-coding-agent` so the bundled Buddy toolkit extension keeps its custom tools available in standalone packaged installs.
+
 ## [4.1.11] - 2026-04-17
 
 ## [4.1.10] - 2026-04-17
