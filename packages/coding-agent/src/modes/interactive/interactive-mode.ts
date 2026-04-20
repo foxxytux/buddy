@@ -4295,28 +4295,74 @@ export class InteractiveMode {
 					}
 				}
 
-				const content = [
-					"# Agent Instructions",
-					"",
-					"Shared instructions for Buddy and other coding agents working in this repository.",
-					"",
-					"## Workflow",
-					"- Make a short plan for non-trivial work, then execute it end-to-end.",
-					"- Use a todo/task tool for multi-step work when one is available.",
-					"- Inspect the relevant files before editing.",
-					"- Prefer targeted edits over broad rewrites unless a rewrite is clearly better.",
-					"- Run the required validation commands after code changes.",
-					"",
-					"## Code Changes",
-					"- Keep changes minimal and focused on the request.",
-					"- Follow existing project conventions and formatting.",
-					"- Do not remove intentional functionality without confirmation.",
-					"",
-					"## Communication",
-					"- Be concise.",
-					"- Report what changed, which files were touched, and how it was verified.",
-				].join("\n");
-				fs.writeFileSync(filePath, content, { encoding: "utf-8", mode: 0o600 });
+				// Ask whether to generate AGENTS.md with AI
+				let finalContent: string | undefined;
+				const useAI = await this.showExtensionConfirm(
+					"Generate AGENTS.md with AI?",
+					"Generate a repository-specific AGENTS.md using the current AI model (requires a selected model and API key).",
+				);
+				if (useAI) {
+					// Collect some lightweight repo context: README and top-level files
+					let readmeSnippet = "";
+					try {
+						const readmePath = path.join(targetDir, "README.md");
+						if (fs.existsSync(readmePath)) {
+							readmeSnippet = fs.readFileSync(readmePath, "utf-8").slice(0, 2000);
+						}
+					} catch {
+						readmeSnippet = "";
+					}
+
+					let filesList = "";
+					try {
+						const entries = fs.readdirSync(targetDir, { withFileTypes: true });
+						filesList = entries
+							.map((e) => (e.isDirectory() ? `${e.name}/` : e.name))
+							.slice(0, 50)
+							.join(", ");
+					} catch {
+						filesList = "";
+					}
+
+					const generationPrompt = `Create a concise AGENTS.md for a source code repository. Use the following repository info:\n\nREADME:\n${readmeSnippet}\n\nTop-level files: ${filesList}\n\nRequirements:\n- Include sections: Workflow, Code Changes, Communication, Tests/Verification, Running the project, Common commands, Conventions.\n- Prefer concrete commands where useful (e.g., test, build, lint).\n- Recommend using a todo/task tool for multi-step work and show an example todo list skeleton.\n- Keep it actionable and repo-specific where possible.\n- Output only the markdown content (no commentary).`;
+
+					try {
+						await this.session.prompt(generationPrompt, { expandPromptTemplates: false });
+						const aiResult = this.session.getLastAssistantText();
+						if (aiResult && aiResult.trim().length > 0) {
+							finalContent = aiResult.trim();
+						}
+					} catch (err) {
+						this.showError(`AI generation failed: ${err instanceof Error ? err.message : String(err)}`);
+					}
+				}
+
+				if (!finalContent) {
+					// Fallback static template
+					finalContent = [
+						"# Agent Instructions",
+						"",
+						"Shared instructions for Buddy and other coding agents working in this repository.",
+						"",
+						"## Workflow",
+						"- Make a short plan for non-trivial work, then execute it end-to-end.",
+						"- Use a todo/task tool for multi-step work when one is available.",
+						"- Inspect the relevant files before editing.",
+						"- Prefer targeted edits over broad rewrites unless a rewrite is clearly better.",
+						"- Run the required validation commands after code changes.",
+						"",
+						"## Code Changes",
+						"- Keep changes minimal and focused on the request.",
+						"- Follow existing project conventions and formatting.",
+						"- Do not remove intentional functionality without confirmation.",
+						"",
+						"## Communication",
+						"- Be concise.",
+						"- Report what changed, which files were touched, and how it was verified.",
+					].join("\n");
+				}
+
+				fs.writeFileSync(filePath, finalContent, { encoding: "utf-8", mode: 0o600 });
 				this.showStatus(`Created AGENTS.md: ${filePath}`);
 			} catch (error: unknown) {
 				this.showError(`Failed to create AGENTS.md: ${error instanceof Error ? error.message : String(error)}`);
