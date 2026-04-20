@@ -39,6 +39,7 @@ import {
 import { spawn, spawnSync } from "child_process";
 import {
 	APP_NAME,
+	CONFIG_DIR_NAME,
 	getAgentDir,
 	getAuthPath,
 	getDebugLogPath,
@@ -2244,6 +2245,11 @@ export class InteractiveMode {
 				await this.handleReloadCommand();
 				return;
 			}
+			if (text === "/init" || text.startsWith("/init ")) {
+				this.editor.setText("");
+				await this.handleInitCommand(text);
+				return;
+			}
 			if (text === "/debug") {
 				this.handleDebugCommand();
 				this.editor.setText("");
@@ -4188,6 +4194,140 @@ export class InteractiveMode {
 		} catch (error) {
 			dismissReloadBox(previousEditor as Component);
 			this.showError(`Reload failed: ${error instanceof Error ? error.message : String(error)}`);
+		}
+	}
+
+	private async handleInitCommand(text: string): Promise<void> {
+		const parts = text.split(/\s+/).slice(1);
+		const isSubagent = parts.includes("--subagent");
+		const isGlobal = parts.includes("--global");
+		const subagentScope: "user" | "project" = parts.includes("--project") ? "project" : "user";
+
+		if (isSubagent) {
+			let name = parts.find((part) => part && !part.startsWith("--"))?.trim();
+			if (!name) {
+				name = await this.showExtensionInput("Agent name", "e.g. scout");
+				if (!name) {
+					this.showStatus("Init cancelled");
+					return;
+				}
+			}
+			name = name.trim();
+			if (!name) {
+				this.showError("Usage: /init --subagent [--project] <name>");
+				return;
+			}
+
+			const description = await this.showExtensionInput("Agent description", "Short description");
+			if (description === undefined) {
+				this.showStatus("Init cancelled");
+				return;
+			}
+			const trimmedDescription = description.trim();
+			if (!trimmedDescription) {
+				this.showError("Agent description cannot be empty");
+				return;
+			}
+
+			const targetDir =
+				subagentScope === "user"
+					? path.join(getAgentDir(), "agents")
+					: path.join(this.sessionManager.getCwd(), CONFIG_DIR_NAME, "agents");
+
+			try {
+				fs.mkdirSync(targetDir, { recursive: true });
+				const safeName = name.replace(/[^\w.-]+/g, "_");
+				const filePath = path.join(targetDir, `${safeName}.md`);
+
+				if (fs.existsSync(filePath)) {
+					const ok = await this.showExtensionConfirm("Overwrite agent?", `${filePath} already exists. Overwrite?`);
+					if (!ok) {
+						this.showStatus("Init cancelled");
+						return;
+					}
+				}
+
+				const nameValue = JSON.stringify(name);
+				const descriptionValue = JSON.stringify(trimmedDescription);
+				const content = [
+					"---",
+					`name: ${nameValue}`,
+					`description: ${descriptionValue}`,
+					"tools: read, grep, find, ls",
+					"model: claude-sonnet-4-5",
+					"---",
+					"",
+					`You are the ${name} subagent.`,
+					"",
+					"State your role briefly, then do the delegated task.",
+					"Keep output concise and action-oriented.",
+				].join("\n");
+				fs.writeFileSync(filePath, content, { encoding: "utf-8", mode: 0o600 });
+				this.showStatus(`Created subagent: ${filePath}`);
+			} catch (error: unknown) {
+				this.showError(`Failed to create subagent: ${error instanceof Error ? error.message : String(error)}`);
+				return;
+			}
+		} else {
+			const cwd = this.sessionManager.getCwd();
+			const gitRootResult = spawnSync("git", ["rev-parse", "--show-toplevel"], {
+				cwd,
+				encoding: "utf-8",
+			});
+			const targetDir =
+				isGlobal || gitRootResult.status !== 0
+					? isGlobal
+						? getAgentDir()
+						: cwd
+					: gitRootResult.stdout.trim() || cwd;
+			const filePath = path.join(targetDir, "AGENTS.md");
+
+			try {
+				fs.mkdirSync(targetDir, { recursive: true });
+				if (fs.existsSync(filePath)) {
+					const ok = await this.showExtensionConfirm(
+						"Overwrite AGENTS.md?",
+						`${filePath} already exists. Overwrite?`,
+					);
+					if (!ok) {
+						this.showStatus("Init cancelled");
+						return;
+					}
+				}
+
+				const content = [
+					"# Agent Instructions",
+					"",
+					"Shared instructions for Buddy and other coding agents working in this repository.",
+					"",
+					"## Workflow",
+					"- Make a short plan for non-trivial work, then execute it end-to-end.",
+					"- Use a todo/task tool for multi-step work when one is available.",
+					"- Inspect the relevant files before editing.",
+					"- Prefer targeted edits over broad rewrites unless a rewrite is clearly better.",
+					"- Run the required validation commands after code changes.",
+					"",
+					"## Code Changes",
+					"- Keep changes minimal and focused on the request.",
+					"- Follow existing project conventions and formatting.",
+					"- Do not remove intentional functionality without confirmation.",
+					"",
+					"## Communication",
+					"- Be concise.",
+					"- Report what changed, which files were touched, and how it was verified.",
+				].join("\n");
+				fs.writeFileSync(filePath, content, { encoding: "utf-8", mode: 0o600 });
+				this.showStatus(`Created AGENTS.md: ${filePath}`);
+			} catch (error: unknown) {
+				this.showError(`Failed to create AGENTS.md: ${error instanceof Error ? error.message : String(error)}`);
+				return;
+			}
+		}
+
+		try {
+			await this.session.resourceLoader.reload();
+		} catch {
+			// Ignore reload errors; files were already created.
 		}
 	}
 

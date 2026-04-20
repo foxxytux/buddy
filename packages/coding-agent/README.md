@@ -159,6 +159,9 @@ Type `/` in the editor to trigger commands. [Extensions](#extensions) can regist
 | `/export [file]` | Export session to HTML file |
 | `/share` | Upload as private GitHub gist with shareable HTML link |
 | `/reload` | Reload keybindings, extensions, skills, prompts, and context files (themes hot-reload automatically) |
+| `/init` | Create a repo-root `AGENTS.md` starter file for Buddy and other coding agents |
+| `/init --global` | Create `~/.buddy/agent/AGENTS.md` |
+| `/init --subagent [--project] <name>` | Create a starter subagent file in `~/.buddy/agent/agents/` or `.buddy/agents/` |
 | `/hotkeys` | Show all keyboard shortcuts |
 | `/changelog` | Display version history |
 | `/quit` | Quit buddy |
@@ -263,6 +266,8 @@ Buddy loads `AGENTS.md` (or `CLAUDE.md`) at startup from:
 Use for project instructions, conventions, common commands. All matching files are concatenated.
 
 Disable context file loading with `--no-context-files` (or `-nc`).
+
+Use `/init` to create a starter `AGENTS.md` in the repository root.
 
 ### System Prompt
 

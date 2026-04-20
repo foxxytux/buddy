@@ -66,6 +66,19 @@ When running interactively, the tool prompts for confirmation before running pro
 
 ## Usage
 
+Create starter files with Buddy itself:
+
+```text
+/init
+/init --subagent scout
+/init --subagent --project reviewer
+```
+
+This creates:
+- `<repo-root>/AGENTS.md`
+- `~/.buddy/agent/agents/scout.md`
+- `.buddy/agents/reviewer.md`
+
 ### Single agent
 ```
 Use scout to find all authentication code

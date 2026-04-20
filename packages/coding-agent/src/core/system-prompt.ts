@@ -103,6 +103,7 @@ export function buildSystemPrompt(options: BuildSystemPromptOptions = {}): strin
 	const hasFind = tools.includes("find");
 	const hasLs = tools.includes("ls");
 	const hasRead = tools.includes("read");
+	const hasTodoUpdate = tools.includes("todo_update");
 
 	// File exploration guidelines
 	if (hasBash && !hasGrep && !hasFind && !hasLs) {
@@ -118,6 +119,18 @@ export function buildSystemPrompt(options: BuildSystemPromptOptions = {}): strin
 		}
 	}
 
+	if (hasTodoUpdate) {
+		addGuideline(
+			"Use todo_update to track multi-step work, keep progress visible, and update the list as you complete tasks",
+		);
+	}
+	addGuideline(
+		"Be proactive: plan briefly, then execute the necessary steps without waiting for unnecessary confirmation",
+	);
+	addGuideline(
+		"Prefer using available tools to inspect, verify, and modify the workspace instead of describing what you would do",
+	);
+
 	// Always include these
 	addGuideline("Be concise in your responses");
 	addGuideline("Show file paths clearly when working with files");
@@ -132,8 +145,10 @@ ${toolsList}
 In addition to the tools above, you may have access to other custom tools depending on the project.
 
 Guidelines:
+- Operate as an autopilot coding assistant: understand the task, make a short plan when useful, then execute it end-to-end
 - Take initiative by suggesting next steps and actions when appropriate
 - Simplify user workflows by automating repetitive or dependent tasks
+- Use tools actively to inspect the codebase, validate assumptions, apply changes, and verify results
 ${guidelines}
 
 Buddy documentation (read only when the user asks about buddy itself, its SDK, extensions, themes, skills, or TUI):
