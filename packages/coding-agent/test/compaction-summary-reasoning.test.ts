@@ -56,12 +56,12 @@ describe("generateSummary reasoning options", () => {
 		completeSimpleMock.mockResolvedValue(mockSummaryResponse);
 	});
 
-	it("sets reasoning=high for reasoning-capable models", async () => {
+	it("sets minimal reasoning for reasoning-capable models", async () => {
 		await generateSummary(messages, createModel(true), 2000, "test-key");
 
 		expect(completeSimpleMock).toHaveBeenCalledTimes(1);
 		expect(completeSimpleMock.mock.calls[0][2]).toMatchObject({
-			reasoning: "high",
+			reasoning: "minimal",
 			apiKey: "test-key",
 		});
 	});

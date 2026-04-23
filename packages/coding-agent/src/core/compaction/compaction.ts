@@ -484,6 +484,10 @@ Use this EXACT format:
 
 Keep each section concise. Preserve exact file paths, function names, and error messages.`;
 
+const MAX_SUMMARY_TOKENS = 4096;
+const MAX_TURN_PREFIX_SUMMARY_TOKENS = 2048;
+const SUMMARIZATION_REASONING = "minimal" as const;
+
 const UPDATE_SUMMARIZATION_PROMPT = `The messages above are NEW conversation messages to incorporate into the existing summary provided in <previous-summary> tags.
 
 Update the existing structured summary with new information. RULES:
@@ -537,7 +541,7 @@ export async function generateSummary(
 	customInstructions?: string,
 	previousSummary?: string,
 ): Promise<string> {
-	const maxTokens = Math.floor(0.8 * reserveTokens);
+	const maxTokens = Math.min(MAX_SUMMARY_TOKENS, Math.floor(0.5 * reserveTokens));
 
 	// Use update prompt if we have a previous summary, otherwise initial prompt
 	let basePrompt = previousSummary ? UPDATE_SUMMARIZATION_PROMPT : SUMMARIZATION_PROMPT;
@@ -566,7 +570,7 @@ export async function generateSummary(
 	];
 
 	const completionOptions = model.reasoning
-		? { maxTokens, signal, apiKey, headers, reasoning: "high" as const }
+		? { maxTokens, signal, apiKey, headers, reasoning: SUMMARIZATION_REASONING }
 		: { maxTokens, signal, apiKey, headers };
 
 	const response = await completeSimple(
@@ -794,7 +798,7 @@ async function generateTurnPrefixSummary(
 	headers?: Record<string, string>,
 	signal?: AbortSignal,
 ): Promise<string> {
-	const maxTokens = Math.floor(0.5 * reserveTokens); // Smaller budget for turn prefix
+	const maxTokens = Math.min(MAX_TURN_PREFIX_SUMMARY_TOKENS, Math.floor(0.25 * reserveTokens));
 	const llmMessages = convertToLlm(messages);
 	const conversationText = serializeConversation(llmMessages);
 	const promptText = `<conversation>\n${conversationText}\n</conversation>\n\n${TURN_PREFIX_SUMMARIZATION_PROMPT}`;
@@ -809,7 +813,9 @@ async function generateTurnPrefixSummary(
 	const response = await completeSimple(
 		model,
 		{ systemPrompt: SUMMARIZATION_SYSTEM_PROMPT, messages: summarizationMessages },
-		{ maxTokens, signal, apiKey, headers },
+		model.reasoning
+			? { maxTokens, signal, apiKey, headers, reasoning: SUMMARIZATION_REASONING }
+			: { maxTokens, signal, apiKey, headers },
 	);
 
 	if (response.stopReason === "error") {
