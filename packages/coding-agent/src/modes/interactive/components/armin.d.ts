@@ -1,7 +1,7 @@
 /**
  * Armin says hi! A fun easter egg with animated XBM art.
  */
-import type { Component, TUI } from "@mariozechner/pi-tui";
+import type { Component, TUI } from "@foxxytux/buddy-tui";
 export declare class ArminComponent implements Component {
     private ui;
     private interval;

@@ -1,4 +1,4 @@
-import { type ImageContent, type Message, type SimpleStreamOptions, type ThinkingBudgets, type Transport } from "@mariozechner/pi-ai";
+import { type ImageContent, type Message, type SimpleStreamOptions, type ThinkingBudgets, type Transport } from "@foxxytux/buddy-ai";
 import type { AfterToolCallContext, AfterToolCallResult, AgentEvent, AgentMessage, AgentState, BeforeToolCallContext, BeforeToolCallResult, StreamFn, ToolExecutionMode } from "./types.js";
 type QueueMode = "all" | "one-at-a-time";
 /** Options for constructing an {@link Agent}. */

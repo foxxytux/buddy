@@ -2,7 +2,7 @@
  * TUI component for managing package resources (enable/disable)
  */
 import { basename, dirname, join, relative } from "node:path";
-import { Container, getKeybindings, Input, matchesKey, Spacer, truncateToWidth, visibleWidth, } from "@mariozechner/pi-tui";
+import { Container, getKeybindings, Input, matchesKey, Spacer, truncateToWidth, visibleWidth, } from "@foxxytux/buddy-tui";
 import { CONFIG_DIR_NAME } from "../../../config.js";
 import { theme } from "../theme/theme.js";
 import { DynamicBorder } from "./dynamic-border.js";

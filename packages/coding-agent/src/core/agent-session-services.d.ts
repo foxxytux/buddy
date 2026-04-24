@@ -1,5 +1,5 @@
-import type { ThinkingLevel } from "@mariozechner/pi-agent-core";
-import type { Model } from "@mariozechner/pi-ai";
+import type { ThinkingLevel } from "@foxxytux/buddy-agent-core";
+import type { Model } from "@foxxytux/buddy-ai";
 import { AuthStorage } from "./auth-storage.js";
 import type { SessionStartEvent, ToolDefinition } from "./extensions/index.js";
 import { ModelRegistry } from "./model-registry.js";

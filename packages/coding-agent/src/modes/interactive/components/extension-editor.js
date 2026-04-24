@@ -6,7 +6,7 @@ import { spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { Container, Editor, getKeybindings, Spacer, Text, } from "@mariozechner/pi-tui";
+import { Container, Editor, getKeybindings, Spacer, Text, } from "@foxxytux/buddy-tui";
 import { getEditorTheme, theme } from "../theme/theme.js";
 import { DynamicBorder } from "./dynamic-border.js";
 import { keyHint } from "./keybinding-hints.js";

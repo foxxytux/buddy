@@ -1,7 +1,7 @@
 /**
  * CLI argument parsing and help display
  */
-import type { ThinkingLevel } from "@mariozechner/pi-agent-core";
+import type { ThinkingLevel } from "@foxxytux/buddy-agent-core";
 import type { ExtensionFlag } from "../core/extensions/types.js";
 export type Mode = "text" | "json" | "rpc";
 export interface Args {

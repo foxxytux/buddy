@@ -1,4 +1,4 @@
-import { Box, Container, Markdown } from "@mariozechner/pi-tui";
+import { Box, Container, Markdown } from "@foxxytux/buddy-tui";
 import { getMarkdownTheme, theme } from "../theme/theme.js";
 const OSC133_ZONE_START = "\x1b]133;A\x07";
 const OSC133_ZONE_END = "\x1b]133;B\x07";

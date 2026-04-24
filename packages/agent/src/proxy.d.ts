@@ -2,7 +2,7 @@
  * Proxy stream function for apps that route LLM calls through a server.
  * The server manages auth and proxies requests to LLM providers.
  */
-import { type AssistantMessage, type AssistantMessageEvent, type Context, EventStream, type Model, type SimpleStreamOptions, type StopReason } from "@mariozechner/pi-ai";
+import { type AssistantMessage, type AssistantMessageEvent, type Context, EventStream, type Model, type SimpleStreamOptions, type StopReason } from "@foxxytux/buddy-ai";
 declare class ProxyMessageEventStream extends EventStream<AssistantMessageEvent, AssistantMessage> {
     constructor();
 }

@@ -1,7 +1,7 @@
 /**
  * Reusable countdown timer for dialog components.
  */
-import type { TUI } from "@mariozechner/pi-tui";
+import type { TUI } from "@foxxytux/buddy-tui";
 export declare class CountdownTimer {
     private tui;
     private onTick;

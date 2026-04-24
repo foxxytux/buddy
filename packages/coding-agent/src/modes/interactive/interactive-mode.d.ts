@@ -2,7 +2,7 @@
  * Interactive mode for the coding agent.
  * Handles TUI rendering and user interaction, delegating business logic to AgentSession.
  */
-import { type ImageContent } from "@mariozechner/pi-ai";
+import { type ImageContent } from "@foxxytux/buddy-ai";
 import { type AgentSessionRuntime } from "../../core/agent-session-runtime.js";
 export declare function isApiKeyLoginProvider(providerId: string, oauthProviderIds: ReadonlySet<string>, builtInProviderIds?: ReadonlySet<string>): boolean;
 export declare function getApiKeyProviderDisplayName(providerId: string): string;

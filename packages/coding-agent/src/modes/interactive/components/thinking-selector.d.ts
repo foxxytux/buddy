@@ -1,5 +1,5 @@
-import type { ThinkingLevel } from "@mariozechner/pi-agent-core";
-import { Container, SelectList } from "@mariozechner/pi-tui";
+import type { ThinkingLevel } from "@foxxytux/buddy-agent-core";
+import { Container, SelectList } from "@foxxytux/buddy-tui";
 /**
  * Component that renders a thinking level selector with borders
  */

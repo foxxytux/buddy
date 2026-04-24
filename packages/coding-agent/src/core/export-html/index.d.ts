@@ -1,4 +1,4 @@
-import type { AgentState } from "@mariozechner/pi-agent-core";
+import type { AgentState } from "@foxxytux/buddy-agent-core";
 import { SessionManager } from "../session-manager.js";
 /**
  * Interface for rendering custom tools to HTML.

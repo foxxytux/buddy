@@ -1,4 +1,4 @@
-import { truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
+import { truncateToWidth, visibleWidth } from "@foxxytux/buddy-tui";
 import { theme } from "../theme/theme.js";
 /**
  * Sanitize text for display in a single-line status.

@@ -526,7 +526,7 @@ function getDefaultTheme() {
 // Global Theme Instance
 // ============================================================================
 // Use globalThis to share theme across module loaders (tsx + jiti in dev mode)
-const THEME_KEY = Symbol.for("@mariozechner/pi-coding-agent:theme");
+const THEME_KEY = Symbol.for("@foxxytux/buddy-coding-agent:theme");
 // Export theme as a getter that reads from globalThis
 // This ensures all module instances (tsx, jiti) see the same theme
 export const theme = new Proxy({}, {

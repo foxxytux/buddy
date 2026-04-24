@@ -1,4 +1,4 @@
-import { Editor } from "@mariozechner/pi-tui";
+import { Editor } from "@foxxytux/buddy-tui";
 /**
  * Custom editor that handles app-level keybindings for coding-agent.
  */

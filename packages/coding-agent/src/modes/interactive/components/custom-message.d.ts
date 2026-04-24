@@ -1,4 +1,4 @@
-import { Container, type MarkdownTheme } from "@mariozechner/pi-tui";
+import { Container, type MarkdownTheme } from "@foxxytux/buddy-tui";
 import type { MessageRenderer } from "../../../core/extensions/types.js";
 import type { CustomMessage } from "../../../core/messages.js";
 /**

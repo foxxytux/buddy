@@ -2,7 +2,7 @@
  * Generic selector component for extensions.
  * Displays a list of string options with keyboard navigation.
  */
-import { Container, getKeybindings, Spacer, Text } from "@mariozechner/pi-tui";
+import { Container, getKeybindings, Spacer, Text } from "@foxxytux/buddy-tui";
 import { theme } from "../theme/theme.js";
 import { CountdownTimer } from "./countdown-timer.js";
 import { DynamicBorder } from "./dynamic-border.js";

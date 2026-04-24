@@ -1,4 +1,4 @@
-import type { ImageContent, TextContent } from "@mariozechner/pi-ai";
+import type { ImageContent, TextContent } from "@foxxytux/buddy-ai";
 export declare function shortenPath(path: unknown): string;
 export declare function str(value: unknown): string | null;
 export declare function replaceTabs(text: string): string;

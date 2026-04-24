@@ -1,4 +1,4 @@
-import { type Component, Container } from "@mariozechner/pi-tui";
+import { type Component, Container } from "@foxxytux/buddy-tui";
 interface UserMessageItem {
     id: string;
     text: string;

@@ -1,9 +1,9 @@
 /**
  * Extension runner - executes extensions and manages their lifecycle.
  */
-import type { AgentMessage } from "@mariozechner/pi-agent-core";
-import type { ImageContent } from "@mariozechner/pi-ai";
-import type { KeyId } from "@mariozechner/pi-tui";
+import type { AgentMessage } from "@foxxytux/buddy-agent-core";
+import type { ImageContent } from "@foxxytux/buddy-ai";
+import type { KeyId } from "@foxxytux/buddy-tui";
 import type { ResourceDiagnostic } from "../diagnostics.js";
 import type { KeybindingsConfig } from "../keybindings.js";
 import type { ModelRegistry } from "../model-registry.js";

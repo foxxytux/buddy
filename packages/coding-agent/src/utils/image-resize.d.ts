@@ -1,4 +1,4 @@
-import type { ImageContent } from "@mariozechner/pi-ai";
+import type { ImageContent } from "@foxxytux/buddy-ai";
 export interface ImageResizeOptions {
     maxWidth?: number;
     maxHeight?: number;

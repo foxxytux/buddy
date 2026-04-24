@@ -4,7 +4,7 @@
  * When navigating to a different point in the session tree, this generates
  * a summary of the branch being left so context isn't lost.
  */
-import { completeSimple } from "@mariozechner/pi-ai";
+import { completeSimple } from "@foxxytux/buddy-ai";
 import { convertToLlm, createBranchSummaryMessage, createCompactionSummaryMessage, createCustomMessage, } from "../messages.js";
 import { estimateTokens } from "./compaction.js";
 import { computeFileLists, createFileOps, extractFileOpsFromMessage, formatFileOperations, SUMMARIZATION_SYSTEM_PROMPT, serializeConversation, } from "./utils.js";

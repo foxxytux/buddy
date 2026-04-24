@@ -1,7 +1,7 @@
 /**
  * TUI session selector for --resume flag
  */
-import { ProcessTerminal, setKeybindings, TUI } from "@mariozechner/pi-tui";
+import { ProcessTerminal, setKeybindings, TUI } from "@foxxytux/buddy-tui";
 import { KeybindingsManager } from "../core/keybindings.js";
 import { SessionSelectorComponent } from "../modes/interactive/components/session-selector.js";
 /** Show TUI session selector and return selected session path or null if cancelled */

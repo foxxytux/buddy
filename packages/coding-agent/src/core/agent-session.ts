@@ -22,9 +22,9 @@ import type {
 	AgentState,
 	AgentTool,
 	ThinkingLevel,
-} from "@mariozechner/pi-agent-core";
-import type { AssistantMessage, ImageContent, Message, Model, TextContent } from "@mariozechner/pi-ai";
-import { isContextOverflow, modelsAreEqual, resetApiProviders, supportsXhigh } from "@mariozechner/pi-ai";
+} from "@foxxytux/buddy-agent-core";
+import type { AssistantMessage, ImageContent, Message, Model, TextContent } from "@foxxytux/buddy-ai";
+import { isContextOverflow, modelsAreEqual, resetApiProviders, supportsXhigh } from "@foxxytux/buddy-ai";
 import { theme } from "../modes/interactive/theme/theme.js";
 import { stripFrontmatter } from "../utils/frontmatter.js";
 import { sleep } from "../utils/sleep.js";

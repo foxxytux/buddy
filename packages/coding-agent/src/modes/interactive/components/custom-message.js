@@ -1,4 +1,4 @@
-import { Box, Container, Markdown, Spacer, Text } from "@mariozechner/pi-tui";
+import { Box, Container, Markdown, Spacer, Text } from "@foxxytux/buddy-tui";
 import { getMarkdownTheme, theme } from "../theme/theme.js";
 /**
  * Component that renders a custom message entry from extensions.

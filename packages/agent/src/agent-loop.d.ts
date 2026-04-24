@@ -2,7 +2,7 @@
  * Agent loop that works with AgentMessage throughout.
  * Transforms to Message[] only at the LLM call boundary.
  */
-import { EventStream } from "@mariozechner/pi-ai";
+import { EventStream } from "@foxxytux/buddy-ai";
 import type { AgentContext, AgentEvent, AgentLoopConfig, AgentMessage, StreamFn } from "./types.js";
 export type AgentEventSink = (event: AgentEvent) => Promise<void> | void;
 /**

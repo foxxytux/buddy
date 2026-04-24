@@ -1,5 +1,5 @@
 import * as os from "node:os";
-import { getCapabilities, getImageDimensions, imageFallback } from "@mariozechner/pi-tui";
+import { getCapabilities, getImageDimensions, imageFallback } from "@foxxytux/buddy-tui";
 import stripAnsi from "strip-ansi";
 import { sanitizeBinaryOutput } from "../../utils/shell.js";
 export function shortenPath(path) {

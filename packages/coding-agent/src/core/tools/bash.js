@@ -2,7 +2,7 @@ import { randomBytes } from "node:crypto";
 import { createWriteStream, existsSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { Container, Text, truncateToWidth } from "@mariozechner/pi-tui";
+import { Container, Text, truncateToWidth } from "@foxxytux/buddy-tui";
 import { spawn } from "child_process";
 import { Type } from "typebox";
 import { keyHint } from "../../modes/interactive/components/keybinding-hints.js";

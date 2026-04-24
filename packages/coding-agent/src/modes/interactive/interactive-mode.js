@@ -6,8 +6,8 @@ import * as crypto from "node:crypto";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { getProviders, } from "@mariozechner/pi-ai";
-import { CombinedAutocompleteProvider, Container, fuzzyFilter, Loader, Markdown, matchesKey, ProcessTerminal, Spacer, setKeybindings, Text, TruncatedText, TUI, visibleWidth, } from "@mariozechner/pi-tui";
+import { getProviders, } from "@foxxytux/buddy-ai";
+import { CombinedAutocompleteProvider, Container, fuzzyFilter, Loader, Markdown, matchesKey, ProcessTerminal, Spacer, setKeybindings, Text, TruncatedText, TUI, visibleWidth, } from "@foxxytux/buddy-tui";
 import { spawn, spawnSync } from "child_process";
 import { APP_NAME, APP_TITLE, getAgentDir, getAuthPath, getDebugLogPath, getDocsPath, getShareViewerUrl, getUpdateInstruction, VERSION, } from "../../config.js";
 import { parseSkillBlock } from "../../core/agent-session.js";
@@ -572,7 +572,7 @@ export class InteractiveMode {
         if (process.env.PI_SKIP_VERSION_CHECK || process.env.PI_OFFLINE)
             return undefined;
         try {
-            const response = await fetch("https://registry.npmjs.org/@mariozechner/pi-coding-agent/latest", {
+            const response = await fetch("https://registry.npmjs.org/@foxxytux/buddy-coding-agent/latest", {
                 signal: AbortSignal.timeout(10000),
             });
             if (!response.ok)
@@ -2888,7 +2888,7 @@ export class InteractiveMode {
         this.ui.requestRender();
     }
     showNewVersionNotification(newVersion) {
-        const action = theme.fg("accent", getUpdateInstruction("@mariozechner/pi-coding-agent"));
+        const action = theme.fg("accent", getUpdateInstruction("@foxxytux/buddy-coding-agent"));
         const updateInstruction = theme.fg("muted", `New version ${newVersion} is available. `) + action;
         const changelogUrl = theme.fg("accent", "https://github.com/badlogic/pi-mono/blob/main/packages/coding-agent/CHANGELOG.md");
         const changelogLine = theme.fg("muted", "Changelog: ") + changelogUrl;

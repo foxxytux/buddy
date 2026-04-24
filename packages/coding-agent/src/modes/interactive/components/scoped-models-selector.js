@@ -1,4 +1,4 @@
-import { Container, fuzzyFilter, getKeybindings, Input, Key, matchesKey, Spacer, Text, } from "@mariozechner/pi-tui";
+import { Container, fuzzyFilter, getKeybindings, Input, Key, matchesKey, Spacer, Text, } from "@foxxytux/buddy-tui";
 import { theme } from "../theme/theme.js";
 import { DynamicBorder } from "./dynamic-border.js";
 import { keyText } from "./keybinding-hints.js";

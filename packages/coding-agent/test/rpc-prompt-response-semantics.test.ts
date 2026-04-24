@@ -1,14 +1,14 @@
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { Agent } from "@mariozechner/pi-agent-core";
+import { Agent } from "@foxxytux/buddy-agent-core";
 import {
 	type AssistantMessage,
 	type AssistantMessageEvent,
 	EventStream,
 	getModel,
 	type Model,
-} from "@mariozechner/pi-ai";
+} from "@foxxytux/buddy-ai";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { AgentSession } from "../src/core/agent-session.js";
 import type { AgentSessionRuntime } from "../src/core/agent-session-runtime.js";

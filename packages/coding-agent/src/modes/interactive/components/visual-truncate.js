@@ -2,7 +2,7 @@
  * Shared utility for truncating text to visual lines (accounting for line wrapping).
  * Used by both tool-execution.ts and bash-execution.ts for consistent behavior.
  */
-import { Text } from "@mariozechner/pi-tui";
+import { Text } from "@foxxytux/buddy-tui";
 /**
  * Truncate text to a maximum number of visual lines (from the end).
  * This accounts for line wrapping based on terminal width.

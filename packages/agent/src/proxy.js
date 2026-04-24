@@ -3,7 +3,7 @@
  * The server manages auth and proxies requests to LLM providers.
  */
 // Internal import for JSON parsing utility
-import { EventStream, parseStreamingJson, } from "@mariozechner/pi-ai";
+import { EventStream, parseStreamingJson, } from "@foxxytux/buddy-ai";
 // Create stream class matching ProxyMessageEventStream
 class ProxyMessageEventStream extends EventStream {
     constructor() {

@@ -1,7 +1,7 @@
 /**
  * Utilities for formatting keybinding hints in the UI.
  */
-import { getKeybindings } from "@mariozechner/pi-tui";
+import { getKeybindings } from "@foxxytux/buddy-tui";
 import { theme } from "../theme/theme.js";
 function formatKeys(keys) {
     if (keys.length === 0)

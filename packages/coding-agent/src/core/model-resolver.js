@@ -1,7 +1,7 @@
 /**
  * Model resolution, scoping, and initial selection
  */
-import { modelsAreEqual } from "@mariozechner/pi-ai";
+import { modelsAreEqual } from "@foxxytux/buddy-ai";
 import chalk from "chalk";
 import { minimatch } from "minimatch";
 import { isValidThinkingLevel } from "../cli/args.js";

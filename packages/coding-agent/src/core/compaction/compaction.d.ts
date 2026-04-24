@@ -4,8 +4,8 @@
  * Pure functions for compaction logic. The session manager handles I/O,
  * and after compaction the session is reloaded.
  */
-import type { AgentMessage, ThinkingLevel } from "@mariozechner/pi-agent-core";
-import type { Model, Usage } from "@mariozechner/pi-ai";
+import type { AgentMessage, ThinkingLevel } from "@foxxytux/buddy-agent-core";
+import type { Model, Usage } from "@foxxytux/buddy-ai";
 import { type SessionEntry } from "../session-manager.js";
 import { type FileOperations } from "./utils.js";
 /** Details stored in CompactionEntry.details for file tracking */

@@ -1,5 +1,5 @@
-import type { AssistantMessage } from "@mariozechner/pi-ai";
-import { Container, type MarkdownTheme } from "@mariozechner/pi-tui";
+import type { AssistantMessage } from "@foxxytux/buddy-ai";
+import { Container, type MarkdownTheme } from "@foxxytux/buddy-tui";
 /**
  * Component that renders a complete assistant message
  */

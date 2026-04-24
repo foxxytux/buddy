@@ -1,4 +1,4 @@
-import { Text } from "@mariozechner/pi-tui";
+import { Text } from "@foxxytux/buddy-tui";
 import { existsSync, readdirSync, statSync } from "fs";
 import nodePath from "path";
 import { Type } from "typebox";

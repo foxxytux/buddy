@@ -1,5 +1,5 @@
-import type { AgentTool } from "@mariozechner/pi-agent-core";
-import { fauxAssistantMessage, fauxThinking, fauxToolCall } from "@mariozechner/pi-ai";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
+import { fauxAssistantMessage, fauxThinking, fauxToolCall } from "@foxxytux/buddy-ai";
 import { Type } from "typebox";
 import { afterEach, describe, expect, it } from "vitest";
 import { createHarness, type Harness } from "./harness.js";

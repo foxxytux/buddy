@@ -1,4 +1,4 @@
-import { Box, Markdown, Text } from "@mariozechner/pi-tui";
+import { Box, Markdown, Text } from "@foxxytux/buddy-tui";
 import { getMarkdownTheme, theme } from "../theme/theme.js";
 import { keyText } from "./keybinding-hints.js";
 /**

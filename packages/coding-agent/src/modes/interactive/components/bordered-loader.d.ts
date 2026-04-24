@@ -1,4 +1,4 @@
-import { Container, type TUI } from "@mariozechner/pi-tui";
+import { Container, type TUI } from "@foxxytux/buddy-tui";
 import type { Theme } from "../theme/theme.js";
 /** Loader wrapped with borders for extension UI */
 export declare class BorderedLoader extends Container {

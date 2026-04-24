@@ -1,8 +1,8 @@
 /**
  * Shared utilities for compaction and branch summarization.
  */
-import type { AgentMessage } from "@mariozechner/pi-agent-core";
-import type { Message } from "@mariozechner/pi-ai";
+import type { AgentMessage } from "@foxxytux/buddy-agent-core";
+import type { Message } from "@foxxytux/buddy-ai";
 export interface FileOperations {
     read: Set<string>;
     written: Set<string>;

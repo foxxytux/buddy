@@ -1,5 +1,5 @@
-import type { AgentTool } from "@mariozechner/pi-agent-core";
-import { Container, Text } from "@mariozechner/pi-tui";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
+import { Container, Text } from "@foxxytux/buddy-tui";
 import { mkdir as fsMkdir, writeFile as fsWriteFile } from "fs/promises";
 import { dirname } from "path";
 import { type Static, Type } from "typebox";

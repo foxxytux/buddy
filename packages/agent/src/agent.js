@@ -1,4 +1,4 @@
-import { streamSimple, } from "@mariozechner/pi-ai";
+import { streamSimple, } from "@foxxytux/buddy-ai";
 import { runAgentLoop, runAgentLoopContinue } from "./agent-loop.js";
 function defaultConvertToLlm(messages) {
     return messages.filter((message) => message.role === "user" || message.role === "assistant" || message.role === "toolResult");

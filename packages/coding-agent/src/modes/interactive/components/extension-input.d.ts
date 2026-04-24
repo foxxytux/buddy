@@ -1,7 +1,7 @@
 /**
  * Simple text input component for extensions.
  */
-import { Container, type Focusable, type TUI } from "@mariozechner/pi-tui";
+import { Container, type Focusable, type TUI } from "@foxxytux/buddy-tui";
 export interface ExtensionInputOptions {
     tui?: TUI;
     timeout?: number;

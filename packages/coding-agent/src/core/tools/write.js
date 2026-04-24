@@ -1,4 +1,4 @@
-import { Container, Text } from "@mariozechner/pi-tui";
+import { Container, Text } from "@foxxytux/buddy-tui";
 import { mkdir as fsMkdir, writeFile as fsWriteFile } from "fs/promises";
 import { dirname } from "path";
 import { Type } from "typebox";

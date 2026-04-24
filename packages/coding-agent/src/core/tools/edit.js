@@ -1,4 +1,4 @@
-import { Box, Container, Spacer, Text } from "@mariozechner/pi-tui";
+import { Box, Container, Spacer, Text } from "@foxxytux/buddy-tui";
 import { constants } from "fs";
 import { access as fsAccess, readFile as fsReadFile, writeFile as fsWriteFile } from "fs/promises";
 import { Type } from "typebox";

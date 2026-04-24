@@ -5,8 +5,8 @@
  * Uses file locking to prevent race conditions when multiple pi instances
  * try to refresh tokens simultaneously.
  */
-import { findEnvKeys, getEnvApiKey, } from "@mariozechner/pi-ai";
-import { getOAuthApiKey, getOAuthProvider, getOAuthProviders } from "@mariozechner/pi-ai/oauth";
+import { findEnvKeys, getEnvApiKey, } from "@foxxytux/buddy-ai";
+import { getOAuthApiKey, getOAuthProvider, getOAuthProviders } from "@foxxytux/buddy-ai/oauth";
 import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import lockfile from "proper-lockfile";

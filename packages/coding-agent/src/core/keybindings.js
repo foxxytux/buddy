@@ -1,4 +1,4 @@
-import { TUI_KEYBINDINGS, KeybindingsManager as TuiKeybindingsManager, } from "@mariozechner/pi-tui";
+import { TUI_KEYBINDINGS, KeybindingsManager as TuiKeybindingsManager, } from "@foxxytux/buddy-tui";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { getAgentDir } from "../config.js";

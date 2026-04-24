@@ -2,7 +2,7 @@
  * Multi-line editor component for extensions.
  * Supports Ctrl+G for external editor.
  */
-import { Container, type EditorOptions, type Focusable, type TUI } from "@mariozechner/pi-tui";
+import { Container, type EditorOptions, type Focusable, type TUI } from "@foxxytux/buddy-tui";
 import type { KeybindingsManager } from "../../../core/keybindings.js";
 export declare class ExtensionEditorComponent extends Container implements Focusable {
     private editor;

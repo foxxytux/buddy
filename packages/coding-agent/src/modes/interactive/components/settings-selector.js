@@ -1,4 +1,4 @@
-import { Container, getCapabilities, SelectList, SettingsList, Spacer, Text, } from "@mariozechner/pi-tui";
+import { Container, getCapabilities, SelectList, SettingsList, Spacer, Text, } from "@foxxytux/buddy-tui";
 import { getSelectListTheme, getSettingsListTheme, theme } from "../theme/theme.js";
 import { DynamicBorder } from "./dynamic-border.js";
 const SETTINGS_SUBMENU_SELECT_LIST_LAYOUT = {

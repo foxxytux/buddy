@@ -1,5 +1,5 @@
-import { type Model } from "@mariozechner/pi-ai";
-import { Container, type Focusable, Input, type TUI } from "@mariozechner/pi-tui";
+import { type Model } from "@foxxytux/buddy-ai";
+import { Container, type Focusable, Input, type TUI } from "@foxxytux/buddy-tui";
 import type { ModelRegistry } from "../../../core/model-registry.js";
 import type { SettingsManager } from "../../../core/settings-manager.js";
 interface ScopedModelItem {

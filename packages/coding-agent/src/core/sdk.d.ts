@@ -1,5 +1,5 @@
-import { type ThinkingLevel } from "@mariozechner/pi-agent-core";
-import { type Model } from "@mariozechner/pi-ai";
+import { type ThinkingLevel } from "@foxxytux/buddy-agent-core";
+import { type Model } from "@foxxytux/buddy-ai";
 import { AgentSession } from "./agent-session.js";
 import { AuthStorage } from "./auth-storage.js";
 import type { LoadExtensionsResult, SessionStartEvent, ToolDefinition } from "./extensions/index.js";
@@ -77,7 +77,7 @@ export { withFileMutationQueue, createCodingTools, createReadOnlyTools, createRe
  * const { session } = await createAgentSession();
  *
  * // With explicit model
- * import { getModel } from '@mariozechner/pi-ai';
+ * import { getModel } from '@foxxytux/buddy-ai';
  * const { session } = await createAgentSession({
  *   model: getModel('anthropic', 'claude-opus-4-5'),
  *   thinkingLevel: 'high',

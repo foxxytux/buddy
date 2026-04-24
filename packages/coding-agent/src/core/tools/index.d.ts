@@ -7,7 +7,7 @@ export { createLsTool, createLsToolDefinition, type LsOperations, type LsToolDet
 export { createReadTool, createReadToolDefinition, type ReadOperations, type ReadToolDetails, type ReadToolInput, type ReadToolOptions, } from "./read.js";
 export { DEFAULT_MAX_BYTES, DEFAULT_MAX_LINES, formatSize, type TruncationOptions, type TruncationResult, truncateHead, truncateLine, truncateTail, } from "./truncate.js";
 export { createWriteTool, createWriteToolDefinition, type WriteOperations, type WriteToolInput, type WriteToolOptions, } from "./write.js";
-import type { AgentTool } from "@mariozechner/pi-agent-core";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
 import type { ToolDefinition } from "../extensions/types.js";
 import { type BashToolOptions } from "./bash.js";
 import { type EditToolOptions } from "./edit.js";

@@ -1,4 +1,4 @@
-import { CancellableLoader, Container, Loader, Spacer, Text } from "@mariozechner/pi-tui";
+import { CancellableLoader, Container, Loader, Spacer, Text } from "@foxxytux/buddy-tui";
 import { DynamicBorder } from "./dynamic-border.js";
 import { keyHint } from "./keybinding-hints.js";
 /** Loader wrapped with borders for extension UI */

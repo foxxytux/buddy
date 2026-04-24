@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import { existsSync, realpathSync } from "node:fs";
 import { unlink } from "node:fs/promises";
 import * as os from "node:os";
-import { Container, getKeybindings, Input, Spacer, Text, truncateToWidth, visibleWidth, } from "@mariozechner/pi-tui";
+import { Container, getKeybindings, Input, Spacer, Text, truncateToWidth, visibleWidth, } from "@foxxytux/buddy-tui";
 import { KeybindingsManager } from "../../../core/keybindings.js";
 import { theme } from "../theme/theme.js";
 import { DynamicBorder } from "./dynamic-border.js";

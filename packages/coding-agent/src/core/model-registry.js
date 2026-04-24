@@ -1,8 +1,8 @@
 /**
  * Model registry - manages built-in and custom models, provides API key resolution.
  */
-import { getModels, getProviders, registerApiProvider, resetApiProviders, } from "@mariozechner/pi-ai";
-import { registerOAuthProvider, resetOAuthProviders } from "@mariozechner/pi-ai/oauth";
+import { getModels, getProviders, registerApiProvider, resetApiProviders, } from "@foxxytux/buddy-ai";
+import { registerOAuthProvider, resetOAuthProviders } from "@foxxytux/buddy-ai/oauth";
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { Type } from "typebox";

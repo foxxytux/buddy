@@ -3,8 +3,8 @@
  *
  * Spawns the agent in RPC mode and provides a typed API for all operations.
  */
-import type { AgentEvent, AgentMessage, ThinkingLevel } from "@mariozechner/pi-agent-core";
-import type { ImageContent } from "@mariozechner/pi-ai";
+import type { AgentEvent, AgentMessage, ThinkingLevel } from "@foxxytux/buddy-agent-core";
+import type { ImageContent } from "@foxxytux/buddy-ai";
 import type { SessionStats } from "../../core/agent-session.js";
 import type { BashResult } from "../../core/bash-executor.js";
 import type { CompactionResult } from "../../core/compaction/index.js";

@@ -12,8 +12,8 @@
  *
  * Modes use this class and add their own I/O layer on top.
  */
-import type { Agent, AgentEvent, AgentMessage, AgentState, AgentTool, ThinkingLevel } from "@mariozechner/pi-agent-core";
-import type { ImageContent, Model, TextContent } from "@mariozechner/pi-ai";
+import type { Agent, AgentEvent, AgentMessage, AgentState, AgentTool, ThinkingLevel } from "@foxxytux/buddy-agent-core";
+import type { ImageContent, Model, TextContent } from "@foxxytux/buddy-ai";
 import { type BashResult } from "./bash-executor.js";
 import { type CompactionResult } from "./compaction/index.js";
 import { type ContextUsage, type ExtensionCommandContextActions, type ExtensionErrorListener, ExtensionRunner, type ExtensionUIContext, type InputSource, type ReplacedSessionContext, type SessionStartEvent, type ShutdownHandler, type ToolDefinition, type ToolInfo } from "./extensions/index.js";

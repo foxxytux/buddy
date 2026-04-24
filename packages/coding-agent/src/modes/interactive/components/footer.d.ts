@@ -1,4 +1,4 @@
-import { type Component } from "@mariozechner/pi-tui";
+import { type Component } from "@foxxytux/buddy-tui";
 import type { AgentSession } from "../../../core/agent-session.js";
 import type { ReadonlyFooterDataProvider } from "../../../core/footer-data-provider.js";
 /**

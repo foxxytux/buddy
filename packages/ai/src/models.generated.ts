@@ -7622,7 +7622,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 65536,
-			maxTokens: 4096,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"amazon/nova-2-lite-v1": {
 			id: "amazon/nova-2-lite-v1",
@@ -8183,7 +8183,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 163840,
-			maxTokens: 163840,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"deepseek/deepseek-chat-v3-0324": {
 			id: "deepseek/deepseek-chat-v3-0324",
@@ -8200,7 +8200,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 163840,
-			maxTokens: 4096,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"deepseek/deepseek-chat-v3.1": {
 			id: "deepseek/deepseek-chat-v3.1",
@@ -8251,7 +8251,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 163840,
-			maxTokens: 4096,
+			maxTokens: 32768,
 		} satisfies Model<"openai-completions">,
 		"deepseek/deepseek-v3.1-terminus": {
 			id: "deepseek/deepseek-v3.1-terminus",
@@ -8264,11 +8264,11 @@ export const MODELS = {
 			cost: {
 				input: 0.21,
 				output: 0.7899999999999999,
-				cacheRead: 0.1300000002,
+				cacheRead: 0.13,
 				cacheWrite: 0,
 			},
 			contextWindow: 163840,
-			maxTokens: 4096,
+			maxTokens: 32768,
 		} satisfies Model<"openai-completions">,
 		"deepseek/deepseek-v3.2": {
 			id: "deepseek/deepseek-v3.2",
@@ -8610,7 +8610,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 262144,
-			maxTokens: 4096,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"google/gemma-4-31b-it:free": {
 			id: "google/gemma-4-31b-it:free",
@@ -8729,7 +8729,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 131072,
-			maxTokens: 4096,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"meta-llama/llama-3.1-8b-instruct": {
 			id: "meta-llama/llama-3.1-8b-instruct",
@@ -8865,7 +8865,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 196608,
-			maxTokens: 4096,
+			maxTokens: 131072,
 		} satisfies Model<"openai-completions">,
 		"minimax/minimax-m2.5:free": {
 			id: "minimax/minimax-m2.5:free",
@@ -9188,7 +9188,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 128000,
-			maxTokens: 4096,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"mistralai/mistral-small-creative": {
 			id: "mistralai/mistral-small-creative",
@@ -9409,7 +9409,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 131072,
-			maxTokens: 4096,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"nvidia/nemotron-3-nano-30b-a3b": {
 			id: "nvidia/nemotron-3-nano-30b-a3b",
@@ -9426,7 +9426,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 262144,
-			maxTokens: 4096,
+			maxTokens: 228000,
 		} satisfies Model<"openai-completions">,
 		"nvidia/nemotron-3-nano-30b-a3b:free": {
 			id: "nvidia/nemotron-3-nano-30b-a3b:free",
@@ -9511,7 +9511,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 131072,
-			maxTokens: 4096,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"nvidia/nemotron-nano-9b-v2:free": {
 			id: "nvidia/nemotron-nano-9b-v2:free",
@@ -10259,7 +10259,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 131072,
-			maxTokens: 4096,
+			maxTokens: 131072,
 		} satisfies Model<"openai-completions">,
 		"openai/gpt-oss-120b:free": {
 			id: "openai/gpt-oss-120b:free",
@@ -10293,7 +10293,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 131072,
-			maxTokens: 4096,
+			maxTokens: 131072,
 		} satisfies Model<"openai-completions">,
 		"openai/gpt-oss-20b:free": {
 			id: "openai/gpt-oss-20b:free",
@@ -10718,7 +10718,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 262144,
-			maxTokens: 4096,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"qwen/qwen3-235b-a22b-thinking-2507": {
 			id: "qwen/qwen3-235b-a22b-thinking-2507",
@@ -10752,7 +10752,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 40960,
-			maxTokens: 40960,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"qwen/qwen3-30b-a3b-instruct-2507": {
 			id: "qwen/qwen3-30b-a3b-instruct-2507",
@@ -10837,7 +10837,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 262144,
-			maxTokens: 4096,
+			maxTokens: 65536,
 		} satisfies Model<"openai-completions">,
 		"qwen/qwen3-coder-30b-a3b-instruct": {
 			id: "qwen/qwen3-coder-30b-a3b-instruct",
@@ -10973,7 +10973,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 262144,
-			maxTokens: 4096,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"qwen/qwen3-next-80b-a3b-instruct:free": {
 			id: "qwen/qwen3-next-80b-a3b-instruct:free",
@@ -11024,7 +11024,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 262144,
-			maxTokens: 4096,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"qwen/qwen3-vl-235b-a22b-thinking": {
 			id: "qwen/qwen3-vl-235b-a22b-thinking",
@@ -11836,11 +11836,11 @@ export const MODELS = {
 			cost: {
 				input: 0.06,
 				output: 0.39999999999999997,
-				cacheRead: 0.0100000002,
+				cacheRead: 0.01,
 				cacheWrite: 0,
 			},
 			contextWindow: 202752,
-			maxTokens: 4096,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"z-ai/glm-5": {
 			id: "z-ai/glm-5",
@@ -11857,7 +11857,7 @@ export const MODELS = {
 				cacheWrite: 0,
 			},
 			contextWindow: 202752,
-			maxTokens: 4096,
+			maxTokens: 16384,
 		} satisfies Model<"openai-completions">,
 		"z-ai/glm-5-turbo": {
 			id: "z-ai/glm-5-turbo",

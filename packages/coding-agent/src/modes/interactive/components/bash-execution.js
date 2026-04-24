@@ -1,7 +1,7 @@
 /**
  * Component for displaying bash command execution with streaming output.
  */
-import { Container, Loader, Spacer, Text } from "@mariozechner/pi-tui";
+import { Container, Loader, Spacer, Text } from "@foxxytux/buddy-tui";
 import stripAnsi from "strip-ansi";
 import { DEFAULT_MAX_BYTES, DEFAULT_MAX_LINES, truncateTail, } from "../../../core/tools/truncate.js";
 import { theme } from "../theme/theme.js";

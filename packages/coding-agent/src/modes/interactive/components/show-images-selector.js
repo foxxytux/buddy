@@ -1,4 +1,4 @@
-import { Container, SelectList } from "@mariozechner/pi-tui";
+import { Container, SelectList } from "@foxxytux/buddy-tui";
 import { getSelectListTheme } from "../theme/theme.js";
 import { DynamicBorder } from "./dynamic-border.js";
 const SHOW_IMAGES_SELECT_LIST_LAYOUT = {

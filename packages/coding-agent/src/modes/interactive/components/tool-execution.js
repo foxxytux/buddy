@@ -1,4 +1,4 @@
-import { Box, Container, getCapabilities, Image, Spacer, Text } from "@mariozechner/pi-tui";
+import { Box, Container, getCapabilities, Image, Spacer, Text } from "@foxxytux/buddy-tui";
 import { createAllToolDefinitions } from "../../../core/tools/index.js";
 import { getTextOutput as getRenderedTextOutput } from "../../../core/tools/render-utils.js";
 import { convertToPng } from "../../../utils/image-convert.js";

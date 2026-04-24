@@ -1,4 +1,4 @@
-import { Container } from "@mariozechner/pi-tui";
+import { Container } from "@foxxytux/buddy-tui";
 export declare class EarendilAnnouncementComponent extends Container {
     constructor();
 }

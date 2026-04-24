@@ -4,7 +4,7 @@
  * Pure functions for compaction logic. The session manager handles I/O,
  * and after compaction the session is reloaded.
  */
-import { completeSimple } from "@mariozechner/pi-ai";
+import { completeSimple } from "@foxxytux/buddy-ai";
 import { convertToLlm, createBranchSummaryMessage, createCompactionSummaryMessage, createCustomMessage, } from "../messages.js";
 import { buildSessionContext } from "../session-manager.js";
 import { computeFileLists, createFileOps, extractFileOpsFromMessage, formatFileOperations, SUMMARIZATION_SYSTEM_PROMPT, serializeConversation, } from "./utils.js";

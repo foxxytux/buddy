@@ -1,4 +1,4 @@
-import { type Component, Container, type Focusable } from "@mariozechner/pi-tui";
+import { type Component, Container, type Focusable } from "@foxxytux/buddy-tui";
 import { KeybindingsManager } from "../../../core/keybindings.js";
 import type { SessionInfo, SessionListProgress } from "../../../core/session-manager.js";
 import { type NameFilter, type SortMode } from "./session-selector-search.js";

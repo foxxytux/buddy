@@ -1,7 +1,7 @@
 /**
  * List available models with optional fuzzy search
  */
-import { fuzzyFilter } from "@mariozechner/pi-tui";
+import { fuzzyFilter } from "@foxxytux/buddy-tui";
 import chalk from "chalk";
 import { formatNoModelsAvailableMessage } from "../core/auth-guidance.js";
 /**

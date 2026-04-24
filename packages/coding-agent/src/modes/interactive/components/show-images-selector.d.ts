@@ -1,4 +1,4 @@
-import { Container, SelectList } from "@mariozechner/pi-tui";
+import { Container, SelectList } from "@foxxytux/buddy-tui";
 /**
  * Component that renders a show images selector with borders
  */

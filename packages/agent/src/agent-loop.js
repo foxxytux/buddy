@@ -2,7 +2,7 @@
  * Agent loop that works with AgentMessage throughout.
  * Transforms to Message[] only at the LLM call boundary.
  */
-import { EventStream, streamSimple, validateToolArguments, } from "@mariozechner/pi-ai";
+import { EventStream, streamSimple, validateToolArguments, } from "@foxxytux/buddy-ai";
 /**
  * Start an agent loop with a new prompt message.
  * The prompt is added to the context and events are emitted for it.

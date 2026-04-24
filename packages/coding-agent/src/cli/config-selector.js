@@ -1,7 +1,7 @@
 /**
  * TUI config selector for `pi config` command
  */
-import { ProcessTerminal, TUI } from "@mariozechner/pi-tui";
+import { ProcessTerminal, TUI } from "@foxxytux/buddy-tui";
 import { ConfigSelectorComponent } from "../modes/interactive/components/config-selector.js";
 import { initTheme, stopThemeWatcher } from "../modes/interactive/theme/theme.js";
 /** Show TUI config selector and return when closed */

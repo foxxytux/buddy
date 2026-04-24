@@ -1,6 +1,6 @@
-import type { ThinkingLevel } from "@mariozechner/pi-agent-core";
-import type { Transport } from "@mariozechner/pi-ai";
-import { Container, SettingsList } from "@mariozechner/pi-tui";
+import type { ThinkingLevel } from "@foxxytux/buddy-agent-core";
+import type { Transport } from "@foxxytux/buddy-ai";
+import { Container, SettingsList } from "@foxxytux/buddy-tui";
 export interface SettingsConfig {
     autoCompact: boolean;
     showImages: boolean;

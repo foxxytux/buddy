@@ -1,5 +1,5 @@
-import type { Model } from "@mariozechner/pi-ai";
-import { Container, type Focusable, Input } from "@mariozechner/pi-tui";
+import type { Model } from "@foxxytux/buddy-ai";
+import { Container, type Focusable, Input } from "@foxxytux/buddy-tui";
 export interface ModelsConfig {
     allModels: Model<any>[];
     enabledModelIds: string[] | null;

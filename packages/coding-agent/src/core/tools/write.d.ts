@@ -1,4 +1,4 @@
-import type { AgentTool } from "@mariozechner/pi-agent-core";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
 import { type Static, Type } from "typebox";
 import type { ToolDefinition } from "../extensions/types.js";
 declare const writeSchema: Type.TObject<{

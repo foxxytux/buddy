@@ -1,4 +1,4 @@
-import type { EditorTheme, MarkdownTheme, SelectListTheme } from "@mariozechner/pi-tui";
+import type { EditorTheme, MarkdownTheme, SelectListTheme } from "@foxxytux/buddy-tui";
 import type { SourceInfo } from "../../../core/source-info.js";
 export type ThemeColor = "accent" | "border" | "borderAccent" | "borderMuted" | "success" | "error" | "warning" | "muted" | "dim" | "text" | "thinkingText" | "userMessageText" | "customMessageText" | "customMessageLabel" | "toolTitle" | "toolOutput" | "mdHeading" | "mdLink" | "mdLinkUrl" | "mdCode" | "mdCodeBlock" | "mdCodeBlockBorder" | "mdQuote" | "mdQuoteBorder" | "mdHr" | "mdListBullet" | "toolDiffAdded" | "toolDiffRemoved" | "toolDiffContext" | "syntaxComment" | "syntaxKeyword" | "syntaxFunction" | "syntaxVariable" | "syntaxString" | "syntaxNumber" | "syntaxType" | "syntaxOperator" | "syntaxPunctuation" | "thinkingOff" | "thinkingMinimal" | "thinkingLow" | "thinkingMedium" | "thinkingHigh" | "thinkingXhigh" | "bashMode";
 export type ThemeBg = "selectedBg" | "userMessageBg" | "customMessageBg" | "toolPendingBg" | "toolSuccessBg" | "toolErrorBg";
@@ -76,6 +76,6 @@ export declare function getLanguageFromPath(filePath: string): string | undefine
 export declare function getMarkdownTheme(): MarkdownTheme;
 export declare function getSelectListTheme(): SelectListTheme;
 export declare function getEditorTheme(): EditorTheme;
-export declare function getSettingsListTheme(): import("@mariozechner/pi-tui").SettingsListTheme;
+export declare function getSettingsListTheme(): import("@foxxytux/buddy-tui").SettingsListTheme;
 export {};
 //# sourceMappingURL=theme.d.ts.map

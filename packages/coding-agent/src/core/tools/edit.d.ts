@@ -1,5 +1,5 @@
-import type { AgentTool } from "@mariozechner/pi-agent-core";
-import { Box } from "@mariozechner/pi-tui";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
+import { Box } from "@foxxytux/buddy-tui";
 import { type Static, Type } from "typebox";
 import type { ToolDefinition } from "../extensions/types.js";
 import { type EditDiffError, type EditDiffResult } from "./edit-diff.js";
