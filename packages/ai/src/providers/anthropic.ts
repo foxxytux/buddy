@@ -5,6 +5,7 @@ import type {
 	MessageCreateParamsStreaming,
 	MessageParam,
 	RawMessageStreamEvent,
+	ThinkingConfigParam,
 } from "@anthropic-ai/sdk/resources/messages.js";
 import { getEnvApiKey } from "../env-api-keys.js";
 import { calculateCost } from "../models.js";
@@ -895,7 +896,7 @@ function buildParams(
 			const display: AnthropicThinkingDisplay = options.thinkingDisplay ?? "summarized";
 			if (supportsAdaptiveThinking(model.id)) {
 				// Adaptive thinking: Claude decides when and how much to think.
-				params.thinking = { type: "adaptive", display };
+				params.thinking = { type: "adaptive", display } as unknown as ThinkingConfigParam;
 				if (options.effort) {
 					// The Anthropic SDK types can lag newly supported effort values such as "xhigh".
 					params.output_config =
@@ -911,7 +912,7 @@ function buildParams(
 					type: "enabled",
 					budget_tokens: options.thinkingBudgetTokens || 1024,
 					display,
-				};
+				} as Anthropic.ThinkingConfigParam;
 			}
 		} else if (options?.thinkingEnabled === false) {
 			params.thinking = { type: "disabled" };

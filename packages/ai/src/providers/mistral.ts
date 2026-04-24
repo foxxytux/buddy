@@ -1,4 +1,5 @@
 import { Mistral } from "@mistralai/mistralai";
+// @ts-expect-error - deep import resolved via node_modules
 import type {
 	ChatCompletionStreamRequest,
 	ChatCompletionStreamRequestMessage,
