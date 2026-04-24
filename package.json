@@ -50,6 +50,7 @@
 	"dependencies": {
 		"@foxxytux/buddy-coding-agent": "^4.0.0",
 		"@mariozechner/jiti": "^2.6.5",
+		"@mistralai/mistralai": "^2.2.1",
 		"get-east-asian-width": "^1.4.0"
 	},
 	"overrides": {
