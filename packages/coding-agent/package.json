@@ -65,7 +65,8 @@
 		"strip-ansi": "^7.1.0",
 		"undici": "^7.19.1",
 		"uuid": "^11.1.0",
-		"yaml": "^2.8.2"
+		"yaml": "^2.8.2",
+		"typebox": "^1.1.24"
 	},
 	"overrides": {
 		"rimraf": "6.1.2",
