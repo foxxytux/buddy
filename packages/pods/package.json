@@ -1,6 +1,6 @@
 {
 	"name": "@foxxytux/buddy-pods",
-	"version": "4.1.16",
+	"version": "4.1.17",
 	"description": "CLI tool for managing vLLM deployments on GPU pods",
 	"type": "module",
 	"bin": {
@@ -33,7 +33,7 @@
 		"node": ">=20.0.0"
 	},
 	"dependencies": {
-		"@foxxytux/buddy-agent-core": "^4.1.16",
+		"@foxxytux/buddy-agent-core": "^4.1.17",
 		"chalk": "^5.5.0"
 	},
 	"devDependencies": {}
