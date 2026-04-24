@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Added `gpt-5.5` to the built-in `openai-codex` catalog and updated the Codex default model to `gpt-5.5`.
+
 ## [4.1.16] - 2026-04-23
 
 ## [4.1.15] - 2026-04-20

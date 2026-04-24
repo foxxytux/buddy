@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Added `gpt-5.5` to the `openai-codex` model catalog so Codex users can select the new model after release generation.
+
 ## [4.1.16] - 2026-04-23
 
 ## [4.1.15] - 2026-04-20
