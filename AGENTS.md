@@ -95,6 +95,16 @@ From repository root:
 
 If you need to build/publish packages, run the relevant per-package build or use your normal monorepo release tooling. Check `packages/*/package.json` for package-specific scripts.
 
+## Releases
+- Use the root release script for lockstep releases:
+  - `npm run release:patch`
+  - `npm run release:minor`
+  - `npm run release:major`
+- The release script bumps versions, updates changelogs, commits, tags, and publishes to npm.
+- GitHub Actions now creates the GitHub Release automatically for each pushed `v*` tag.
+- If a release tag already exists on GitHub and needs to be re-fired, delete and re-push the tag instead of creating a second version.
+- For the current `v4.1.18` release, the repo already has the tag and the workflow should publish the GitHub Release from that tag event.
+
 ## Conventions
 - Language and tooling:
   - TypeScript monorepo (see `tsconfig.json` and `tsconfig.base.json`)

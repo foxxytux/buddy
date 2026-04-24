@@ -104,6 +104,7 @@ git push origin --tags
 Developer notes
 
 - Build and publish are driven from the monorepo root. The `publish` script calls `npm publish -ws` and publishes workspace packages by their package.json `name` fields.
+- GitHub Actions automatically creates the GitHub Release for each pushed `v*` tag.
 - Use `npm run check` before committing. See CONTRIBUTING.md for contributor rules.
 
 Troubleshooting
