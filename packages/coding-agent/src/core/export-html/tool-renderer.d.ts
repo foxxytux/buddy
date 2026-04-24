@@ -7,28 +7,36 @@
 import type { Theme } from "../../modes/interactive/theme/theme.js";
 import type { ToolDefinition } from "../extensions/types.js";
 export interface ToolHtmlRendererDeps {
-    /** Function to look up tool definition by name */
-    getToolDefinition: (name: string) => ToolDefinition | undefined;
-    /** Theme for styling */
-    theme: Theme;
-    /** Working directory for render context */
-    cwd: string;
-    /** Terminal width for rendering (default: 100) */
-    width?: number;
+	/** Function to look up tool definition by name */
+	getToolDefinition: (name: string) => ToolDefinition | undefined;
+	/** Theme for styling */
+	theme: Theme;
+	/** Working directory for render context */
+	cwd: string;
+	/** Terminal width for rendering (default: 100) */
+	width?: number;
 }
 export interface ToolHtmlRenderer {
-    /** Render a tool call to HTML. Returns undefined if tool has no custom renderer. */
-    renderCall(toolCallId: string, toolName: string, args: unknown): string | undefined;
-    /** Render a tool result to collapsed/expanded HTML. Returns undefined if tool has no custom renderer. */
-    renderResult(toolCallId: string, toolName: string, result: Array<{
-        type: string;
-        text?: string;
-        data?: string;
-        mimeType?: string;
-    }>, details: unknown, isError: boolean): {
-        collapsed?: string;
-        expanded?: string;
-    } | undefined;
+	/** Render a tool call to HTML. Returns undefined if tool has no custom renderer. */
+	renderCall(toolCallId: string, toolName: string, args: unknown): string | undefined;
+	/** Render a tool result to collapsed/expanded HTML. Returns undefined if tool has no custom renderer. */
+	renderResult(
+		toolCallId: string,
+		toolName: string,
+		result: Array<{
+			type: string;
+			text?: string;
+			data?: string;
+			mimeType?: string;
+		}>,
+		details: unknown,
+		isError: boolean,
+	):
+		| {
+				collapsed?: string;
+				expanded?: string;
+		  }
+		| undefined;
 }
 /**
  * Create a tool HTML renderer.

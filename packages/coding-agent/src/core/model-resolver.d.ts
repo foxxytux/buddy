@@ -7,21 +7,24 @@ import type { ModelRegistry } from "./model-registry.js";
 /** Default model IDs for each known provider */
 export declare const defaultModelPerProvider: Record<KnownProvider, string>;
 export interface ScopedModel {
-    model: Model<Api>;
-    /** Thinking level if explicitly specified in pattern (e.g., "model:high"), undefined otherwise */
-    thinkingLevel?: ThinkingLevel;
+	model: Model<Api>;
+	/** Thinking level if explicitly specified in pattern (e.g., "model:high"), undefined otherwise */
+	thinkingLevel?: ThinkingLevel;
 }
 /**
  * Find an exact model reference match.
  * Supports either a bare model id or a canonical provider/modelId reference.
  * When matching by bare id, ambiguous matches across providers are rejected.
  */
-export declare function findExactModelReferenceMatch(modelReference: string, availableModels: Model<Api>[]): Model<Api> | undefined;
+export declare function findExactModelReferenceMatch(
+	modelReference: string,
+	availableModels: Model<Api>[],
+): Model<Api> | undefined;
 export interface ParsedModelResult {
-    model: Model<Api> | undefined;
-    /** Thinking level if explicitly specified in pattern, undefined otherwise */
-    thinkingLevel?: ThinkingLevel;
-    warning: string | undefined;
+	model: Model<Api> | undefined;
+	/** Thinking level if explicitly specified in pattern, undefined otherwise */
+	thinkingLevel?: ThinkingLevel;
+	warning: string | undefined;
 }
 /**
  * Parse a pattern to extract model and thinking level.
@@ -36,9 +39,13 @@ export interface ParsedModelResult {
  *
  * @internal Exported for testing
  */
-export declare function parseModelPattern(pattern: string, availableModels: Model<Api>[], options?: {
-    allowInvalidThinkingLevelFallback?: boolean;
-}): ParsedModelResult;
+export declare function parseModelPattern(
+	pattern: string,
+	availableModels: Model<Api>[],
+	options?: {
+		allowInvalidThinkingLevelFallback?: boolean;
+	},
+): ParsedModelResult;
 /**
  * Resolve model patterns to actual Model objects with optional thinking levels
  * Format: "pattern:level" where :level is optional
@@ -52,14 +59,14 @@ export declare function parseModelPattern(pattern: string, availableModels: Mode
  */
 export declare function resolveModelScope(patterns: string[], modelRegistry: ModelRegistry): Promise<ScopedModel[]>;
 export interface ResolveCliModelResult {
-    model: Model<Api> | undefined;
-    thinkingLevel?: ThinkingLevel;
-    warning: string | undefined;
-    /**
-     * Error message suitable for CLI display.
-     * When set, model will be undefined.
-     */
-    error: string | undefined;
+	model: Model<Api> | undefined;
+	thinkingLevel?: ThinkingLevel;
+	warning: string | undefined;
+	/**
+	 * Error message suitable for CLI display.
+	 * When set, model will be undefined.
+	 */
+	error: string | undefined;
 }
 /**
  * Resolve a single model from CLI flags.
@@ -73,14 +80,14 @@ export interface ResolveCliModelResult {
  * return a thinking level from "<pattern>:<thinking>" so the caller can apply it.
  */
 export declare function resolveCliModel(options: {
-    cliProvider?: string;
-    cliModel?: string;
-    modelRegistry: ModelRegistry;
+	cliProvider?: string;
+	cliModel?: string;
+	modelRegistry: ModelRegistry;
 }): ResolveCliModelResult;
 export interface InitialModelResult {
-    model: Model<Api> | undefined;
-    thinkingLevel: ThinkingLevel;
-    fallbackMessage: string | undefined;
+	model: Model<Api> | undefined;
+	thinkingLevel: ThinkingLevel;
+	fallbackMessage: string | undefined;
 }
 /**
  * Find the initial model to use based on priority:
@@ -91,20 +98,26 @@ export interface InitialModelResult {
  * 5. First available model with valid API key
  */
 export declare function findInitialModel(options: {
-    cliProvider?: string;
-    cliModel?: string;
-    scopedModels: ScopedModel[];
-    isContinuing: boolean;
-    defaultProvider?: string;
-    defaultModelId?: string;
-    defaultThinkingLevel?: ThinkingLevel;
-    modelRegistry: ModelRegistry;
+	cliProvider?: string;
+	cliModel?: string;
+	scopedModels: ScopedModel[];
+	isContinuing: boolean;
+	defaultProvider?: string;
+	defaultModelId?: string;
+	defaultThinkingLevel?: ThinkingLevel;
+	modelRegistry: ModelRegistry;
 }): Promise<InitialModelResult>;
 /**
  * Restore model from session, with fallback to available models
  */
-export declare function restoreModelFromSession(savedProvider: string, savedModelId: string, currentModel: Model<Api> | undefined, shouldPrintMessages: boolean, modelRegistry: ModelRegistry): Promise<{
-    model: Model<Api> | undefined;
-    fallbackMessage: string | undefined;
+export declare function restoreModelFromSession(
+	savedProvider: string,
+	savedModelId: string,
+	currentModel: Model<Api> | undefined,
+	shouldPrintMessages: boolean,
+	modelRegistry: ModelRegistry,
+): Promise<{
+	model: Model<Api> | undefined;
+	fallbackMessage: string | undefined;
 }>;
 //# sourceMappingURL=model-resolver.d.ts.map

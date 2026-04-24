@@ -9,7 +9,13 @@
  * - Antigravity (Gemini 3, Claude, GPT-OSS via Google Cloud)
  */
 export { anthropicOAuthProvider, loginAnthropic, refreshAnthropicToken } from "./anthropic.js";
-export { getGitHubCopilotBaseUrl, githubCopilotOAuthProvider, loginGitHubCopilot, normalizeDomain, refreshGitHubCopilotToken, } from "./github-copilot.js";
+export {
+	getGitHubCopilotBaseUrl,
+	githubCopilotOAuthProvider,
+	loginGitHubCopilot,
+	normalizeDomain,
+	refreshGitHubCopilotToken,
+} from "./github-copilot.js";
 export { antigravityOAuthProvider, loginAntigravity, refreshAntigravityToken } from "./google-antigravity.js";
 export { geminiCliOAuthProvider, loginGeminiCli, refreshGoogleCloudToken } from "./google-gemini-cli.js";
 export { loginOpenAICodex, openaiCodexOAuthProvider, refreshOpenAICodexToken } from "./openai-codex.js";
@@ -46,7 +52,10 @@ export declare function getOAuthProviderInfoList(): OAuthProviderInfo[];
  * Refresh token for any OAuth provider.
  * @deprecated Use getOAuthProvider(id).refreshToken() instead
  */
-export declare function refreshOAuthToken(providerId: OAuthProviderId, credentials: OAuthCredentials): Promise<OAuthCredentials>;
+export declare function refreshOAuthToken(
+	providerId: OAuthProviderId,
+	credentials: OAuthCredentials,
+): Promise<OAuthCredentials>;
 /**
  * Get API key for a provider from OAuth credentials.
  * Automatically refreshes expired tokens.
@@ -54,8 +63,11 @@ export declare function refreshOAuthToken(providerId: OAuthProviderId, credentia
  * @returns API key string and updated credentials, or null if no credentials
  * @throws Error if refresh fails
  */
-export declare function getOAuthApiKey(providerId: OAuthProviderId, credentials: Record<string, OAuthCredentials>): Promise<{
-    newCredentials: OAuthCredentials;
-    apiKey: string;
+export declare function getOAuthApiKey(
+	providerId: OAuthProviderId,
+	credentials: Record<string, OAuthCredentials>,
+): Promise<{
+	newCredentials: OAuthCredentials;
+	apiKey: string;
 } | null>;
 //# sourceMappingURL=index.d.ts.map

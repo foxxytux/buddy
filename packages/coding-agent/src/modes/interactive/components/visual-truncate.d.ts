@@ -3,10 +3,10 @@
  * Used by both tool-execution.ts and bash-execution.ts for consistent behavior.
  */
 export interface VisualTruncateResult {
-    /** The visual lines to display */
-    visualLines: string[];
-    /** Number of visual lines that were skipped (hidden) */
-    skippedCount: number;
+	/** The visual lines to display */
+	visualLines: string[];
+	/** Number of visual lines that were skipped (hidden) */
+	skippedCount: number;
 }
 /**
  * Truncate text to a maximum number of visual lines (from the end).
@@ -20,5 +20,10 @@ export interface VisualTruncateResult {
  *                   Use 1 when result will be placed in a plain Container.
  * @returns The truncated visual lines and count of skipped lines
  */
-export declare function truncateToVisualLines(text: string, maxVisualLines: number, width: number, paddingX?: number): VisualTruncateResult;
+export declare function truncateToVisualLines(
+	text: string,
+	maxVisualLines: number,
+	width: number,
+	paddingX?: number,
+): VisualTruncateResult;
 //# sourceMappingURL=visual-truncate.d.ts.map

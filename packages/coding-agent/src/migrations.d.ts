@@ -27,7 +27,7 @@ export declare function showDeprecationWarnings(warnings: string[]): Promise<voi
  * @returns Object with migration results and deprecation warnings
  */
 export declare function runMigrations(cwd: string): {
-    migratedAuthProviders: string[];
-    deprecationWarnings: string[];
+	migratedAuthProviders: string[];
+	deprecationWarnings: string[];
 };
 //# sourceMappingURL=migrations.d.ts.map

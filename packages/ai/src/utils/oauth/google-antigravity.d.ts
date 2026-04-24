@@ -18,9 +18,10 @@ export declare function refreshAntigravityToken(refreshToken: string, projectId:
  * @param onManualCodeInput - Optional promise that resolves with user-pasted redirect URL.
  *                            Races with browser callback - whichever completes first wins.
  */
-export declare function loginAntigravity(onAuth: (info: {
-    url: string;
-    instructions?: string;
-}) => void, onProgress?: (message: string) => void, onManualCodeInput?: () => Promise<string>): Promise<OAuthCredentials>;
+export declare function loginAntigravity(
+	onAuth: (info: { url: string; instructions?: string }) => void,
+	onProgress?: (message: string) => void,
+	onManualCodeInput?: () => Promise<string>,
+): Promise<OAuthCredentials>;
 export declare const antigravityOAuthProvider: OAuthProviderInterface;
 //# sourceMappingURL=google-antigravity.d.ts.map

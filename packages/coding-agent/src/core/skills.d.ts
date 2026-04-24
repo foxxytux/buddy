@@ -1,28 +1,28 @@
 import type { ResourceDiagnostic } from "./diagnostics.js";
 import { type SourceInfo } from "./source-info.js";
 export interface SkillFrontmatter {
-    name?: string;
-    description?: string;
-    "disable-model-invocation"?: boolean;
-    [key: string]: unknown;
+	name?: string;
+	description?: string;
+	"disable-model-invocation"?: boolean;
+	[key: string]: unknown;
 }
 export interface Skill {
-    name: string;
-    description: string;
-    filePath: string;
-    baseDir: string;
-    sourceInfo: SourceInfo;
-    disableModelInvocation: boolean;
+	name: string;
+	description: string;
+	filePath: string;
+	baseDir: string;
+	sourceInfo: SourceInfo;
+	disableModelInvocation: boolean;
 }
 export interface LoadSkillsResult {
-    skills: Skill[];
-    diagnostics: ResourceDiagnostic[];
+	skills: Skill[];
+	diagnostics: ResourceDiagnostic[];
 }
 export interface LoadSkillsFromDirOptions {
-    /** Directory to scan for skills */
-    dir: string;
-    /** Source identifier for these skills */
-    source: string;
+	/** Directory to scan for skills */
+	dir: string;
+	/** Source identifier for these skills */
+	source: string;
 }
 /**
  * Load skills from a directory.
@@ -43,14 +43,14 @@ export declare function loadSkillsFromDir(options: LoadSkillsFromDirOptions): Lo
  */
 export declare function formatSkillsForPrompt(skills: Skill[]): string;
 export interface LoadSkillsOptions {
-    /** Working directory for project-local skills. */
-    cwd: string;
-    /** Agent config directory for global skills. */
-    agentDir: string;
-    /** Explicit skill paths (files or directories) */
-    skillPaths: string[];
-    /** Include default skills directories. */
-    includeDefaults: boolean;
+	/** Working directory for project-local skills. */
+	cwd: string;
+	/** Agent config directory for global skills. */
+	agentDir: string;
+	/** Explicit skill paths (files or directories) */
+	skillPaths: string[];
+	/** Include default skills directories. */
+	includeDefaults: boolean;
 }
 /**
  * Load skills from all configured locations.

@@ -1,6 +1,6 @@
 export interface RenderDiffOptions {
-    /** File path (unused, kept for API compatibility) */
-    filePath?: string;
+	/** File path (unused, kept for API compatibility) */
+	filePath?: string;
 }
 /**
  * Render a diff string with colored lines and intra-line change highlighting.

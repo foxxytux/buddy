@@ -9,9 +9,12 @@ export declare function visibleWidth(str: string): number;
 /**
  * Extract ANSI escape sequences from a string at the given position.
  */
-export declare function extractAnsiCode(str: string, pos: number): {
-    code: string;
-    length: number;
+export declare function extractAnsiCode(
+	str: string,
+	pos: number,
+): {
+	code: string;
+	length: number;
 } | null;
 /**
  * Wrap text with ANSI codes preserved.
@@ -60,19 +63,30 @@ export declare function truncateToWidth(text: string, maxWidth: number, ellipsis
  */
 export declare function sliceByColumn(line: string, startCol: number, length: number, strict?: boolean): string;
 /** Like sliceByColumn but also returns the actual visible width of the result. */
-export declare function sliceWithWidth(line: string, startCol: number, length: number, strict?: boolean): {
-    text: string;
-    width: number;
+export declare function sliceWithWidth(
+	line: string,
+	startCol: number,
+	length: number,
+	strict?: boolean,
+): {
+	text: string;
+	width: number;
 };
 /**
  * Extract "before" and "after" segments from a line in a single pass.
  * Used for overlay compositing where we need content before and after the overlay region.
  * Preserves styling from before the overlay that should affect content after it.
  */
-export declare function extractSegments(line: string, beforeEnd: number, afterStart: number, afterLen: number, strictAfter?: boolean): {
-    before: string;
-    beforeWidth: number;
-    after: string;
-    afterWidth: number;
+export declare function extractSegments(
+	line: string,
+	beforeEnd: number,
+	afterStart: number,
+	afterLen: number,
+	strictAfter?: boolean,
+): {
+	before: string;
+	beforeWidth: number;
+	after: string;
+	afterWidth: number;
 };
 //# sourceMappingURL=utils.d.ts.map

@@ -17,14 +17,11 @@ import type { OAuthCredentials, OAuthPrompt, OAuthProviderInterface } from "./ty
  * @param options.originator - OAuth originator parameter (defaults to "pi")
  */
 export declare function loginOpenAICodex(options: {
-    onAuth: (info: {
-        url: string;
-        instructions?: string;
-    }) => void;
-    onPrompt: (prompt: OAuthPrompt) => Promise<string>;
-    onProgress?: (message: string) => void;
-    onManualCodeInput?: () => Promise<string>;
-    originator?: string;
+	onAuth: (info: { url: string; instructions?: string }) => void;
+	onPrompt: (prompt: OAuthPrompt) => Promise<string>;
+	onProgress?: (message: string) => void;
+	onManualCodeInput?: () => Promise<string>;
+	originator?: string;
 }): Promise<OAuthCredentials>;
 /**
  * Refresh OpenAI Codex OAuth token

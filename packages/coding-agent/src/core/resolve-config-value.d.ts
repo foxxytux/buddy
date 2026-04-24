@@ -17,7 +17,10 @@ export declare function resolveConfigValueOrThrow(config: string, description: s
  * Resolve all header values using the same resolution logic as API keys.
  */
 export declare function resolveHeaders(headers: Record<string, string> | undefined): Record<string, string> | undefined;
-export declare function resolveHeadersOrThrow(headers: Record<string, string> | undefined, description: string): Record<string, string> | undefined;
+export declare function resolveHeadersOrThrow(
+	headers: Record<string, string> | undefined,
+	description: string,
+): Record<string, string> | undefined;
 /** Clear the config value command cache. Exported for testing. */
 export declare function clearConfigValueCache(): void;
 //# sourceMappingURL=resolve-config-value.d.ts.map

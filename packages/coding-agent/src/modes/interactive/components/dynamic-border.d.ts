@@ -7,9 +7,9 @@ import type { Component } from "@mariozechner/pi-tui";
  * function when using DynamicBorder in components exported for extension use.
  */
 export declare class DynamicBorder implements Component {
-    private color;
-    constructor(color?: (str: string) => string);
-    invalidate(): void;
-    render(width: number): string[];
+	private color;
+	constructor(color?: (str: string) => string);
+	invalidate(): void;
+	render(width: number): string[];
 }
 //# sourceMappingURL=dynamic-border.d.ts.map

@@ -1,5 +1,5 @@
 import { Container } from "@mariozechner/pi-tui";
 export declare class EarendilAnnouncementComponent extends Container {
-    constructor();
+	constructor();
 }
 //# sourceMappingURL=earendil-announcement.d.ts.map

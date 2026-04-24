@@ -1,3 +1,6 @@
 import type { SettingsManager } from "./settings-manager.js";
-export declare function isInstallTelemetryEnabled(settingsManager: SettingsManager, telemetryEnv?: string | undefined): boolean;
+export declare function isInstallTelemetryEnabled(
+	settingsManager: SettingsManager,
+	telemetryEnv?: string | undefined,
+): boolean;
 //# sourceMappingURL=telemetry.d.ts.map

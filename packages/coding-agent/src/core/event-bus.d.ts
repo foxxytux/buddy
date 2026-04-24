@@ -1,9 +1,9 @@
 export interface EventBus {
-    emit(channel: string, data: unknown): void;
-    on(channel: string, handler: (data: unknown) => void): () => void;
+	emit(channel: string, data: unknown): void;
+	on(channel: string, handler: (data: unknown) => void): () => void;
 }
 export interface EventBusController extends EventBus {
-    clear(): void;
+	clear(): void;
 }
 export declare function createEventBus(): EventBusController;
 //# sourceMappingURL=event-bus.d.ts.map
