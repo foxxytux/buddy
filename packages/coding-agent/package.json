@@ -1,6 +1,6 @@
 {
 	"name": "@foxxytux/buddy-coding-agent",
-	"version": "4.1.18",
+	"version": "4.1.19",
 	"description": "General agent CLI with read, bash, edit, write tools and session management",
 	"type": "module",
 	"buddyConfig": {

@@ -1,6 +1,6 @@
 {
 	"name": "@foxxytux/buddy",
-	"version": "4.1.18",
+	"version": "4.1.19",
 	"description": "Buddy — metapackage that installs the Buddy CLI and runtime packages",
 	"scripts": {
 		"clean": "shx rm -rf dist"

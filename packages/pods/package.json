@@ -1,6 +1,6 @@
 {
 	"name": "@foxxytux/buddy-pods",
-	"version": "4.1.18",
+	"version": "4.1.19",
 	"description": "CLI tool for managing vLLM deployments on GPU pods",
 	"type": "module",
 	"bin": {

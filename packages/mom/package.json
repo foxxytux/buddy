@@ -1,6 +1,6 @@
 {
 	"name": "@foxxytux/buddy-mom",
-	"version": "4.1.18",
+	"version": "4.1.19",
 	"description": "Slack bot that delegates messages to the pi coding agent",
 	"type": "module",
 	"bin": {
