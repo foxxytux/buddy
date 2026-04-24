@@ -1,5 +1,5 @@
 import { createInterface } from "node:readline";
-import { Text } from "@mariozechner/pi-tui";
+import { Text } from "@foxxytux/buddy-tui";
 import { spawn } from "child_process";
 import { existsSync } from "fs";
 import path from "path";

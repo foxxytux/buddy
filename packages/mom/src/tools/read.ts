@@ -1,5 +1,5 @@
-import type { AgentTool } from "@mariozechner/pi-agent-core";
-import type { ImageContent, TextContent } from "@mariozechner/pi-ai";
+import type { AgentTool } from "@foxxytux/buddy-agent-core";
+import type { ImageContent, TextContent } from "@foxxytux/buddy-ai";
 import { extname } from "path";
 import { Type } from "typebox";
 import type { Executor } from "../sandbox.js";
