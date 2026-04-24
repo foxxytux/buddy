@@ -10,21 +10,21 @@ import { type SessionEntry } from "../session-manager.js";
 import { type FileOperations } from "./utils.js";
 /** Details stored in CompactionEntry.details for file tracking */
 export interface CompactionDetails {
-	readFiles: string[];
-	modifiedFiles: string[];
+    readFiles: string[];
+    modifiedFiles: string[];
 }
 /** Result from compact() - SessionManager adds uuid/parentUuid when saving */
 export interface CompactionResult<T = unknown> {
-	summary: string;
-	firstKeptEntryId: string;
-	tokensBefore: number;
-	/** Extension-specific data (e.g., ArtifactIndex, version markers for structured compaction) */
-	details?: T;
+    summary: string;
+    firstKeptEntryId: string;
+    tokensBefore: number;
+    /** Extension-specific data (e.g., ArtifactIndex, version markers for structured compaction) */
+    details?: T;
 }
 export interface CompactionSettings {
-	enabled: boolean;
-	reserveTokens: number;
-	keepRecentTokens: number;
+    enabled: boolean;
+    reserveTokens: number;
+    keepRecentTokens: number;
 }
 export declare const DEFAULT_COMPACTION_SETTINGS: CompactionSettings;
 /**
@@ -37,10 +37,10 @@ export declare function calculateContextTokens(usage: Usage): number;
  */
 export declare function getLastAssistantUsage(entries: SessionEntry[]): Usage | undefined;
 export interface ContextUsageEstimate {
-	tokens: number;
-	usageTokens: number;
-	trailingTokens: number;
-	lastUsageIndex: number | null;
+    tokens: number;
+    usageTokens: number;
+    trailingTokens: number;
+    lastUsageIndex: number | null;
 }
 /**
  * Estimate context tokens from messages, using the last assistant usage when available.
@@ -50,11 +50,7 @@ export declare function estimateContextTokens(messages: AgentMessage[]): Context
 /**
  * Check if compaction should trigger based on context usage.
  */
-export declare function shouldCompact(
-	contextTokens: number,
-	contextWindow: number,
-	settings: CompactionSettings,
-): boolean;
+export declare function shouldCompact(contextTokens: number, contextWindow: number, settings: CompactionSettings): boolean;
 /**
  * Estimate token count for a message using chars/4 heuristic.
  * This is conservative (overestimates tokens).
@@ -67,12 +63,12 @@ export declare function estimateTokens(message: AgentMessage): number;
  */
 export declare function findTurnStartIndex(entries: SessionEntry[], entryIndex: number, startIndex: number): number;
 export interface CutPointResult {
-	/** Index of first entry to keep */
-	firstKeptEntryIndex: number;
-	/** Index of user message that starts the turn being split, or -1 if not splitting */
-	turnStartIndex: number;
-	/** Whether this cut splits a turn (cut point is not a user message) */
-	isSplitTurn: boolean;
+    /** Index of first entry to keep */
+    firstKeptEntryIndex: number;
+    /** Index of user message that starts the turn being split, or -1 if not splitting */
+    turnStartIndex: number;
+    /** Whether this cut splits a turn (cut point is not a user message) */
+    isSplitTurn: boolean;
 }
 /**
  * Find the cut point in session entries that keeps approximately `keepRecentTokens`.
@@ -90,48 +86,30 @@ export interface CutPointResult {
  *
  * Only considers entries between `startIndex` and `endIndex` (exclusive).
  */
-export declare function findCutPoint(
-	entries: SessionEntry[],
-	startIndex: number,
-	endIndex: number,
-	keepRecentTokens: number,
-): CutPointResult;
+export declare function findCutPoint(entries: SessionEntry[], startIndex: number, endIndex: number, keepRecentTokens: number): CutPointResult;
 /**
  * Generate a summary of the conversation using the LLM.
  * If previousSummary is provided, uses the update prompt to merge.
  */
-export declare function generateSummary(
-	currentMessages: AgentMessage[],
-	model: Model<any>,
-	reserveTokens: number,
-	apiKey: string,
-	headers?: Record<string, string>,
-	signal?: AbortSignal,
-	customInstructions?: string,
-	previousSummary?: string,
-	thinkingLevel?: ThinkingLevel,
-): Promise<string>;
+export declare function generateSummary(currentMessages: AgentMessage[], model: Model<any>, reserveTokens: number, apiKey: string, headers?: Record<string, string>, signal?: AbortSignal, customInstructions?: string, previousSummary?: string, thinkingLevel?: ThinkingLevel): Promise<string>;
 export interface CompactionPreparation {
-	/** UUID of first entry to keep */
-	firstKeptEntryId: string;
-	/** Messages that will be summarized and discarded */
-	messagesToSummarize: AgentMessage[];
-	/** Messages that will be turned into turn prefix summary (if splitting) */
-	turnPrefixMessages: AgentMessage[];
-	/** Whether this is a split turn (cut point in middle of turn) */
-	isSplitTurn: boolean;
-	tokensBefore: number;
-	/** Summary from previous compaction, for iterative update */
-	previousSummary?: string;
-	/** File operations extracted from messagesToSummarize */
-	fileOps: FileOperations;
-	/** Compaction settions from settings.jsonl	*/
-	settings: CompactionSettings;
+    /** UUID of first entry to keep */
+    firstKeptEntryId: string;
+    /** Messages that will be summarized and discarded */
+    messagesToSummarize: AgentMessage[];
+    /** Messages that will be turned into turn prefix summary (if splitting) */
+    turnPrefixMessages: AgentMessage[];
+    /** Whether this is a split turn (cut point in middle of turn) */
+    isSplitTurn: boolean;
+    tokensBefore: number;
+    /** Summary from previous compaction, for iterative update */
+    previousSummary?: string;
+    /** File operations extracted from messagesToSummarize */
+    fileOps: FileOperations;
+    /** Compaction settions from settings.jsonl	*/
+    settings: CompactionSettings;
 }
-export declare function prepareCompaction(
-	pathEntries: SessionEntry[],
-	settings: CompactionSettings,
-): CompactionPreparation | undefined;
+export declare function prepareCompaction(pathEntries: SessionEntry[], settings: CompactionSettings): CompactionPreparation | undefined;
 /**
  * Generate summaries for compaction using prepared data.
  * Returns CompactionResult - SessionManager adds uuid/parentUuid when saving.
@@ -139,13 +117,5 @@ export declare function prepareCompaction(
  * @param preparation - Pre-calculated preparation from prepareCompaction()
  * @param customInstructions - Optional custom focus for the summary
  */
-export declare function compact(
-	preparation: CompactionPreparation,
-	model: Model<any>,
-	apiKey: string,
-	headers?: Record<string, string>,
-	customInstructions?: string,
-	signal?: AbortSignal,
-	thinkingLevel?: ThinkingLevel,
-): Promise<CompactionResult>;
+export declare function compact(preparation: CompactionPreparation, model: Model<any>, apiKey: string, headers?: Record<string, string>, customInstructions?: string, signal?: AbortSignal, thinkingLevel?: ThinkingLevel): Promise<CompactionResult>;
 //# sourceMappingURL=compaction.d.ts.map

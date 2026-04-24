@@ -1,18 +1,18 @@
 import type { ImageContent } from "@mariozechner/pi-ai";
 export interface ImageResizeOptions {
-	maxWidth?: number;
-	maxHeight?: number;
-	maxBytes?: number;
-	jpegQuality?: number;
+    maxWidth?: number;
+    maxHeight?: number;
+    maxBytes?: number;
+    jpegQuality?: number;
 }
 export interface ResizedImage {
-	data: string;
-	mimeType: string;
-	originalWidth: number;
-	originalHeight: number;
-	width: number;
-	height: number;
-	wasResized: boolean;
+    data: string;
+    mimeType: string;
+    originalWidth: number;
+    originalHeight: number;
+    width: number;
+    height: number;
+    wasResized: boolean;
 }
 /**
  * Resize an image to fit within the specified max dimensions and encoded file size.

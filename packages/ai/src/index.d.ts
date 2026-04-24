@@ -19,16 +19,7 @@ export * from "./stream.js";
 export * from "./types.js";
 export * from "./utils/event-stream.js";
 export * from "./utils/json-parse.js";
-export type {
-	OAuthAuthInfo,
-	OAuthCredentials,
-	OAuthLoginCallbacks,
-	OAuthPrompt,
-	OAuthProvider,
-	OAuthProviderId,
-	OAuthProviderInfo,
-	OAuthProviderInterface,
-} from "./utils/oauth/types.js";
+export type { OAuthAuthInfo, OAuthCredentials, OAuthLoginCallbacks, OAuthPrompt, OAuthProvider, OAuthProviderId, OAuthProviderInfo, OAuthProviderInterface, } from "./utils/oauth/types.js";
 export * from "./utils/overflow.js";
 export * from "./utils/typebox-helpers.js";
 export * from "./utils/validation.js";

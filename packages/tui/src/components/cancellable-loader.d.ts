@@ -9,14 +9,14 @@ import { Loader } from "./loader.js";
  * doWork(loader.signal).then(done);
  */
 export declare class CancellableLoader extends Loader {
-	private abortController;
-	/** Called when user presses Escape */
-	onAbort?: () => void;
-	/** AbortSignal that is aborted when user presses Escape */
-	get signal(): AbortSignal;
-	/** Whether the loader was aborted */
-	get aborted(): boolean;
-	handleInput(data: string): void;
-	dispose(): void;
+    private abortController;
+    /** Called when user presses Escape */
+    onAbort?: () => void;
+    /** AbortSignal that is aborted when user presses Escape */
+    get signal(): AbortSignal;
+    /** Whether the loader was aborted */
+    get aborted(): boolean;
+    handleInput(data: string): void;
+    dispose(): void;
 }
 //# sourceMappingURL=cancellable-loader.d.ts.map

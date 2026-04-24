@@ -1,6 +1,6 @@
 export interface ShellConfig {
-	shell: string;
-	args: string[];
+    shell: string;
+    args: string[];
 }
 /**
  * Resolve shell configuration based on platform and an optional explicit shell path.

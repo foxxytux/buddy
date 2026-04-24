@@ -5,19 +5,19 @@
  */
 import type { Component, TUI } from "@mariozechner/pi-tui";
 export declare class DaxnutsComponent implements Component {
-	private ui;
-	private image;
-	private interval;
-	private tick;
-	private maxTicks;
-	private cachedLines;
-	private cachedWidth;
-	private cachedTick;
-	constructor(ui: TUI);
-	invalidate(): void;
-	private startAnimation;
-	private stopAnimation;
-	render(width: number): string[];
-	dispose(): void;
+    private ui;
+    private image;
+    private interval;
+    private tick;
+    private maxTicks;
+    private cachedLines;
+    private cachedWidth;
+    private cachedTick;
+    constructor(ui: TUI);
+    invalidate(): void;
+    private startAnimation;
+    private stopAnimation;
+    render(width: number): string[];
+    dispose(): void;
 }
 //# sourceMappingURL=daxnuts.d.ts.map

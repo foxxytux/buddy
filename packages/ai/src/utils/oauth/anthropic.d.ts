@@ -9,10 +9,13 @@ import type { OAuthCredentials, OAuthPrompt, OAuthProviderInterface } from "./ty
  * Login with Anthropic OAuth (authorization code + PKCE)
  */
 export declare function loginAnthropic(options: {
-	onAuth: (info: { url: string; instructions?: string }) => void;
-	onPrompt: (prompt: OAuthPrompt) => Promise<string>;
-	onProgress?: (message: string) => void;
-	onManualCodeInput?: () => Promise<string>;
+    onAuth: (info: {
+        url: string;
+        instructions?: string;
+    }) => void;
+    onPrompt: (prompt: OAuthPrompt) => Promise<string>;
+    onProgress?: (message: string) => void;
+    onManualCodeInput?: () => Promise<string>;
 }): Promise<OAuthCredentials>;
 /**
  * Refresh Anthropic OAuth token

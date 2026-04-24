@@ -12,22 +12,22 @@ import { convertTools, mapToolChoice } from "./google-shared.js";
  */
 export type GoogleThinkingLevel = "THINKING_LEVEL_UNSPECIFIED" | "MINIMAL" | "LOW" | "MEDIUM" | "HIGH";
 export interface GoogleGeminiCliOptions extends StreamOptions {
-	toolChoice?: "auto" | "none" | "any";
-	/**
-	 * Thinking/reasoning configuration.
-	 * - Gemini 2.x models: use `budgetTokens` to set the thinking budget
-	 * - Gemini 3 models (gemini-3-pro-*, gemini-3-flash-*): use `level` instead
-	 *
-	 * When using `streamSimple`, this is handled automatically based on the model.
-	 */
-	thinking?: {
-		enabled: boolean;
-		/** Thinking budget in tokens. Use for Gemini 2.x models. */
-		budgetTokens?: number;
-		/** Thinking level. Use for Gemini 3 models (LOW/HIGH for Pro, MINIMAL/LOW/MEDIUM/HIGH for Flash). */
-		level?: GoogleThinkingLevel;
-	};
-	projectId?: string;
+    toolChoice?: "auto" | "none" | "any";
+    /**
+     * Thinking/reasoning configuration.
+     * - Gemini 2.x models: use `budgetTokens` to set the thinking budget
+     * - Gemini 3 models (gemini-3-pro-*, gemini-3-flash-*): use `level` instead
+     *
+     * When using `streamSimple`, this is handled automatically based on the model.
+     */
+    thinking?: {
+        enabled: boolean;
+        /** Thinking budget in tokens. Use for Gemini 2.x models. */
+        budgetTokens?: number;
+        /** Thinking level. Use for Gemini 3 models (LOW/HIGH for Pro, MINIMAL/LOW/MEDIUM/HIGH for Flash). */
+        level?: GoogleThinkingLevel;
+    };
+    projectId?: string;
 }
 /**
  * Extract retry delay from Gemini error response (in milliseconds).
@@ -40,40 +40,35 @@ export interface GoogleGeminiCliOptions extends StreamOptions {
  */
 export declare function extractRetryDelay(errorText: string, response?: Response | Headers): number | undefined;
 interface CloudCodeAssistRequest {
-	project: string;
-	model: string;
-	request: {
-		contents: Content[];
-		sessionId?: string;
-		systemInstruction?: {
-			role?: string;
-			parts: {
-				text: string;
-			}[];
-		};
-		generationConfig?: {
-			maxOutputTokens?: number;
-			temperature?: number;
-			thinkingConfig?: ThinkingConfig;
-		};
-		tools?: ReturnType<typeof convertTools>;
-		toolConfig?: {
-			functionCallingConfig: {
-				mode: ReturnType<typeof mapToolChoice>;
-			};
-		};
-	};
-	requestType?: string;
-	userAgent?: string;
-	requestId?: string;
+    project: string;
+    model: string;
+    request: {
+        contents: Content[];
+        sessionId?: string;
+        systemInstruction?: {
+            role?: string;
+            parts: {
+                text: string;
+            }[];
+        };
+        generationConfig?: {
+            maxOutputTokens?: number;
+            temperature?: number;
+            thinkingConfig?: ThinkingConfig;
+        };
+        tools?: ReturnType<typeof convertTools>;
+        toolConfig?: {
+            functionCallingConfig: {
+                mode: ReturnType<typeof mapToolChoice>;
+            };
+        };
+    };
+    requestType?: string;
+    userAgent?: string;
+    requestId?: string;
 }
 export declare const streamGoogleGeminiCli: StreamFunction<"google-gemini-cli", GoogleGeminiCliOptions>;
 export declare const streamSimpleGoogleGeminiCli: StreamFunction<"google-gemini-cli", SimpleStreamOptions>;
-export declare function buildRequest(
-	model: Model<"google-gemini-cli">,
-	context: Context,
-	projectId: string,
-	options?: GoogleGeminiCliOptions,
-	isAntigravity?: boolean,
-): CloudCodeAssistRequest;
+export declare function buildRequest(model: Model<"google-gemini-cli">, context: Context, projectId: string, options?: GoogleGeminiCliOptions, isAntigravity?: boolean): CloudCodeAssistRequest;
+export {};
 //# sourceMappingURL=google-gemini-cli.d.ts.map

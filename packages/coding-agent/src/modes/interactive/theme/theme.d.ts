@@ -1,93 +1,37 @@
 import type { EditorTheme, MarkdownTheme, SelectListTheme } from "@mariozechner/pi-tui";
 import type { SourceInfo } from "../../../core/source-info.js";
-export type ThemeColor =
-	| "accent"
-	| "border"
-	| "borderAccent"
-	| "borderMuted"
-	| "success"
-	| "error"
-	| "warning"
-	| "muted"
-	| "dim"
-	| "text"
-	| "thinkingText"
-	| "userMessageText"
-	| "customMessageText"
-	| "customMessageLabel"
-	| "toolTitle"
-	| "toolOutput"
-	| "mdHeading"
-	| "mdLink"
-	| "mdLinkUrl"
-	| "mdCode"
-	| "mdCodeBlock"
-	| "mdCodeBlockBorder"
-	| "mdQuote"
-	| "mdQuoteBorder"
-	| "mdHr"
-	| "mdListBullet"
-	| "toolDiffAdded"
-	| "toolDiffRemoved"
-	| "toolDiffContext"
-	| "syntaxComment"
-	| "syntaxKeyword"
-	| "syntaxFunction"
-	| "syntaxVariable"
-	| "syntaxString"
-	| "syntaxNumber"
-	| "syntaxType"
-	| "syntaxOperator"
-	| "syntaxPunctuation"
-	| "thinkingOff"
-	| "thinkingMinimal"
-	| "thinkingLow"
-	| "thinkingMedium"
-	| "thinkingHigh"
-	| "thinkingXhigh"
-	| "bashMode";
-export type ThemeBg =
-	| "selectedBg"
-	| "userMessageBg"
-	| "customMessageBg"
-	| "toolPendingBg"
-	| "toolSuccessBg"
-	| "toolErrorBg";
+export type ThemeColor = "accent" | "border" | "borderAccent" | "borderMuted" | "success" | "error" | "warning" | "muted" | "dim" | "text" | "thinkingText" | "userMessageText" | "customMessageText" | "customMessageLabel" | "toolTitle" | "toolOutput" | "mdHeading" | "mdLink" | "mdLinkUrl" | "mdCode" | "mdCodeBlock" | "mdCodeBlockBorder" | "mdQuote" | "mdQuoteBorder" | "mdHr" | "mdListBullet" | "toolDiffAdded" | "toolDiffRemoved" | "toolDiffContext" | "syntaxComment" | "syntaxKeyword" | "syntaxFunction" | "syntaxVariable" | "syntaxString" | "syntaxNumber" | "syntaxType" | "syntaxOperator" | "syntaxPunctuation" | "thinkingOff" | "thinkingMinimal" | "thinkingLow" | "thinkingMedium" | "thinkingHigh" | "thinkingXhigh" | "bashMode";
+export type ThemeBg = "selectedBg" | "userMessageBg" | "customMessageBg" | "toolPendingBg" | "toolSuccessBg" | "toolErrorBg";
 type ColorMode = "truecolor" | "256color";
 export declare class Theme {
-	readonly name?: string;
-	readonly sourcePath?: string;
-	sourceInfo?: SourceInfo;
-	private fgColors;
-	private bgColors;
-	private mode;
-	constructor(
-		fgColors: Record<ThemeColor, string | number>,
-		bgColors: Record<ThemeBg, string | number>,
-		mode: ColorMode,
-		options?: {
-			name?: string;
-			sourcePath?: string;
-			sourceInfo?: SourceInfo;
-		},
-	);
-	fg(color: ThemeColor, text: string): string;
-	bg(color: ThemeBg, text: string): string;
-	bold(text: string): string;
-	italic(text: string): string;
-	underline(text: string): string;
-	inverse(text: string): string;
-	strikethrough(text: string): string;
-	getFgAnsi(color: ThemeColor): string;
-	getBgAnsi(color: ThemeBg): string;
-	getColorMode(): ColorMode;
-	getThinkingBorderColor(level: "off" | "minimal" | "low" | "medium" | "high" | "xhigh"): (str: string) => string;
-	getBashModeBorderColor(): (str: string) => string;
+    readonly name?: string;
+    readonly sourcePath?: string;
+    sourceInfo?: SourceInfo;
+    private fgColors;
+    private bgColors;
+    private mode;
+    constructor(fgColors: Record<ThemeColor, string | number>, bgColors: Record<ThemeBg, string | number>, mode: ColorMode, options?: {
+        name?: string;
+        sourcePath?: string;
+        sourceInfo?: SourceInfo;
+    });
+    fg(color: ThemeColor, text: string): string;
+    bg(color: ThemeBg, text: string): string;
+    bold(text: string): string;
+    italic(text: string): string;
+    underline(text: string): string;
+    inverse(text: string): string;
+    strikethrough(text: string): string;
+    getFgAnsi(color: ThemeColor): string;
+    getBgAnsi(color: ThemeBg): string;
+    getColorMode(): ColorMode;
+    getThinkingBorderColor(level: "off" | "minimal" | "low" | "medium" | "high" | "xhigh"): (str: string) => string;
+    getBashModeBorderColor(): (str: string) => string;
 }
 export declare function getAvailableThemes(): string[];
 export interface ThemeInfo {
-	name: string;
-	path: string | undefined;
+    name: string;
+    path: string | undefined;
 }
 export declare function getAvailableThemesWithPaths(): ThemeInfo[];
 export declare function loadThemeFromPath(themePath: string, mode?: ColorMode): Theme;
@@ -95,12 +39,9 @@ export declare function getThemeByName(name: string): Theme | undefined;
 export declare const theme: Theme;
 export declare function setRegisteredThemes(themes: Theme[]): void;
 export declare function initTheme(themeName?: string, enableWatcher?: boolean): void;
-export declare function setTheme(
-	name: string,
-	enableWatcher?: boolean,
-): {
-	success: boolean;
-	error?: string;
+export declare function setTheme(name: string, enableWatcher?: boolean): {
+    success: boolean;
+    error?: string;
 };
 export declare function setThemeInstance(themeInstance: Theme): void;
 export declare function onThemeChange(callback: () => void): void;
@@ -119,9 +60,9 @@ export declare function isLightTheme(themeName?: string): boolean;
  * Returns undefined for each color that isn't explicitly set.
  */
 export declare function getThemeExportColors(themeName?: string): {
-	pageBg?: string;
-	cardBg?: string;
-	infoBg?: string;
+    pageBg?: string;
+    cardBg?: string;
+    infoBg?: string;
 };
 /**
  * Highlight code with syntax coloring based on file extension or language.
@@ -136,4 +77,5 @@ export declare function getMarkdownTheme(): MarkdownTheme;
 export declare function getSelectListTheme(): SelectListTheme;
 export declare function getEditorTheme(): EditorTheme;
 export declare function getSettingsListTheme(): import("@mariozechner/pi-tui").SettingsListTheme;
+export {};
 //# sourceMappingURL=theme.d.ts.map

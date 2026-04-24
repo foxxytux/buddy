@@ -3,12 +3,12 @@ import { type SourceInfo } from "./source-info.js";
  * Represents a prompt template loaded from a markdown file
  */
 export interface PromptTemplate {
-	name: string;
-	description: string;
-	argumentHint?: string;
-	content: string;
-	sourceInfo: SourceInfo;
-	filePath: string;
+    name: string;
+    description: string;
+    argumentHint?: string;
+    content: string;
+    sourceInfo: SourceInfo;
+    filePath: string;
 }
 /**
  * Parse command arguments respecting quoted strings (bash-style)
@@ -28,14 +28,14 @@ export declare function parseCommandArgs(argsString: string): string[];
  */
 export declare function substituteArgs(content: string, args: string[]): string;
 export interface LoadPromptTemplatesOptions {
-	/** Working directory for project-local templates. */
-	cwd: string;
-	/** Agent config directory for global templates. */
-	agentDir: string;
-	/** Explicit prompt template paths (files or directories). */
-	promptPaths: string[];
-	/** Include default prompt directories. */
-	includeDefaults: boolean;
+    /** Working directory for project-local templates. */
+    cwd: string;
+    /** Agent config directory for global templates. */
+    agentDir: string;
+    /** Explicit prompt template paths (files or directories). */
+    promptPaths: string[];
+    /** Include default prompt directories. */
+    includeDefaults: boolean;
 }
 /**
  * Load all prompt templates from:

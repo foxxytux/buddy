@@ -7,10 +7,7 @@ export declare function getGitHubCopilotBaseUrl(token?: string, enterpriseDomain
 /**
  * Refresh GitHub Copilot token
  */
-export declare function refreshGitHubCopilotToken(
-	refreshToken: string,
-	enterpriseDomain?: string,
-): Promise<OAuthCredentials>;
+export declare function refreshGitHubCopilotToken(refreshToken: string, enterpriseDomain?: string): Promise<OAuthCredentials>;
 /**
  * Login with GitHub Copilot OAuth (device code flow)
  *
@@ -20,10 +17,14 @@ export declare function refreshGitHubCopilotToken(
  * @param options.signal - Optional AbortSignal for cancellation
  */
 export declare function loginGitHubCopilot(options: {
-	onAuth: (url: string, instructions?: string) => void;
-	onPrompt: (prompt: { message: string; placeholder?: string; allowEmpty?: boolean }) => Promise<string>;
-	onProgress?: (message: string) => void;
-	signal?: AbortSignal;
+    onAuth: (url: string, instructions?: string) => void;
+    onPrompt: (prompt: {
+        message: string;
+        placeholder?: string;
+        allowEmpty?: boolean;
+    }) => Promise<string>;
+    onProgress?: (message: string) => void;
+    signal?: AbortSignal;
 }): Promise<OAuthCredentials>;
 export declare const githubCopilotOAuthProvider: OAuthProviderInterface;
 //# sourceMappingURL=github-copilot.d.ts.map

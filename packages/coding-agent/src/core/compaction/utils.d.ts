@@ -4,9 +4,9 @@
 import type { AgentMessage } from "@mariozechner/pi-agent-core";
 import type { Message } from "@mariozechner/pi-ai";
 export interface FileOperations {
-	read: Set<string>;
-	written: Set<string>;
-	edited: Set<string>;
+    read: Set<string>;
+    written: Set<string>;
+    edited: Set<string>;
 }
 export declare function createFileOps(): FileOperations;
 /**
@@ -18,8 +18,8 @@ export declare function extractFileOpsFromMessage(message: AgentMessage, fileOps
  * Returns readFiles (files only read, not modified) and modifiedFiles.
  */
 export declare function computeFileLists(fileOps: FileOperations): {
-	readFiles: string[];
-	modifiedFiles: string[];
+    readFiles: string[];
+    modifiedFiles: string[];
 };
 /**
  * Format file operations as XML tags for summary.
@@ -34,6 +34,5 @@ export declare function formatFileOperations(readFiles: string[], modifiedFiles:
  * reasonable token budgets. Full content is not needed for summarization.
  */
 export declare function serializeConversation(messages: Message[]): string;
-export declare const SUMMARIZATION_SYSTEM_PROMPT =
-	"You are a context summarization assistant. Your task is to read a conversation between a user and an AI coding assistant, then produce a structured summary following the exact format specified.\n\nDo NOT continue the conversation. Do NOT respond to any questions in the conversation. ONLY output the structured summary.";
+export declare const SUMMARIZATION_SYSTEM_PROMPT = "You are a context summarization assistant. Your task is to read a conversation between a user and an AI coding assistant, then produce a structured summary following the exact format specified.\n\nDo NOT continue the conversation. Do NOT respond to any questions in the conversation. ONLY output the structured summary.";
 //# sourceMappingURL=utils.d.ts.map

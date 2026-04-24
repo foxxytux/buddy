@@ -6,7 +6,7 @@
  */
 import type { ExtensionFactory } from "./core/extensions/types.js";
 export interface MainOptions {
-	extensionFactories?: ExtensionFactory[];
+    extensionFactories?: ExtensionFactory[];
 }
 export declare function main(args: string[], options?: MainOptions): Promise<void>;
 //# sourceMappingURL=main.d.ts.map

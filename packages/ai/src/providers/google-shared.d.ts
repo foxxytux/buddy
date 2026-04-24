@@ -29,10 +29,7 @@ export declare function isThinkingPart(part: Pick<Part, "thought" | "thoughtSign
  * Note: this does NOT merge or move signatures across distinct response parts. It only prevents
  * a signature from being overwritten with `undefined` within the same streamed block.
  */
-export declare function retainThoughtSignature(
-	existing: string | undefined,
-	incoming: string | undefined,
-): string | undefined;
+export declare function retainThoughtSignature(existing: string | undefined, incoming: string | undefined): string | undefined;
 /**
  * Models via Google APIs that require explicit tool call IDs in function calls/responses.
  */
@@ -49,14 +46,9 @@ export declare function convertMessages<T extends GoogleApiType>(model: Model<T>
  * field instead (OpenAPI 3.03 Schema). This is needed for Cloud Code Assist with Claude
  * models, where the API translates `parameters` into Anthropic's `input_schema`.
  */
-export declare function convertTools(
-	tools: Tool[],
-	useParameters?: boolean,
-):
-	| {
-			functionDeclarations: Record<string, unknown>[];
-	  }[]
-	| undefined;
+export declare function convertTools(tools: Tool[], useParameters?: boolean): {
+    functionDeclarations: Record<string, unknown>[];
+}[] | undefined;
 /**
  * Map tool choice string to Gemini FunctionCallingConfigMode.
  */
@@ -69,4 +61,5 @@ export declare function mapStopReason(reason: FinishReason): StopReason;
  * Map string finish reason to our StopReason (for raw API responses).
  */
 export declare function mapStopReasonString(reason: string): StopReason;
+export {};
 //# sourceMappingURL=google-shared.d.ts.map

@@ -18,31 +18,31 @@
  */
 import { EventEmitter } from "events";
 export type StdinBufferOptions = {
-	/**
-	 * Maximum time to wait for sequence completion (default: 10ms)
-	 * After this time, the buffer is flushed even if incomplete
-	 */
-	timeout?: number;
+    /**
+     * Maximum time to wait for sequence completion (default: 10ms)
+     * After this time, the buffer is flushed even if incomplete
+     */
+    timeout?: number;
 };
 export type StdinBufferEventMap = {
-	data: [string];
-	paste: [string];
+    data: [string];
+    paste: [string];
 };
 /**
  * Buffers stdin input and emits complete sequences via the 'data' event.
  * Handles partial escape sequences that arrive across multiple chunks.
  */
 export declare class StdinBuffer extends EventEmitter<StdinBufferEventMap> {
-	private buffer;
-	private timeout;
-	private readonly timeoutMs;
-	private pasteMode;
-	private pasteBuffer;
-	constructor(options?: StdinBufferOptions);
-	process(data: string | Buffer): void;
-	flush(): string[];
-	clear(): void;
-	getBuffer(): string;
-	destroy(): void;
+    private buffer;
+    private timeout;
+    private readonly timeoutMs;
+    private pasteMode;
+    private pasteBuffer;
+    constructor(options?: StdinBufferOptions);
+    process(data: string | Buffer): void;
+    flush(): string[];
+    clear(): void;
+    getBuffer(): string;
+    destroy(): void;
 }
 //# sourceMappingURL=stdin-buffer.d.ts.map

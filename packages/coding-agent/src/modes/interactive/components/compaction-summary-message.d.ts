@@ -5,12 +5,12 @@ import type { CompactionSummaryMessage } from "../../../core/messages.js";
  * Uses same background color as custom messages for visual consistency.
  */
 export declare class CompactionSummaryMessageComponent extends Box {
-	private expanded;
-	private message;
-	private markdownTheme;
-	constructor(message: CompactionSummaryMessage, markdownTheme?: MarkdownTheme);
-	setExpanded(expanded: boolean): void;
-	invalidate(): void;
-	private updateDisplay;
+    private expanded;
+    private message;
+    private markdownTheme;
+    constructor(message: CompactionSummaryMessage, markdownTheme?: MarkdownTheme);
+    setExpanded(expanded: boolean): void;
+    invalidate(): void;
+    private updateDisplay;
 }
 //# sourceMappingURL=compaction-summary-message.d.ts.map

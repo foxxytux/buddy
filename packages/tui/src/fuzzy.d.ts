@@ -4,8 +4,8 @@
  * Lower score = better match.
  */
 export interface FuzzyMatch {
-	matches: boolean;
-	score: number;
+    matches: boolean;
+    score: number;
 }
 export declare function fuzzyMatch(query: string, text: string): FuzzyMatch;
 /**

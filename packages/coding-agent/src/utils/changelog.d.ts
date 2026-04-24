@@ -1,8 +1,8 @@
 export interface ChangelogEntry {
-	major: number;
-	minor: number;
-	patch: number;
-	content: string;
+    major: number;
+    minor: number;
+    patch: number;
+    content: string;
 }
 /**
  * Parse changelog entries from CHANGELOG.md

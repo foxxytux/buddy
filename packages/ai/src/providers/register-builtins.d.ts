@@ -10,16 +10,8 @@ import type { OpenAICodexResponsesOptions } from "./openai-codex-responses.js";
 import type { OpenAICompletionsOptions } from "./openai-completions.js";
 import type { OpenAIResponsesOptions } from "./openai-responses.js";
 interface BedrockProviderModule {
-	streamBedrock: (
-		model: Model<"bedrock-converse-stream">,
-		context: Context,
-		options?: BedrockOptions,
-	) => AsyncIterable<AssistantMessageEvent>;
-	streamSimpleBedrock: (
-		model: Model<"bedrock-converse-stream">,
-		context: Context,
-		options?: SimpleStreamOptions,
-	) => AsyncIterable<AssistantMessageEvent>;
+    streamBedrock: (model: Model<"bedrock-converse-stream">, context: Context, options?: BedrockOptions) => AsyncIterable<AssistantMessageEvent>;
+    streamSimpleBedrock: (model: Model<"bedrock-converse-stream">, context: Context, options?: SimpleStreamOptions) => AsyncIterable<AssistantMessageEvent>;
 }
 export declare function setBedrockProviderModule(module: BedrockProviderModule): void;
 export declare const streamAnthropic: StreamFunction<"anthropic-messages", AnthropicOptions>;
@@ -42,4 +34,5 @@ export declare const streamOpenAIResponses: StreamFunction<"openai-responses", O
 export declare const streamSimpleOpenAIResponses: StreamFunction<"openai-responses", SimpleStreamOptions>;
 export declare function registerBuiltInApiProviders(): void;
 export declare function resetApiProviders(): void;
+export {};
 //# sourceMappingURL=register-builtins.d.ts.map
