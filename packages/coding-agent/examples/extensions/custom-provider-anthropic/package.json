@@ -1,5 +1,5 @@
 {
-  "name": "pi-extension-custom-provider-anthropic",
+  "name": "@foxxytux/extension-custom-provider-anthropic",
   "private": true,
   "version": "0.70.3",
   "type": "module",

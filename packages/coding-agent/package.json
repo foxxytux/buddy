@@ -46,9 +46,9 @@
 	},
 	"dependencies": {
 		"@mariozechner/jiti": "^2.6.2",
-		"@foxxytux/buddy-agent-core": "^4.1.18",
-		"@foxxytux/buddy-ai": "^4.1.18",
-		"@foxxytux/buddy-tui": "^4.1.18",
+		"@foxxytux/buddy-agent-core": "^4.1.19",
+		"@foxxytux/buddy-ai": "^4.1.19",
+		"@foxxytux/buddy-tui": "^4.1.19",
 		"@silvia-odwyer/photon-node": "^0.3.4",
 		"ajv": "^8.17.1",
 		"chalk": "^5.5.0",

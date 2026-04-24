@@ -1,5 +1,5 @@
 {
-  "name": "pi-extension-with-deps",
+  "name": "@foxxytux/extension-with-deps",
   "private": true,
   "version": "0.70.3",
   "type": "module",
