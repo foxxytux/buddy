@@ -10,7 +10,7 @@
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { getModel } from "@foxxytux/buddy-ai";
+import { getModel } from "@mariozechner/pi-ai";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { AgentSession } from "../src/core/agent-session.js";
 import {
@@ -22,7 +22,6 @@ import {
 } from "../src/core/agent-session-runtime.js";
 import { AuthStorage } from "../src/core/auth-storage.js";
 import { SessionManager } from "../src/core/session-manager.js";
-import { codingTools } from "../src/core/tools/index.js";
 import { API_KEY } from "./utilities.js";
 
 describe.skipIf(!API_KEY)("AgentSession forking", () => {
@@ -40,7 +39,6 @@ describe.skipIf(!API_KEY)("AgentSession forking", () => {
 		if (runtimeHost) {
 			await runtimeHost.dispose();
 		}
-		process.chdir(tmpdir());
 		if (tempDir && existsSync(tempDir)) {
 			rmSync(tempDir, { recursive: true });
 		}
@@ -73,7 +71,7 @@ describe.skipIf(!API_KEY)("AgentSession forking", () => {
 					sessionManager,
 					sessionStartEvent,
 					model,
-					tools: codingTools,
+					tools: ["read", "bash", "edit", "write"],
 				})),
 				services,
 				diagnostics: services.diagnostics,

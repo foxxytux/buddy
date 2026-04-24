@@ -8,7 +8,13 @@
  * - Interact with the user via UI primitives
  */
 
-import type { AgentMessage, AgentToolResult, AgentToolUpdateCallback, ThinkingLevel } from "@foxxytux/buddy-agent-core";
+import type {
+	AgentMessage,
+	AgentToolResult,
+	AgentToolUpdateCallback,
+	ThinkingLevel,
+	ToolExecutionMode,
+} from "@mariozechner/pi-agent-core";
 import type {
 	Api,
 	AssistantMessageEvent,
@@ -21,9 +27,10 @@ import type {
 	SimpleStreamOptions,
 	TextContent,
 	ToolResultMessage,
-} from "@foxxytux/buddy-ai";
+} from "@mariozechner/pi-ai";
 import type {
 	AutocompleteItem,
+	AutocompleteProvider,
 	Component,
 	EditorComponent,
 	EditorTheme,
@@ -31,8 +38,8 @@ import type {
 	OverlayHandle,
 	OverlayOptions,
 	TUI,
-} from "@foxxytux/buddy-tui";
-import type { Static, TSchema } from "@sinclair/typebox";
+} from "@mariozechner/pi-tui";
+import type { Static, TSchema } from "typebox";
 import type { Theme } from "../../modes/interactive/theme/theme.js";
 import type { BashResult } from "../bash-executor.js";
 import type { CompactionPreparation, CompactionResult } from "../compaction/index.js";
@@ -51,6 +58,7 @@ import type {
 } from "../session-manager.js";
 import type { SlashCommandInfo } from "../slash-commands.js";
 import type { SourceInfo } from "../source-info.js";
+import type { BuildSystemPromptOptions } from "../system-prompt.js";
 import type { BashOperations } from "../tools/bash.js";
 import type { EditToolDetails } from "../tools/edit.js";
 import type {
@@ -69,7 +77,8 @@ import type {
 } from "../tools/index.js";
 
 export type { ExecOptions, ExecResult } from "../exec.js";
-export type { AgentToolResult, AgentToolUpdateCallback };
+export type { BuildSystemPromptOptions } from "../system-prompt.js";
+export type { AgentToolResult, AgentToolUpdateCallback, ToolExecutionMode };
 export type { AppKeybinding, KeybindingsManager } from "../keybindings.js";
 
 // ============================================================================
@@ -96,6 +105,17 @@ export interface ExtensionWidgetOptions {
 /** Raw terminal input listener for extensions. */
 export type TerminalInputHandler = (data: string) => { consume?: boolean; data?: string } | undefined;
 
+/** Working indicator configuration for the interactive streaming loader. */
+export interface WorkingIndicatorOptions {
+	/** Animation frames. Use an empty array to hide the indicator entirely. Custom frames are rendered verbatim. */
+	frames?: string[];
+	/** Frame interval in milliseconds for animated indicators. */
+	intervalMs?: number;
+}
+
+/** Wrap the current autocomplete provider with additional behavior. */
+export type AutocompleteProviderFactory = (current: AutocompleteProvider) => AutocompleteProvider;
+
 /**
  * UI context for extensions to request interactive UI.
  * Each mode (interactive, RPC, print) provides its own implementation.
@@ -121,6 +141,19 @@ export interface ExtensionUIContext {
 
 	/** Set the working/loading message shown during streaming. Call with no argument to restore default. */
 	setWorkingMessage(message?: string): void;
+
+	/** Show or hide the built-in interactive working loader row during streaming. */
+	setWorkingVisible(visible: boolean): void;
+
+	/**
+	 * Configure the interactive working indicator shown during streaming.
+	 *
+	 * - Omit the argument to restore the default animated spinner.
+	 * - Use `frames: ["●"]` for a static indicator.
+	 * - Use `frames: []` to hide the indicator entirely.
+	 * - Custom frames are rendered as provided, so extensions must add their own colors.
+	 */
+	setWorkingIndicator(options?: WorkingIndicatorOptions): void;
 
 	/** Set the label shown for hidden thinking blocks. Call with no argument to restore default. */
 	setHiddenThinkingLabel(label?: string): void;
@@ -180,6 +213,9 @@ export interface ExtensionUIContext {
 	/** Show a multi-line editor for text editing. */
 	editor(title: string, prefill?: string): Promise<string | undefined>;
 
+	/** Stack additional autocomplete behavior on top of the built-in provider. */
+	addAutocompleteProvider(factory: AutocompleteProviderFactory): void;
+
 	/**
 	 * Set a custom editor component via factory function.
 	 * Pass undefined to restore the default editor.
@@ -189,12 +225,12 @@ export interface ExtensionUIContext {
 	 * - `keybindings`: KeybindingsManager for app-level keybindings
 	 *
 	 * For full app keybinding support (escape, ctrl+d, model switching, etc.),
-	 * extend `CustomEditor` from `@foxxytux/buddy-coding-agent` and call
+	 * extend `CustomEditor` from `@mariozechner/pi-coding-agent` and call
 	 * `super.handleInput(data)` for keys you don't handle.
 	 *
 	 * @example
 	 * ```ts
-	 * import { CustomEditor } from "@foxxytux/buddy-coding-agent";
+	 * import { CustomEditor } from "@mariozechner/pi-coding-agent";
 	 *
 	 * class VimEditor extends CustomEditor {
 	 *   private mode: "normal" | "insert" = "insert";
@@ -300,10 +336,14 @@ export interface ExtensionCommandContext extends ExtensionContext {
 	newSession(options?: {
 		parentSession?: string;
 		setup?: (sessionManager: SessionManager) => Promise<void>;
+		withSession?: (ctx: ReplacedSessionContext) => Promise<void>;
 	}): Promise<{ cancelled: boolean }>;
 
 	/** Fork from a specific entry, creating a new session file. */
-	fork(entryId: string): Promise<{ cancelled: boolean }>;
+	fork(
+		entryId: string,
+		options?: { position?: "before" | "at"; withSession?: (ctx: ReplacedSessionContext) => Promise<void> },
+	): Promise<{ cancelled: boolean }>;
 
 	/** Navigate to a different point in the session tree. */
 	navigateTree(
@@ -312,10 +352,30 @@ export interface ExtensionCommandContext extends ExtensionContext {
 	): Promise<{ cancelled: boolean }>;
 
 	/** Switch to a different session file. */
-	switchSession(sessionPath: string): Promise<{ cancelled: boolean }>;
+	switchSession(
+		sessionPath: string,
+		options?: { withSession?: (ctx: ReplacedSessionContext) => Promise<void> },
+	): Promise<{ cancelled: boolean }>;
 
 	/** Reload extensions, skills, prompts, and themes. */
 	reload(): Promise<void>;
+}
+
+/**
+ * Fresh command-capable context bound to the replacement session after a session switch.
+ *
+ * This is passed to `withSession()` callbacks on `newSession()`, `fork()`, and `switchSession()`.
+ */
+export interface ReplacedSessionContext extends ExtensionCommandContext {
+	sendMessage<T = unknown>(
+		message: Pick<CustomMessage<T>, "customType" | "content" | "display" | "details">,
+		options?: { triggerTurn?: boolean; deliverAs?: "steer" | "followUp" | "nextTurn" },
+	): Promise<void>;
+
+	sendUserMessage(
+		content: string | (TextContent | ImageContent)[],
+		options?: { deliverAs?: "steer" | "followUp" },
+	): Promise<void>;
 }
 
 // ============================================================================
@@ -380,6 +440,15 @@ export interface ToolDefinition<TParams extends TSchema = TSchema, TDetails = un
 	/** Optional compatibility shim to prepare raw tool call arguments before schema validation. Must return an object conforming to TParams. */
 	prepareArguments?: (args: unknown) => Static<TParams>;
 
+	/**
+	 * Per-tool execution mode override.
+	 * - "sequential": this tool must execute one at a time with other tool calls.
+	 * - "parallel": this tool can execute concurrently with other tool calls.
+	 *
+	 * If omitted, the default execution mode applies.
+	 */
+	executionMode?: ToolExecutionMode;
+
 	/** Execute the tool. */
 	execute(
 		toolCallId: string,
@@ -413,7 +482,7 @@ type AnyToolDefinition = ToolDefinition<any, any, any>;
 export function defineTool<TParams extends TSchema, TDetails = unknown, TState = any>(
 	tool: ToolDefinition<TParams, TDetails, TState>,
 ): ToolDefinition<TParams, TDetails, TState> & AnyToolDefinition {
-	return tool;
+	return tool as ToolDefinition<TParams, TDetails, TState> & AnyToolDefinition;
 }
 
 // ============================================================================
@@ -458,6 +527,7 @@ export interface SessionBeforeSwitchEvent {
 export interface SessionBeforeForkEvent {
 	type: "session_before_fork";
 	entryId: string;
+	position: "before" | "at";
 }
 
 /** Fired before context compaction (can be cancelled or customized) */
@@ -476,9 +546,12 @@ export interface SessionCompactEvent {
 	fromExtension: boolean;
 }
 
-/** Fired on graceful process shutdown paths such as Ctrl+C, Ctrl+D, SIGHUP, and SIGTERM. */
+/** Fired before an extension runtime is torn down due to quit, reload, or session replacement. */
 export interface SessionShutdownEvent {
 	type: "session_shutdown";
+	reason: "quit" | "reload" | "new" | "resume" | "fork";
+	/** Destination session file when shutting down due to session replacement. */
+	targetSessionFile?: string;
 }
 
 /** Preparation data for tree navigation */
@@ -538,12 +611,24 @@ export interface BeforeProviderRequestEvent {
 	payload: unknown;
 }
 
+/** Fired after a provider response is received and before the response stream is consumed. */
+export interface AfterProviderResponseEvent {
+	type: "after_provider_response";
+	status: number;
+	headers: Record<string, string>;
+}
+
 /** Fired after user submits prompt but before agent loop. */
 export interface BeforeAgentStartEvent {
 	type: "before_agent_start";
+	/** The raw user prompt text (after expansion). */
 	prompt: string;
+	/** Images attached to the user prompt, if any. */
 	images?: ImageContent[];
+	/** The fully assembled system prompt string. */
 	systemPrompt: string;
+	/** Structured options used to build the system prompt. Extensions can inspect this to understand what Pi loaded without re-discovering resources. */
+	systemPromptOptions: BuildSystemPromptOptions;
 }
 
 /** Fired when an agent loop starts */
@@ -858,6 +943,7 @@ export type ExtensionEvent =
 	| SessionEvent
 	| ContextEvent
 	| BeforeProviderRequestEvent
+	| AfterProviderResponseEvent
 	| BeforeAgentStartEvent
 	| AgentStartEvent
 	| AgentEndEvent
@@ -1005,6 +1091,7 @@ export interface ExtensionAPI {
 		event: "before_provider_request",
 		handler: ExtensionHandler<BeforeProviderRequestEvent, BeforeProviderRequestEventResult>,
 	): void;
+	on(event: "after_provider_response", handler: ExtensionHandler<AfterProviderResponseEvent>): void;
 	on(event: "before_agent_start", handler: ExtensionHandler<BeforeAgentStartEvent, BeforeAgentStartEventResult>): void;
 	on(event: "agent_start", handler: ExtensionHandler<AgentStartEvent>): void;
 	on(event: "agent_end", handler: ExtensionHandler<AgentEndEvent>): void;
@@ -1149,7 +1236,7 @@ export interface ExtensionAPI {
 	 *
 	 * @example
 	 * // Register a new provider with custom models
-	 * buddy.registerProvider("my-proxy", {
+	 * pi.registerProvider("my-proxy", {
 	 *   baseUrl: "https://proxy.example.com",
 	 *   apiKey: "PROXY_API_KEY",
 	 *   api: "anthropic-messages",
@@ -1168,13 +1255,13 @@ export interface ExtensionAPI {
 	 *
 	 * @example
 	 * // Override baseUrl for an existing provider
-	 * buddy.registerProvider("anthropic", {
+	 * pi.registerProvider("anthropic", {
 	 *   baseUrl: "https://proxy.example.com"
 	 * });
 	 *
 	 * @example
 	 * // Register provider with OAuth support
-	 * buddy.registerProvider("corporate-ai", {
+	 * pi.registerProvider("corporate-ai", {
 	 *   baseUrl: "https://ai.corp.com",
 	 *   api: "openai-responses",
 	 *   models: [...],
@@ -1199,7 +1286,7 @@ export interface ExtensionAPI {
 	 * the initial load phase.
 	 *
 	 * @example
-	 * buddy.unregisterProvider("my-proxy");
+	 * pi.unregisterProvider("my-proxy");
 	 */
 	unregisterProvider(name: string): void;
 
@@ -1211,7 +1298,7 @@ export interface ExtensionAPI {
 // Provider Registration Types
 // ============================================================================
 
-/** Configuration for registering a provider via buddy.registerProvider(). */
+/** Configuration for registering a provider via pi.registerProvider(). */
 export interface ProviderConfig {
 	/** Base URL for the API endpoint. Required when defining models. */
 	baseUrl?: string;
@@ -1267,7 +1354,7 @@ export interface ProviderModelConfig {
 }
 
 /** Extension factory function type. Supports both sync and async initialization. */
-export type ExtensionFactory = (buddy: ExtensionAPI) => void | Promise<void>;
+export type ExtensionFactory = (pi: ExtensionAPI) => void | Promise<void>;
 
 // ============================================================================
 // Loaded Extension Types
@@ -1342,6 +1429,10 @@ export interface ExtensionRuntimeState {
 	flagValues: Map<string, boolean | string>;
 	/** Provider registrations queued during extension loading, processed when runner binds */
 	pendingProviderRegistrations: Array<{ name: string; config: ProviderConfig; extensionPath: string }>;
+	/** Throws when this extension instance is stale after runtime replacement. */
+	assertActive: () => void;
+	/** Marks this extension instance as stale after runtime replacement or reload. */
+	invalidate: (message?: string) => void;
 	/**
 	 * Register or unregister a provider.
 	 *
@@ -1353,7 +1444,7 @@ export interface ExtensionRuntimeState {
 }
 
 /**
- * Action implementations for buddy.* API methods.
+ * Action implementations for pi.* API methods.
  * Provided to runner.initialize(), copied into the shared runtime.
  */
 export interface ExtensionActions {
@@ -1398,13 +1489,20 @@ export interface ExtensionCommandContextActions {
 	newSession: (options?: {
 		parentSession?: string;
 		setup?: (sessionManager: SessionManager) => Promise<void>;
+		withSession?: (ctx: ReplacedSessionContext) => Promise<void>;
 	}) => Promise<{ cancelled: boolean }>;
-	fork: (entryId: string) => Promise<{ cancelled: boolean }>;
+	fork: (
+		entryId: string,
+		options?: { position?: "before" | "at"; withSession?: (ctx: ReplacedSessionContext) => Promise<void> },
+	) => Promise<{ cancelled: boolean }>;
 	navigateTree: (
 		targetId: string,
 		options?: { summarize?: boolean; customInstructions?: string; replaceInstructions?: boolean; label?: string },
 	) => Promise<{ cancelled: boolean }>;
-	switchSession: (sessionPath: string) => Promise<{ cancelled: boolean }>;
+	switchSession: (
+		sessionPath: string,
+		options?: { withSession?: (ctx: ReplacedSessionContext) => Promise<void> },
+	) => Promise<{ cancelled: boolean }>;
 	reload: () => Promise<void>;
 }
 

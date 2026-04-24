@@ -1,7 +1,7 @@
 /**
  * Modal Editor - vim-like modal editing example
  *
- * Usage: buddy --extension ./examples/extensions/modal-editor.ts
+ * Usage: pi --extension ./examples/extensions/modal-editor.ts
  *
  * - Escape: insert → normal mode (in normal mode, aborts agent)
  * - i: normal → insert mode
@@ -9,8 +9,8 @@
  * - ctrl+c, ctrl+d, etc. work in both modes
  */
 
-import { CustomEditor, type ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { matchesKey, truncateToWidth, visibleWidth } from "@foxxytux/buddy-tui";
+import { CustomEditor, type ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { matchesKey, truncateToWidth, visibleWidth } from "@mariozechner/pi-tui";
 
 // Normal mode key mappings: key -> escape sequence (or null for mode switch)
 const NORMAL_KEYS: Record<string, string | null> = {
@@ -78,8 +78,8 @@ class ModalEditor extends CustomEditor {
 	}
 }
 
-export default function (buddy: ExtensionAPI) {
-	buddy.on("session_start", (_event, ctx) => {
+export default function (pi: ExtensionAPI) {
+	pi.on("session_start", (_event, ctx) => {
 		ctx.ui.setEditorComponent((tui, theme, kb) => new ModalEditor(tui, theme, kb));
 	});
 }

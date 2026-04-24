@@ -1,16 +1,16 @@
-# buddy-pods
+# pi
 
 Deploy and manage LLMs on GPU pods with automatic vLLM configuration for agentic workloads.
 
 ## Installation
 
 ```bash
-npm install -g @foxxytux/buddy-pods
+npm install -g @mariozechner/pi
 ```
 
-## What is buddy-pods?
+## What is pi?
 
-`buddy-pods` simplifies running large language models on remote GPU pods. It automatically:
+`pi` simplifies running large language models on remote GPU pods. It automatically:
 - Sets up vLLM on fresh Ubuntu pods
 - Configures tool calling for agentic models (Qwen, GPT-OSS, GLM, etc.)
 - Manages multiple models on the same pod with "smart" GPU allocation
@@ -25,17 +25,17 @@ export HF_TOKEN=your_huggingface_token      # Get from https://huggingface.co/se
 export PI_API_KEY=your_api_key              # Any string you want for API authentication
 
 # Setup a DataCrunch pod with NFS storage (models path auto-extracted)
-buddy-pods pods setup dc1 "ssh root@1.2.3.4" \
+pi pods setup dc1 "ssh root@1.2.3.4" \
   --mount "sudo mount -t nfs -o nconnect=16 nfs.fin-02.datacrunch.io:/your-pseudo /mnt/hf-models"
 
 # Start a model (automatic configuration for known models)
-buddy-pods start Qwen/Qwen2.5-Coder-32B-Instruct --name qwen
+pi start Qwen/Qwen2.5-Coder-32B-Instruct --name qwen
 
 # Send a single message to the model
-buddy-pods agent qwen "What is the Fibonacci sequence?"
+pi agent qwen "What is the Fibonacci sequence?"
 
 # Interactive chat mode with file system tools
-buddy-pods agent qwen -i
+pi agent qwen -i
 
 # Use with any OpenAI-compatible client
 export OPENAI_BASE_URL='http://1.2.3.4:8001/v1'
@@ -77,16 +77,16 @@ export OPENAI_API_KEY=$PI_API_KEY
 ### Pod Management
 
 ```bash
-buddy-pods pods setup <name> "<ssh>" [options]        # Setup new pod
+pi pods setup <name> "<ssh>" [options]        # Setup new pod
   --mount "<mount_command>"                   # Run mount command during setup
   --models-path <path>                        # Override extracted path (optional)
   --vllm release|nightly|gpt-oss              # vLLM version (default: release)
 
-buddy-pods pods                                       # List all configured pods
-buddy-pods pods active <name>                         # Switch active pod
-buddy-pods pods remove <name>                         # Remove pod from local config
-buddy-pods shell [<name>]                             # SSH into pod
-buddy-pods ssh [<name>] "<command>"                   # Run command on pod
+pi pods                                       # List all configured pods
+pi pods active <name>                         # Switch active pod
+pi pods remove <name>                         # Remove pod from local config
+pi shell [<name>]                             # SSH into pod
+pi ssh [<name>] "<command>"                   # Run command on pod
 ```
 
 **Note**: When using `--mount`, the models path is automatically extracted from the mount command's target directory. You only need `--models-path` if not using `--mount` or to override the extracted path.
@@ -100,70 +100,70 @@ buddy-pods ssh [<name>] "<command>"                   # Run command on pod
 ### Model Management
 
 ```bash
-buddy-pods start <model> --name <name> [options]  # Start a model
+pi start <model> --name <name> [options]  # Start a model
   --memory <percent>      # GPU memory: 30%, 50%, 90% (default: 90%)
   --context <size>        # Context window: 4k, 8k, 16k, 32k, 64k, 128k
   --gpus <count>          # Number of GPUs to use (predefined models only)
   --pod <name>            # Target specific pod (overrides active)
   --vllm <args...>        # Pass custom args directly to vLLM
 
-buddy-pods stop [<name>]          # Stop model (or all if no name given)
-buddy-pods list                   # List running models with status
-buddy-pods logs <name>            # Stream model logs (tail -f)
+pi stop [<name>]          # Stop model (or all if no name given)
+pi list                   # List running models with status
+pi logs <name>            # Stream model logs (tail -f)
 ```
 
 ### Agent & Chat Interface
 
 ```bash
-buddy-pods agent <name> "<message>"               # Single message to model
-buddy-pods agent <name> "<msg1>" "<msg2>"         # Multiple messages in sequence
-buddy-pods agent <name> -i                        # Interactive chat mode
-buddy-pods agent <name> -i -c                     # Continue previous session
+pi agent <name> "<message>"               # Single message to model
+pi agent <name> "<msg1>" "<msg2>"         # Multiple messages in sequence
+pi agent <name> -i                        # Interactive chat mode
+pi agent <name> -i -c                     # Continue previous session
 
 # Standalone OpenAI-compatible agent (works with any API)
-buddy-pods agent --base-url http://localhost:8000/v1 --model llama-3.1 "Hello"
-buddy-pods agent --api-key sk-... "What is 2+2?"  # Uses OpenAI by default
-buddy-pods agent --json "What is 2+2?"            # Output event stream as JSONL
-buddy-pods agent -i                                # Interactive mode
+pi-agent --base-url http://localhost:8000/v1 --model llama-3.1 "Hello"
+pi-agent --api-key sk-... "What is 2+2?"  # Uses OpenAI by default
+pi-agent --json "What is 2+2?"            # Output event stream as JSONL
+pi-agent -i                                # Interactive mode
 ```
 
 The agent includes tools for file operations (read, list, bash, glob, rg) to test agentic capabilities, particularly useful for code navigation and analysis tasks.
 
 ## Predefined Model Configurations
 
-`buddy-pods` includes predefined configurations for popular agentic models, so you do not have to specify `--vllm` arguments manually. `buddy-pods` will also check if the model you selected can actually run on your pod with respect to the number of GPUs and available VRAM. Run `buddy-pods start` without additional arguments to see a list of predefined models that can run on the active pod.
+`pi` includes predefined configurations for popular agentic models, so you do not have to specify `--vllm` arguments manually. `pi` will also check if the model you selected can actually run on your pod with respect to the number of GPUs and available VRAM. Run `pi start` without additional arguments to see a list of predefined models that can run on the active pod.
 
 ### Qwen Models
 ```bash
 # Qwen2.5-Coder-32B - Excellent coding model, fits on single H100/H200
-buddy-pods start Qwen/Qwen2.5-Coder-32B-Instruct --name qwen
+pi start Qwen/Qwen2.5-Coder-32B-Instruct --name qwen
 
 # Qwen3-Coder-30B - Advanced reasoning with tool use
-buddy-pods start Qwen/Qwen3-Coder-30B-A3B-Instruct --name qwen3
+pi start Qwen/Qwen3-Coder-30B-A3B-Instruct --name qwen3
 
 # Qwen3-Coder-480B - State-of-the-art on 8xH200 (data-parallel mode)
-buddy-pods start Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8 --name qwen-480b
+pi start Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8 --name qwen-480b
 ```
 
 ### GPT-OSS Models
 ```bash
 # Requires special vLLM build during setup
-buddy-pods pods setup gpt-pod "ssh root@1.2.3.4" --models-path /workspace --vllm gpt-oss
+pi pods setup gpt-pod "ssh root@1.2.3.4" --models-path /workspace --vllm gpt-oss
 
 # GPT-OSS-20B - Fits on 16GB+ VRAM
-buddy-pods start openai/gpt-oss-20b --name gpt20
+pi start openai/gpt-oss-20b --name gpt20
 
 # GPT-OSS-120B - Needs 60GB+ VRAM
-buddy-pods start openai/gpt-oss-120b --name gpt120
+pi start openai/gpt-oss-120b --name gpt120
 ```
 
 ### GLM Models
 ```bash
 # GLM-4.5 - Requires 8-16 GPUs, includes thinking mode
-buddy-pods start zai-org/GLM-4.5 --name glm
+pi start zai-org/GLM-4.5 --name glm
 
 # GLM-4.5-Air - Smaller version, 1-2 GPUs
-buddy-pods start zai-org/GLM-4.5-Air --name glm-air
+pi start zai-org/GLM-4.5-Air --name glm-air
 ```
 
 ### Custom Models with --vllm
@@ -172,15 +172,15 @@ For models not in the predefined list, use `--vllm` to pass arguments directly t
 
 ```bash
 # DeepSeek with custom settings
-buddy-pods start deepseek-ai/DeepSeek-V3 --name deepseek --vllm \
+pi start deepseek-ai/DeepSeek-V3 --name deepseek --vllm \
   --tensor-parallel-size 4 --trust-remote-code
 
 # Mistral with pipeline parallelism
-buddy-pods start mistralai/Mixtral-8x22B-Instruct-v0.1 --name mixtral --vllm \
+pi start mistralai/Mixtral-8x22B-Instruct-v0.1 --name mixtral --vllm \
   --tensor-parallel-size 8 --pipeline-parallel-size 2
 
 # Any model with specific tool parser
-buddy-pods start some/model --name mymodel --vllm \
+pi start some/model --name mymodel --vllm \
   --tool-call-parser hermes --enable-auto-tool-choice
 ```
 
@@ -198,10 +198,10 @@ DataCrunch offers the best experience with shared NFS storage across pods:
 - Share the SFS with the instance
 - Get SSH command from dashboard
 
-### 3. Setup with buddy-pods
+### 3. Setup with pi
 ```bash
 # Get mount command from DataCrunch dashboard
-buddy-pods pods setup dc1 "ssh root@instance.datacrunch.io" \
+pi pods setup dc1 "ssh root@instance.datacrunch.io" \
   --mount "sudo mount -t nfs -o nconnect=16 nfs.fin-02.datacrunch.io:/your-pseudo /mnt/hf-models"
 
 # Models automatically stored in /mnt/hf-models (extracted from mount command)
@@ -226,34 +226,34 @@ RunPod offers good persistent storage with network volumes:
 - Attach your volume to `/runpod-volume`
 - Get SSH command from pod details
 
-### 3. Setup with buddy-pods
+### 3. Setup with pi
 ```bash
 # With network volume
-buddy-pods pods setup runpod "ssh root@pod.runpod.io" --models-path /runpod-volume
+pi pods setup runpod "ssh root@pod.runpod.io" --models-path /runpod-volume
 
 # Or use workspace (persists with pod but not shareable)
-buddy-pods pods setup runpod "ssh root@pod.runpod.io" --models-path /workspace
+pi pods setup runpod "ssh root@pod.runpod.io" --models-path /workspace
 ```
 
 
 ## Multi-GPU Support
 
 ### Automatic GPU Assignment
-When running multiple models, buddy-pods automatically assigns them to different GPUs:
+When running multiple models, pi automatically assigns them to different GPUs:
 ```bash
-buddy-pods start model1 --name m1  # Auto-assigns to GPU 0
-buddy-pods start model2 --name m2  # Auto-assigns to GPU 1
-buddy-pods start model3 --name m3  # Auto-assigns to GPU 2
+pi start model1 --name m1  # Auto-assigns to GPU 0
+pi start model2 --name m2  # Auto-assigns to GPU 1
+pi start model3 --name m3  # Auto-assigns to GPU 2
 ```
 
 ### Specify GPU Count for Predefined Models
 For predefined models with multiple configurations, use `--gpus` to control GPU usage:
 ```bash
 # Run Qwen on 1 GPU instead of all available
-buddy-pods start Qwen/Qwen2.5-Coder-32B-Instruct --name qwen --gpus 1
+pi start Qwen/Qwen2.5-Coder-32B-Instruct --name qwen --gpus 1
 
 # Run GLM-4.5 on 8 GPUs (if it has an 8-GPU config)
-buddy-pods start zai-org/GLM-4.5 --name glm --gpus 8
+pi start zai-org/GLM-4.5 --name glm --gpus 8
 ```
 
 If the model doesn't have a configuration for the requested GPU count, you'll see available options.
@@ -262,11 +262,11 @@ If the model doesn't have a configuration for the requested GPU count, you'll se
 For models that don't fit on a single GPU:
 ```bash
 # Use all available GPUs
-buddy-pods start meta-llama/Llama-3.1-70B-Instruct --name llama70b --vllm \
+pi start meta-llama/Llama-3.1-70B-Instruct --name llama70b --vllm \
   --tensor-parallel-size 4
 
 # Specific GPU count
-buddy-pods start Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8 --name qwen480 --vllm \
+pi start Qwen/Qwen3-Coder-480B-A35B-Instruct-FP8 --name qwen480 --vllm \
   --data-parallel-size 8 --enable-expert-parallel
 ```
 
@@ -279,7 +279,7 @@ from openai import OpenAI
 
 client = OpenAI(
     base_url="http://your-pod-ip:8001/v1",
-    api_key="your-buddy-api-key"
+    api_key="your-pi-api-key"
 )
 
 # Chat completion with tool calling
@@ -308,32 +308,32 @@ response = client.chat.completions.create(
 
 ## Standalone Agent CLI
 
-`buddy-pods` includes a standalone OpenAI-compatible agent that can work with any API:
+`pi` includes a standalone OpenAI-compatible agent that can work with any API:
 
 ```bash
-# Install globally to get buddy-pods agent command
-npm install -g @foxxytux/buddy-pods
+# Install globally to get pi-agent command
+npm install -g @mariozechner/pi
 
 # Use with OpenAI
-buddy-pods agent --api-key sk-... "What is machine learning?"
+pi-agent --api-key sk-... "What is machine learning?"
 
 # Use with local vLLM
-buddy-pods agent --base-url http://localhost:8000/v1 \
+pi-agent --base-url http://localhost:8000/v1 \
          --model meta-llama/Llama-3.1-8B-Instruct \
          --api-key dummy \
          "Explain quantum computing"
 
 # Interactive mode
-buddy-pods agent -i
+pi-agent -i
 
 # Continue previous session
-buddy-pods agent --continue "Follow up question"
+pi-agent --continue "Follow up question"
 
 # Custom system prompt
-buddy-pods agent --system-prompt "You are a Python expert" "Write a web scraper"
+pi-agent --system-prompt "You are a Python expert" "Write a web scraper"
 
 # Use responses API (for GPT-OSS models)
-buddy-pods agent --api responses --model openai/gpt-oss-20b "Hello"
+pi-agent --api responses --model openai/gpt-oss-20b "Hello"
 ```
 
 The agent supports:
@@ -345,7 +345,7 @@ The agent supports:
 
 ## Tool Calling Support
 
-`buddy-pods` automatically configures appropriate tool calling parsers for known models:
+`pi` automatically configures appropriate tool calling parsers for known models:
 
 - **Qwen models**: `hermes` parser (Qwen3-Coder uses `qwen3_coder`)
 - **GLM models**: `glm4_moe` parser with reasoning support
@@ -354,7 +354,7 @@ The agent supports:
 
 To disable tool calling:
 ```bash
-buddy-pods start model --name mymodel --vllm --disable-tool-call-parser
+pi start model --name mymodel --vllm --disable-tool-call-parser
 ```
 
 ## Memory and Context Management
@@ -374,7 +374,7 @@ Sets maximum input + output tokens:
 Example for coding workload:
 ```bash
 # Large context for code analysis, moderate concurrency
-buddy-pods start Qwen/Qwen2.5-Coder-32B-Instruct --name coder \
+pi start Qwen/Qwen2.5-Coder-32B-Instruct --name coder \
   --context 64k --memory 70%
 ```
 
@@ -386,13 +386,13 @@ The interactive agent mode (`-i`) saves sessions for each project directory:
 
 ```bash
 # Start new session
-buddy-pods agent qwen -i
+pi agent qwen -i
 
 # Continue previous session (maintains chat history)
-buddy-pods agent qwen -i -c
+pi agent qwen -i -c
 ```
 
-Sessions are stored in `~/.buddy/sessions/` organized by project path and include:
+Sessions are stored in `~/.pi/sessions/` organized by project path and include:
 - Complete conversation history
 - Tool call results
 - Token usage statistics
@@ -411,7 +411,7 @@ Events are automatically converted to the appropriate API format (Chat Completio
 
 Use `--json` flag to output the event stream as JSONL (JSON Lines) for programmatic consumption:
 ```bash
-buddy-pods agent --api-key sk-... --json "What is 2+2?"
+pi-agent --api-key sk-... --json "What is 2+2?"
 ```
 
 Each line is a complete JSON object representing an event:
@@ -432,13 +432,13 @@ Each line is a complete JSON object representing an event:
 ### Model Won't Start
 ```bash
 # Check GPU usage
-buddy-pods ssh "nvidia-smi"
+pi ssh "nvidia-smi"
 
 # Check if port is in use
-buddy-pods list
+pi list
 
 # Force stop all models
-buddy-pods stop
+pi stop
 ```
 
 ### Tool Calling Issues
@@ -452,16 +452,16 @@ Some models (Llama, Mistral) require HuggingFace access approval. Visit the mode
 ### vLLM Build Issues
 If using `--vllm nightly` fails, try:
 - Use `--vllm release` for stable version
-- Check CUDA compatibility with `buddy-pods ssh "nvidia-smi"`
+- Check CUDA compatibility with `pi ssh "nvidia-smi"`
 
 ### Agent Not Finding Messages
 If the agent shows configuration instead of your message, ensure quotes around messages with special characters:
 ```bash
 # Good
-buddy-pods agent qwen "What is this file about?"
+pi agent qwen "What is this file about?"
 
 # Bad (shell might interpret special chars)
-buddy-pods agent qwen What is this file about?
+pi agent qwen What is this file about?
 ```
 
 ## Advanced Usage
@@ -469,15 +469,15 @@ buddy-pods agent qwen What is this file about?
 ### Working with Multiple Pods
 ```bash
 # Override active pod for any command
-buddy-pods start model --name test --pod dev-pod
-buddy-pods list --pod prod-pod
-buddy-pods stop test --pod dev-pod
+pi start model --name test --pod dev-pod
+pi list --pod prod-pod
+pi stop test --pod dev-pod
 ```
 
 ### Custom vLLM Arguments
 ```bash
 # Pass any vLLM argument after --vllm
-buddy-pods start model --name custom --vllm \
+pi start model --name custom --vllm \
   --quantization awq \
   --enable-prefix-caching \
   --max-num-seqs 256 \
@@ -487,24 +487,24 @@ buddy-pods start model --name custom --vllm \
 ### Monitoring
 ```bash
 # Watch GPU utilization
-buddy-pods ssh "watch -n 1 nvidia-smi"
+pi ssh "watch -n 1 nvidia-smi"
 
 # Check model downloads
-buddy-pods ssh "du -sh ~/.cache/huggingface/hub/*"
+pi ssh "du -sh ~/.cache/huggingface/hub/*"
 
 # View all logs
-buddy-pods ssh "ls -la ~/.vllm_logs/"
+pi ssh "ls -la ~/.vllm_logs/"
 
 # Check agent session history
-ls -la ~/.buddy/sessions/
+ls -la ~/.pi/sessions/
 ```
 
 ## Environment Variables
 
 - `HF_TOKEN` - HuggingFace token for model downloads
 - `PI_API_KEY` - API key for vLLM endpoints
-- `PI_CONFIG_DIR` - Config directory (default: `~/.buddy`)
-- `OPENAI_API_KEY` - Used by `buddy-pods agent` when no `--api-key` provided
+- `PI_CONFIG_DIR` - Config directory (default: `~/.pi`)
+- `OPENAI_API_KEY` - Used by `pi-agent` when no `--api-key` provided
 
 ## License
 

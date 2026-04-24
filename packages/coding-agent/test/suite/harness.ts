@@ -5,10 +5,10 @@
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import type { AgentMessage, AgentTool } from "@foxxytux/buddy-agent-core";
-import { Agent } from "@foxxytux/buddy-agent-core";
-import type { FauxModelDefinition, FauxProviderRegistration, FauxResponseStep, Model } from "@foxxytux/buddy-ai";
-import { registerFauxProvider } from "@foxxytux/buddy-ai";
+import type { AgentMessage, AgentTool } from "@mariozechner/pi-agent-core";
+import { Agent } from "@mariozechner/pi-agent-core";
+import type { FauxModelDefinition, FauxProviderRegistration, FauxResponseStep, Model } from "@mariozechner/pi-ai";
+import { registerFauxProvider } from "@mariozechner/pi-ai";
 import { AgentSession, type AgentSessionEvent } from "../../src/core/agent-session.js";
 import { AuthStorage } from "../../src/core/auth-storage.js";
 import type { ExtensionRunner } from "../../src/core/extensions/index.js";
@@ -141,6 +141,17 @@ export async function createHarness(options: HarnessOptions = {}): Promise<Harne
 				return payload;
 			}
 			return runner.emitBeforeProviderRequest(payload);
+		},
+		onResponse: async (response) => {
+			const runner = extensionRunnerRef.current;
+			if (!runner?.hasHandlers("after_provider_response")) {
+				return;
+			}
+			await runner.emit({
+				type: "after_provider_response",
+				status: response.status,
+				headers: response.headers,
+			});
 		},
 		transformContext: async (messages: AgentMessage[]) => {
 			const runner = extensionRunnerRef.current;

@@ -5,8 +5,8 @@
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { Agent } from "@foxxytux/buddy-agent-core";
-import { getModel } from "@foxxytux/buddy-ai";
+import { Agent } from "@mariozechner/pi-agent-core";
+import { getModel } from "@mariozechner/pi-ai";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { AgentSession } from "../src/core/agent-session.js";
 import { AuthStorage } from "../src/core/auth-storage.js";
@@ -21,7 +21,7 @@ import { ModelRegistry } from "../src/core/model-registry.js";
 import { SessionManager } from "../src/core/session-manager.js";
 import { SettingsManager } from "../src/core/settings-manager.js";
 import { createSyntheticSourceInfo } from "../src/core/source-info.js";
-import { codingTools } from "../src/core/tools/index.js";
+import { createCodingTools } from "../src/index.js";
 import { createTestResourceLoader } from "./utilities.js";
 
 const API_KEY = process.env.ANTHROPIC_OAUTH_TOKEN || process.env.ANTHROPIC_API_KEY;
@@ -92,7 +92,7 @@ describe.skipIf(!API_KEY)("Compaction extensions", () => {
 			initialState: {
 				model,
 				systemPrompt: "You are a helpful assistant. Be concise.",
-				tools: codingTools,
+				tools: createCodingTools(process.cwd()),
 			},
 		});
 

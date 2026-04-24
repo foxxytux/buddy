@@ -15,7 +15,7 @@
  */
 
 import { mkdtemp, writeFile } from "node:fs/promises";
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import {
 	DEFAULT_MAX_BYTES,
 	DEFAULT_MAX_LINES,
@@ -23,12 +23,12 @@ import {
 	type TruncationResult,
 	truncateHead,
 	withFileMutationQueue,
-} from "@foxxytux/buddy-coding-agent";
-import { Text } from "@foxxytux/buddy-tui";
-import { Type } from "@sinclair/typebox";
+} from "@mariozechner/pi-coding-agent";
+import { Text } from "@mariozechner/pi-tui";
 import { execSync } from "child_process";
 import { tmpdir } from "os";
 import { join } from "path";
+import { Type } from "typebox";
 
 const RgParams = Type.Object({
 	pattern: Type.String({ description: "Search pattern (regex)" }),
@@ -45,8 +45,8 @@ interface RgDetails {
 	fullOutputPath?: string;
 }
 
-export default function (buddy: ExtensionAPI) {
-	buddy.registerTool({
+export default function (pi: ExtensionAPI) {
+	pi.registerTool({
 		name: "rg",
 		label: "ripgrep",
 		// Document the truncation limits in the tool description so the LLM knows

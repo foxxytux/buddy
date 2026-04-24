@@ -1,5 +1,5 @@
 {
-	"name": "buddy-extension-sandbox",
+	"name": "pi-extension-sandbox",
 	"private": true,
 	"version": "1.0.0",
 	"type": "module",
@@ -8,7 +8,7 @@
 		"build": "echo 'nothing to build'",
 		"check": "echo 'nothing to check'"
 	},
-	"buddy": {
+	"pi": {
 		"extensions": [
 			"./index.ts"
 		]

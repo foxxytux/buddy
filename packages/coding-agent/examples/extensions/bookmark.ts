@@ -7,10 +7,10 @@
  * Usage: /bookmark [label] - bookmark the last assistant message
  */
 
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
-export default function (buddy: ExtensionAPI) {
-	buddy.registerCommand("bookmark", {
+export default function (pi: ExtensionAPI) {
+	pi.registerCommand("bookmark", {
 		description: "Bookmark last message (usage: /bookmark [label])",
 		handler: async (args, ctx) => {
 			const label = args.trim() || `bookmark-${Date.now()}`;
@@ -20,7 +20,7 @@ export default function (buddy: ExtensionAPI) {
 			for (let i = entries.length - 1; i >= 0; i--) {
 				const entry = entries[i];
 				if (entry.type === "message" && entry.message.role === "assistant") {
-					buddy.setLabel(entry.id, label);
+					pi.setLabel(entry.id, label);
 					ctx.ui.notify(`Bookmarked as: ${label}`, "info");
 					return;
 				}
@@ -31,7 +31,7 @@ export default function (buddy: ExtensionAPI) {
 	});
 
 	// Remove bookmark
-	buddy.registerCommand("unbookmark", {
+	pi.registerCommand("unbookmark", {
 		description: "Remove bookmark from last labeled entry",
 		handler: async (_args, ctx) => {
 			const entries = ctx.sessionManager.getEntries();
@@ -39,7 +39,7 @@ export default function (buddy: ExtensionAPI) {
 				const entry = entries[i];
 				const label = ctx.sessionManager.getLabel(entry.id);
 				if (label) {
-					buddy.setLabel(entry.id, undefined);
+					pi.setLabel(entry.id, undefined);
 					ctx.ui.notify(`Removed bookmark: ${label}`, "info");
 					return;
 				}

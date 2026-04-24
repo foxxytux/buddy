@@ -1,14 +1,14 @@
 {
-  "name": "buddy-extension-with-deps",
+  "name": "pi-extension-with-deps",
   "private": true,
-  "version": "5.0.22",
+  "version": "0.70.2",
   "type": "module",
   "scripts": {
     "clean": "echo 'nothing to clean'",
     "build": "echo 'nothing to build'",
     "check": "echo 'nothing to check'"
   },
-  "buddy": {
+  "pi": {
     "extensions": [
       "./index.ts"
     ]

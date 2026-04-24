@@ -15,6 +15,8 @@ type GeminiCredentials = OAuthCredentials & {
 	projectId: string;
 };
 
+const CALLBACK_HOST = process.env.PI_OAUTH_CALLBACK_HOST || "127.0.0.1";
+
 let _createServer: typeof import("node:http").createServer | null = null;
 let _httpImportPromise: Promise<void> | null = null;
 if (typeof process !== "undefined" && (process.versions?.node || process.versions?.bun)) {
@@ -23,8 +25,11 @@ if (typeof process !== "undefined" && (process.versions?.node || process.version
 	});
 }
 
-const CLIENT_ID = "REDACTED_CLIENT_ID";
-const CLIENT_SECRET = "REDACTED_CLIENT_SECRET";
+const decode = (s: string) => atob(s);
+const CLIENT_ID = decode(
+	"NjgxMjU1ODA5Mzk1LW9vOGZ0Mm9wcmRybnA5ZTNhcWY2YXYzaG1kaWIxMzVqLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29t",
+);
+const CLIENT_SECRET = decode("R09DU1BYLTR1SGdNUG0tMW83U2stZ2VWNkN1NWNsWEZzeGw=");
 const REDIRECT_URI = "http://localhost:8085/oauth2callback";
 const SCOPES = [
 	"https://www.googleapis.com/auth/cloud-platform",
@@ -99,7 +104,7 @@ async function startCallbackServer(): Promise<CallbackServerInfo> {
 			reject(err);
 		});
 
-		server.listen(8085, "127.0.0.1", () => {
+		server.listen(8085, CALLBACK_HOST, () => {
 			resolve({
 				server,
 				cancelWait: () => {

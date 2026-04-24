@@ -15,6 +15,8 @@ type AntigravityCredentials = OAuthCredentials & {
 	projectId: string;
 };
 
+const CALLBACK_HOST = process.env.PI_OAUTH_CALLBACK_HOST || "127.0.0.1";
+
 let _createServer: typeof import("node:http").createServer | null = null;
 let _httpImportPromise: Promise<void> | null = null;
 if (typeof process !== "undefined" && (process.versions?.node || process.versions?.bun)) {
@@ -24,8 +26,11 @@ if (typeof process !== "undefined" && (process.versions?.node || process.version
 }
 
 // Antigravity OAuth credentials (different from Gemini CLI)
-const CLIENT_ID = "REDACTED_CLIENT_ID";
-const CLIENT_SECRET = "REDACTED_CLIENT_SECRET";
+const decode = (s: string) => atob(s);
+const CLIENT_ID = decode(
+	"MTA3MTAwNjA2MDU5MS10bWhzc2luMmgyMWxjcmUyMzV2dG9sb2poNGc0MDNlcC5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbQ==",
+);
+const CLIENT_SECRET = decode("R09DU1BYLUs1OEZXUjQ4NkxkTEoxbUxCOHNYQzR6NnFEQWY=");
 const REDIRECT_URI = "http://localhost:51121/oauth-callback";
 
 // Antigravity requires additional scopes
@@ -107,7 +112,7 @@ async function startCallbackServer(): Promise<CallbackServerInfo> {
 			reject(err);
 		});
 
-		server.listen(51121, "127.0.0.1", () => {
+		server.listen(51121, CALLBACK_HOST, () => {
 			resolve({
 				server,
 				cancelWait: () => {

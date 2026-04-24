@@ -15,6 +15,8 @@ Sessions are stored as trees where each entry has an `id` and `parentId`. The "l
 | Summary | Never | Optional (user prompted) |
 | Events | `session_before_fork` / `session_start` (`reason: "fork"`) | `session_before_tree` / `session_tree` |
 
+Use `/clone` when you want a new session file containing the full current active branch without rewinding to an earlier user message.
+
 ## Tree UI
 
 ```
@@ -213,8 +215,8 @@ interface SessionTreeEvent {
 ### Example: Custom Summarizer
 
 ```typescript
-export default function(buddy: HookAPI) {
-  buddy.on("session_before_tree", async (event, ctx) => {
+export default function(pi: HookAPI) {
+  pi.on("session_before_tree", async (event, ctx) => {
     if (!event.preparation.userWantsSummary) return;
     if (event.preparation.entriesToSummarize.length === 0) return;
     

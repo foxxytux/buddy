@@ -10,10 +10,10 @@
  * via `tool_call` input mutation without replacing the tool.
  *
  * Config files (merged, project takes precedence):
- * - ~/.buddy/agent/extensions/sandbox.json (global)
- * - <cwd>/.buddy/sandbox.json (project-local)
+ * - ~/.pi/agent/extensions/sandbox.json (global)
+ * - <cwd>/.pi/sandbox.json (project-local)
  *
- * Example .buddy/sandbox.json:
+ * Example .pi/sandbox.json:
  * ```json
  * {
  *   "enabled": true,
@@ -30,13 +30,13 @@
  * ```
  *
  * Usage:
- * - `buddy -e ./sandbox` - sandbox enabled with default/config settings
- * - `buddy -e ./sandbox --no-sandbox` - disable sandboxing
+ * - `pi -e ./sandbox` - sandbox enabled with default/config settings
+ * - `pi -e ./sandbox --no-sandbox` - disable sandboxing
  * - `/sandbox` - show current sandbox configuration
  *
  * Setup:
- * 1. Copy sandbox/ directory to ~/.buddy/agent/extensions/
- * 2. Run `npm install` in ~/.buddy/agent/extensions/sandbox/
+ * 1. Copy sandbox/ directory to ~/.pi/agent/extensions/
+ * 2. Run `npm install` in ~/.pi/agent/extensions/sandbox/
  *
  * Linux also requires: bubblewrap, socat, ripgrep
  */
@@ -45,8 +45,8 @@ import { spawn } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { SandboxManager, type SandboxRuntimeConfig } from "@anthropic-ai/sandbox-runtime";
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { type BashOperations, createBashTool, getAgentDir } from "@foxxytux/buddy-coding-agent";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { type BashOperations, createBashTool, getAgentDir } from "@mariozechner/pi-coding-agent";
 
 interface SandboxConfig extends SandboxRuntimeConfig {
 	enabled?: boolean;
@@ -198,8 +198,8 @@ function createSandboxedBashOps(): BashOperations {
 	};
 }
 
-export default function (buddy: ExtensionAPI) {
-	buddy.registerFlag("no-sandbox", {
+export default function (pi: ExtensionAPI) {
+	pi.registerFlag("no-sandbox", {
 		description: "Disable OS-level sandboxing for bash commands",
 		type: "boolean",
 		default: false,
@@ -211,7 +211,7 @@ export default function (buddy: ExtensionAPI) {
 	let sandboxEnabled = false;
 	let sandboxInitialized = false;
 
-	buddy.registerTool({
+	pi.registerTool({
 		...localBash,
 		label: "bash (sandboxed)",
 		async execute(id, params, signal, onUpdate, _ctx) {
@@ -226,13 +226,13 @@ export default function (buddy: ExtensionAPI) {
 		},
 	});
 
-	buddy.on("user_bash", () => {
+	pi.on("user_bash", () => {
 		if (!sandboxEnabled || !sandboxInitialized) return;
 		return { operations: createSandboxedBashOps() };
 	});
 
-	buddy.on("session_start", async (_event, ctx) => {
-		const noSandbox = buddy.getFlag("no-sandbox") as boolean;
+	pi.on("session_start", async (_event, ctx) => {
+		const noSandbox = pi.getFlag("no-sandbox") as boolean;
 
 		if (noSandbox) {
 			sandboxEnabled = false;
@@ -284,7 +284,7 @@ export default function (buddy: ExtensionAPI) {
 		}
 	});
 
-	buddy.on("session_shutdown", async () => {
+	pi.on("session_shutdown", async () => {
 		if (sandboxInitialized) {
 			try {
 				await SandboxManager.reset();
@@ -294,7 +294,7 @@ export default function (buddy: ExtensionAPI) {
 		}
 	});
 
-	buddy.registerCommand("sandbox", {
+	pi.registerCommand("sandbox", {
 		description: "Show sandbox configuration",
 		handler: async (_args, ctx) => {
 			if (!sandboxEnabled) {

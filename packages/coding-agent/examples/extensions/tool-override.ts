@@ -17,15 +17,15 @@
  * is used automatically (syntax highlighting, line numbers, truncation warnings).
  *
  * Usage:
- *   buddy -e ./tool-override.ts
+ *   pi -e ./tool-override.ts
  */
 
-import type { TextContent } from "@foxxytux/buddy-ai";
-import { type ExtensionAPI, getAgentDir, withFileMutationQueue } from "@foxxytux/buddy-coding-agent";
-import { Type } from "@sinclair/typebox";
+import type { TextContent } from "@mariozechner/pi-ai";
+import { type ExtensionAPI, getAgentDir, withFileMutationQueue } from "@mariozechner/pi-coding-agent";
 import { constants, readFileSync } from "fs";
 import { access, appendFile, readFile } from "fs/promises";
 import { join, resolve } from "path";
+import { Type } from "typebox";
 
 const LOG_FILE = join(getAgentDir(), "read-access.log");
 
@@ -65,8 +65,8 @@ const readSchema = Type.Object({
 	limit: Type.Optional(Type.Number({ description: "Maximum number of lines to read" })),
 });
 
-export default function (buddy: ExtensionAPI) {
-	buddy.registerTool({
+export default function (pi: ExtensionAPI) {
+	pi.registerTool({
 		name: "read", // Same name as built-in - this will override it
 		label: "read (audited)",
 		description:
@@ -129,7 +129,7 @@ export default function (buddy: ExtensionAPI) {
 	});
 
 	// Also register a command to view the access log
-	buddy.registerCommand("read-log", {
+	pi.registerCommand("read-log", {
 		description: "View the file access log",
 		handler: async (_args, ctx) => {
 			try {

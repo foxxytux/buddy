@@ -3,10 +3,9 @@ dist/
 *.log
 .DS_Store
 *.tsbuildinfo
-# packages/*/node_modules/
-# Note: dist directories are usually ignored, but the packaged fallback dist/cli.js is committed
-# to allow publishing a runnable bundle. Remove if you prefer to build before publishing.
-!packages/coding-agent/dist/cli.js
+packages/*/dist/
+packages/*/dist-chrome/
+packages/*/dist-firefox/
 *.cpuprofile
 
 # Environment
@@ -37,4 +36,6 @@ todo.md
 plans/
 .buddy/hf-sessions/
 .buddy/hf-sessions-backup/
+.pi/hf-sessions/
+.pi/hf-sessions-backup/
 collect.sh

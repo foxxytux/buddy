@@ -8,9 +8,10 @@ import {
 	createAgentSession,
 	createSyntheticSourceInfo,
 	DefaultResourceLoader,
+	getAgentDir,
 	type PromptTemplate,
 	SessionManager,
-} from "@foxxytux/buddy-coding-agent";
+} from "@mariozechner/pi-coding-agent";
 
 // Define custom templates
 const deployTemplate: PromptTemplate = {
@@ -26,6 +27,8 @@ const deployTemplate: PromptTemplate = {
 };
 
 const loader = new DefaultResourceLoader({
+	cwd: process.cwd(),
+	agentDir: getAgentDir(),
 	promptsOverride: (current) => ({
 		prompts: [...current.prompts, deployTemplate],
 		diagnostics: current.diagnostics,
@@ -33,7 +36,7 @@ const loader = new DefaultResourceLoader({
 });
 await loader.reload();
 
-// Discover templates from cwd/.buddy/prompts/ and ~/.buddy/agent/prompts/
+// Discover templates from cwd/.pi/prompts/ and ~/.pi/agent/prompts/
 const discovered = loader.getPrompts().prompts;
 console.log("Discovered prompt templates:");
 for (const template of discovered) {

@@ -5,7 +5,7 @@
  * Delegates to pi-ai's built-in Anthropic and OpenAI streaming implementations.
  *
  * Usage:
- *   buddy -e ./packages/coding-agent/examples/extensions/custom-provider-gitlab-duo
+ *   pi -e ./packages/coding-agent/examples/extensions/custom-provider-gitlab-duo
  *   # Then /login gitlab-duo, or set GITLAB_TOKEN=glpat-...
  */
 
@@ -20,8 +20,8 @@ import {
 	type SimpleStreamOptions,
 	streamSimpleAnthropic,
 	streamSimpleOpenAIResponses,
-} from "@foxxytux/buddy-ai";
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+} from "@mariozechner/pi-ai";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
 // =============================================================================
 // Constants
@@ -324,8 +324,8 @@ export function streamGitLabDuo(
 // Extension Entry Point
 // =============================================================================
 
-export default function (buddy: ExtensionAPI) {
-	buddy.registerProvider("gitlab-duo", {
+export default function (pi: ExtensionAPI) {
+	pi.registerProvider("gitlab-duo", {
 		baseUrl: AI_GATEWAY_URL,
 		apiKey: "GITLAB_TOKEN",
 		api: "gitlab-duo-api",

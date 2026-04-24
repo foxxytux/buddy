@@ -1,14 +1,14 @@
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { Agent } from "@foxxytux/buddy-agent-core";
+import { Agent } from "@mariozechner/pi-agent-core";
 import {
 	type AssistantMessage,
 	type AssistantMessageEvent,
 	EventStream,
 	getModel,
 	type Model,
-} from "@foxxytux/buddy-ai";
+} from "@mariozechner/pi-ai";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { AgentSession } from "../src/core/agent-session.js";
 import type { AgentSessionRuntime } from "../src/core/agent-session-runtime.js";
@@ -147,6 +147,7 @@ function createRuntimeHost(options: { withAuth: boolean; responseDelayMs: number
 		switchSession: vi.fn(async () => ({ cancelled: true })),
 		fork: vi.fn(async () => ({ cancelled: true, selectedText: "" })),
 		dispose: vi.fn(async () => {}),
+		setRebindSession: vi.fn(),
 	} as unknown as AgentSessionRuntime;
 
 	return {
@@ -217,7 +218,7 @@ describe("RPC prompt response semantics", () => {
 					command: "prompt",
 					success: false,
 					error: expect.stringContaining(
-						"No API key found for fake-provider.\n\nUse /login or set an API key environment variable. See ",
+						"No API key found for fake-provider.\n\nUse /login to log into a provider via OAuth or API key. See:",
 					),
 				});
 			});

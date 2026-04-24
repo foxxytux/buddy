@@ -164,12 +164,12 @@ Project skill`,
 
 			writeFileSync(
 				join(projectExtDir, "project.ts"),
-				`export default function(buddy) {
-	buddy.registerCommand("deploy", {
+				`export default function(pi) {
+	pi.registerCommand("deploy", {
 		description: "project deploy",
 		handler: async () => {},
 	});
-	buddy.registerCommand("project-only", {
+	pi.registerCommand("project-only", {
 		description: "project only",
 		handler: async () => {},
 	});
@@ -178,12 +178,12 @@ Project skill`,
 
 			writeFileSync(
 				join(userExtDir, "user.ts"),
-				`export default function(buddy) {
-	buddy.registerCommand("deploy", {
+				`export default function(pi) {
+	pi.registerCommand("deploy", {
 		description: "user deploy",
 		handler: async () => {},
 	});
-	buddy.registerCommand("user-only", {
+	pi.registerCommand("user-only", {
 		description: "user only",
 		handler: async () => {},
 	});
@@ -470,10 +470,10 @@ Content`,
 			writeFileSync(
 				join(ext1Dir, "index.ts"),
 				`
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { Type } from "@sinclair/typebox";
-export default function(buddy: ExtensionAPI) {
-  buddy.registerTool({
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { Type } from "typebox";
+export default function(pi: ExtensionAPI) {
+  pi.registerTool({
     name: "duplicate-tool",
     description: "First",
     parameters: Type.Object({}),
@@ -485,10 +485,10 @@ export default function(buddy: ExtensionAPI) {
 			writeFileSync(
 				join(ext2Dir, "index.ts"),
 				`
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { Type } from "@sinclair/typebox";
-export default function(buddy: ExtensionAPI) {
-  buddy.registerTool({
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { Type } from "typebox";
+export default function(pi: ExtensionAPI) {
+  pi.registerTool({
     name: "duplicate-tool",
     description: "Second",
     parameters: Type.Object({}),
@@ -512,16 +512,16 @@ export default function(buddy: ExtensionAPI) {
 			writeFileSync(
 				join(globalExtDir, "global.ts"),
 				`
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { Type } from "@sinclair/typebox";
-export default function(buddy: ExtensionAPI) {
-  buddy.registerTool({
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { Type } from "typebox";
+export default function(pi: ExtensionAPI) {
+  pi.registerTool({
     name: "duplicate-tool",
     description: "global tool",
     parameters: Type.Object({}),
     execute: async () => ({ result: "global" }),
   });
-  buddy.registerCommand("deploy", {
+  pi.registerCommand("deploy", {
     description: "global command",
     handler: async () => {},
   });
@@ -531,16 +531,16 @@ export default function(buddy: ExtensionAPI) {
 			writeFileSync(
 				explicitExtPath,
 				`
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { Type } from "@sinclair/typebox";
-export default function(buddy: ExtensionAPI) {
-  buddy.registerTool({
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { Type } from "typebox";
+export default function(pi: ExtensionAPI) {
+  pi.registerTool({
     name: "duplicate-tool",
     description: "explicit tool",
     parameters: Type.Object({}),
     execute: async () => ({ result: "explicit" }),
   });
-  buddy.registerCommand("deploy", {
+  pi.registerCommand("deploy", {
     description: "explicit command",
     handler: async () => {},
   });

@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, realpathSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { fauxAssistantMessage, registerFauxProvider } from "@foxxytux/buddy-ai";
+import { fauxAssistantMessage, registerFauxProvider } from "@mariozechner/pi-ai";
 import { afterEach, describe, expect, it } from "vitest";
 import {
 	type CreateAgentSessionRuntimeFactory,
@@ -16,10 +16,15 @@ import type {
 	ExtensionFactory,
 	SessionBeforeForkEvent,
 	SessionBeforeSwitchEvent,
+	SessionShutdownEvent,
 	SessionStartEvent,
 } from "../../src/index.js";
 
-type RecordedSessionEvent = SessionBeforeSwitchEvent | SessionBeforeForkEvent | SessionStartEvent;
+type RecordedSessionEvent =
+	| SessionBeforeSwitchEvent
+	| SessionBeforeForkEvent
+	| SessionShutdownEvent
+	| SessionStartEvent;
 
 describe("AgentSessionRuntime characterization", () => {
 	const cleanups: Array<() => Promise<void> | void> = [];
@@ -28,7 +33,6 @@ describe("AgentSessionRuntime characterization", () => {
 		while (cleanups.length > 0) {
 			await cleanups.pop()?.();
 		}
-		process.chdir(tmpdir());
 	});
 
 	async function createRuntimeForTest(
@@ -57,8 +61,8 @@ describe("AgentSessionRuntime characterization", () => {
 			thinkingLevel: options?.bootstrapThinkingLevel === false ? undefined : undefined,
 			resourceLoaderOptions: {
 				extensionFactories: [
-					(buddy: ExtensionAPI) => {
-						buddy.registerProvider(faux.getModel().provider, {
+					(pi: ExtensionAPI) => {
+						pi.registerProvider(faux.getModel().provider, {
 							baseUrl: faux.getModel().baseUrl,
 							apiKey: "faux-key",
 							api: faux.api,
@@ -73,7 +77,7 @@ describe("AgentSessionRuntime characterization", () => {
 								maxTokens: registeredModel.maxTokens,
 							})),
 						});
-						extensionFactory(buddy);
+						extensionFactory(pi);
 					},
 				],
 				noSkills: true,
@@ -118,11 +122,14 @@ describe("AgentSessionRuntime characterization", () => {
 
 	it("emits session_before_switch and session_start for new and resume flows", async () => {
 		const events: RecordedSessionEvent[] = [];
-		const { runtime } = await createRuntimeForTest((buddy: ExtensionAPI) => {
-			buddy.on("session_before_switch", (event) => {
+		const { runtime } = await createRuntimeForTest((pi: ExtensionAPI) => {
+			pi.on("session_before_switch", (event) => {
 				events.push(event);
 			});
-			buddy.on("session_start", (event) => {
+			pi.on("session_shutdown", (event) => {
+				events.push(event);
+			});
+			pi.on("session_start", (event) => {
 				events.push(event);
 			});
 		});
@@ -139,19 +146,21 @@ describe("AgentSessionRuntime characterization", () => {
 		await runtime.session.bindExtensions({});
 		expect(runtime.session).not.toBe(originalSession);
 		expect(runtime.session.messages).toEqual([]);
+		const secondSessionFile = runtime.session.sessionFile;
 		expect(events).toEqual([
 			{ type: "session_before_switch", reason: "new", targetSessionFile: undefined },
+			{ type: "session_shutdown", reason: "new", targetSessionFile: secondSessionFile },
 			{ type: "session_start", reason: "new", previousSessionFile: originalSessionFile },
 		]);
 
 		events.length = 0;
-		const secondSessionFile = runtime.session.sessionFile;
 
 		const switchResult = await runtime.switchSession(originalSessionFile!);
 		expect(switchResult.cancelled).toBe(false);
 		await runtime.session.bindExtensions({});
 		expect(events).toEqual([
 			{ type: "session_before_switch", reason: "resume", targetSessionFile: originalSessionFile },
+			{ type: "session_shutdown", reason: "resume", targetSessionFile: originalSessionFile },
 			{ type: "session_start", reason: "resume", previousSessionFile: secondSessionFile },
 		]);
 	});
@@ -159,14 +168,14 @@ describe("AgentSessionRuntime characterization", () => {
 	it("honors session_before_switch cancellation for new and resume", async () => {
 		const events: RecordedSessionEvent[] = [];
 		let cancelReason: "new" | "resume" | undefined;
-		const { runtime } = await createRuntimeForTest((buddy: ExtensionAPI) => {
-			buddy.on("session_before_switch", (event) => {
+		const { runtime } = await createRuntimeForTest((pi: ExtensionAPI) => {
+			pi.on("session_before_switch", (event) => {
 				events.push(event);
 				if (event.reason === cancelReason) {
 					return { cancel: true };
 				}
 			});
-			buddy.on("session_start", (event) => {
+			pi.on("session_start", (event) => {
 				events.push(event);
 			});
 		});
@@ -194,15 +203,18 @@ describe("AgentSessionRuntime characterization", () => {
 	it("emits session_before_fork and session_start and honors cancellation", async () => {
 		const events: RecordedSessionEvent[] = [];
 		let cancelNextFork = false;
-		const { runtime } = await createRuntimeForTest((buddy: ExtensionAPI) => {
-			buddy.on("session_before_fork", (event) => {
+		const { runtime } = await createRuntimeForTest((pi: ExtensionAPI) => {
+			pi.on("session_before_fork", (event) => {
 				events.push(event);
 				if (cancelNextFork) {
 					cancelNextFork = false;
 					return { cancel: true };
 				}
 			});
-			buddy.on("session_start", (event) => {
+			pi.on("session_shutdown", (event) => {
+				events.push(event);
+			});
+			pi.on("session_start", (event) => {
 				events.push(event);
 			});
 		});
@@ -217,7 +229,8 @@ describe("AgentSessionRuntime characterization", () => {
 		expect(successResult.selectedText).toBe("hello");
 		await runtime.session.bindExtensions({});
 		expect(events).toEqual([
-			{ type: "session_before_fork", entryId: userMessage.entryId },
+			{ type: "session_before_fork", entryId: userMessage.entryId, position: "before" },
+			{ type: "session_shutdown", reason: "fork", targetSessionFile: runtime.session.sessionFile },
 			{ type: "session_start", reason: "fork", previousSessionFile },
 		]);
 
@@ -225,7 +238,165 @@ describe("AgentSessionRuntime characterization", () => {
 		cancelNextFork = true;
 		const cancelResult = await runtime.fork(userMessage.entryId);
 		expect(cancelResult).toEqual({ cancelled: true });
-		expect(events).toEqual([{ type: "session_before_fork", entryId: userMessage.entryId }]);
+		expect(events).toEqual([{ type: "session_before_fork", entryId: userMessage.entryId, position: "before" }]);
+
+		events.length = 0;
+		cancelNextFork = true;
+		const cancelAtResult = await runtime.fork("missing-entry", { position: "at" });
+		expect(cancelAtResult).toEqual({ cancelled: true });
+		expect(events).toEqual([{ type: "session_before_fork", entryId: "missing-entry", position: "at" }]);
+	});
+
+	it("duplicates the current active branch when forking at the current position", async () => {
+		const { runtime } = await createRuntimeForTest(() => {});
+		await runtime.session.prompt("hello");
+		await runtime.session.prompt("again");
+
+		const beforeMessages = runtime.session.messages.map((message) => ({
+			role: message.role,
+			text:
+				message.role === "user"
+					? typeof message.content === "string"
+						? message.content
+						: message.content
+								.filter((part): part is { type: "text"; text: string } => part.type === "text")
+								.map((part) => part.text)
+								.join("")
+					: undefined,
+		}));
+		const previousSessionFile = runtime.session.sessionFile;
+		const leafId = runtime.session.sessionManager.getLeafId();
+		expect(leafId).toBeTruthy();
+
+		const result = await runtime.fork(leafId!, { position: "at" });
+		expect(result).toEqual({ cancelled: false, selectedText: undefined });
+		expect(runtime.session.sessionFile).not.toBe(previousSessionFile);
+		expect(
+			runtime.session.messages.map((message) => ({
+				role: message.role,
+				text:
+					message.role === "user"
+						? typeof message.content === "string"
+							? message.content
+							: message.content
+									.filter((part): part is { type: "text"; text: string } => part.type === "text")
+									.map((part) => part.text)
+									.join("")
+						: undefined,
+			})),
+		).toEqual(beforeMessages);
+	});
+
+	it("duplicates the current active branch in-memory when forking at the current position", async () => {
+		const tempDir = join(tmpdir(), `pi-runtime-suite-in-memory-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+		mkdirSync(tempDir, { recursive: true });
+
+		const faux = registerFauxProvider({
+			models: [
+				{ id: "faux-1", reasoning: true },
+				{ id: "faux-2", reasoning: false },
+			],
+		});
+		faux.setResponses([fauxAssistantMessage("one"), fauxAssistantMessage("two"), fauxAssistantMessage("three")]);
+
+		const authStorage = AuthStorage.inMemory();
+		authStorage.setRuntimeApiKey(faux.getModel().provider, "faux-key");
+
+		const runtimeOptions = {
+			agentDir: tempDir,
+			authStorage,
+			model: faux.getModel(),
+			resourceLoaderOptions: {
+				extensionFactories: [
+					(pi: ExtensionAPI) => {
+						pi.registerProvider(faux.getModel().provider, {
+							baseUrl: faux.getModel().baseUrl,
+							apiKey: "faux-key",
+							api: faux.api,
+							models: faux.models.map((registeredModel) => ({
+								id: registeredModel.id,
+								name: registeredModel.name,
+								api: registeredModel.api,
+								reasoning: registeredModel.reasoning,
+								input: registeredModel.input,
+								cost: registeredModel.cost,
+								contextWindow: registeredModel.contextWindow,
+								maxTokens: registeredModel.maxTokens,
+							})),
+						});
+					},
+				],
+				noSkills: true,
+				noPromptTemplates: true,
+				noThemes: true,
+			},
+		};
+		const createRuntime: CreateAgentSessionRuntimeFactory = async ({ cwd, sessionManager, sessionStartEvent }) => {
+			const services = await createAgentSessionServices({
+				...runtimeOptions,
+				cwd,
+			});
+			return {
+				...(await createAgentSessionFromServices({
+					services,
+					sessionManager,
+					sessionStartEvent,
+					model: runtimeOptions.model,
+				})),
+				services,
+				diagnostics: services.diagnostics,
+			};
+		};
+		const runtime = await createAgentSessionRuntime(createRuntime, {
+			cwd: tempDir,
+			agentDir: tempDir,
+			sessionManager: SessionManager.inMemory(tempDir),
+		});
+		await runtime.session.bindExtensions({});
+		cleanups.push(async () => {
+			await runtime.dispose();
+			faux.unregister();
+			if (existsSync(tempDir)) {
+				rmSync(tempDir, { recursive: true, force: true });
+			}
+		});
+
+		await runtime.session.prompt("hello");
+		await runtime.session.prompt("again");
+
+		const beforeMessages = runtime.session.messages.map((message) => ({
+			role: message.role,
+			text:
+				message.role === "user"
+					? typeof message.content === "string"
+						? message.content
+						: message.content
+								.filter((part): part is { type: "text"; text: string } => part.type === "text")
+								.map((part) => part.text)
+								.join("")
+					: undefined,
+		}));
+		const leafId = runtime.session.sessionManager.getLeafId();
+		expect(leafId).toBeTruthy();
+		expect(runtime.session.sessionFile).toBeUndefined();
+
+		const result = await runtime.fork(leafId!, { position: "at" });
+		expect(result).toEqual({ cancelled: false, selectedText: undefined });
+		expect(runtime.session.sessionFile).toBeUndefined();
+		expect(
+			runtime.session.messages.map((message) => ({
+				role: message.role,
+				text:
+					message.role === "user"
+						? typeof message.content === "string"
+							? message.content
+							: message.content
+									.filter((part): part is { type: "text"; text: string } => part.type === "text")
+									.map((part) => part.text)
+									.join("")
+						: undefined,
+			})),
+		).toEqual(beforeMessages);
 	});
 
 	it("throws when forking with an invalid entry id", async () => {
@@ -233,7 +404,7 @@ describe("AgentSessionRuntime characterization", () => {
 		await expect(runtime.fork("missing-entry")).rejects.toThrow("Invalid entry ID for forking");
 	});
 
-	it("updates process.cwd() on cross-cwd session replacement", async () => {
+	it("updates the runtime session cwd on cross-cwd session replacement", async () => {
 		const firstDir = join(tmpdir(), `pi-runtime-cwd-a-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 		const secondDir = join(tmpdir(), `pi-runtime-cwd-b-${Date.now()}-${Math.random().toString(36).slice(2)}`);
 		mkdirSync(firstDir, { recursive: true });
@@ -246,8 +417,8 @@ describe("AgentSessionRuntime characterization", () => {
 			authStorage: otherAuthStorage,
 			resourceLoaderOptions: {
 				extensionFactories: [
-					(buddy: ExtensionAPI) => {
-						buddy.registerProvider(faux.getModel().provider, {
+					(pi: ExtensionAPI) => {
+						pi.registerProvider(faux.getModel().provider, {
 							baseUrl: faux.getModel().baseUrl,
 							apiKey: "faux-key",
 							api: faux.api,
@@ -301,8 +472,8 @@ describe("AgentSessionRuntime characterization", () => {
 
 		await runtime.switchSession(otherSessionFile);
 
-		expect(realpathSync(process.cwd())).toBe(realpathSync(secondDir));
 		expect(realpathSync(runtime.session.sessionManager.getCwd())).toBe(realpathSync(secondDir));
+		expect(realpathSync(runtime.cwd)).toBe(realpathSync(secondDir));
 	});
 
 	it("restores model and thinking state from the destination session", async () => {
@@ -319,8 +490,8 @@ describe("AgentSessionRuntime characterization", () => {
 			authStorage: otherAuthStorage,
 			resourceLoaderOptions: {
 				extensionFactories: [
-					(buddy: ExtensionAPI) => {
-						buddy.registerProvider(faux.getModel().provider, {
+					(pi: ExtensionAPI) => {
+						pi.registerProvider(faux.getModel().provider, {
 							baseUrl: faux.getModel().baseUrl,
 							apiKey: "faux-key",
 							api: faux.api,

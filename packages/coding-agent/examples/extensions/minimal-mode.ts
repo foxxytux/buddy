@@ -11,12 +11,12 @@
  * - Minimal: Shows only tool call, no output (this extension's collapsed mode)
  *
  * Usage:
- *   buddy -e ./minimal-mode.ts
+ *   pi -e ./minimal-mode.ts
  *
  * Then use ctrl+o to toggle between minimal (collapsed) and full (expanded) views.
  */
 
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 import {
 	createBashTool,
 	createEditTool,
@@ -25,8 +25,8 @@ import {
 	createLsTool,
 	createReadTool,
 	createWriteTool,
-} from "@foxxytux/buddy-coding-agent";
-import { Text } from "@foxxytux/buddy-tui";
+} from "@mariozechner/pi-coding-agent";
+import { Text } from "@mariozechner/pi-tui";
 import { homedir } from "os";
 
 /**
@@ -64,11 +64,11 @@ function getBuiltInTools(cwd: string) {
 	return tools;
 }
 
-export default function (buddy: ExtensionAPI) {
+export default function (pi: ExtensionAPI) {
 	// =========================================================================
 	// Read Tool
 	// =========================================================================
-	buddy.registerTool({
+	pi.registerTool({
 		name: "read",
 		label: "read",
 		description:
@@ -115,7 +115,7 @@ export default function (buddy: ExtensionAPI) {
 	// =========================================================================
 	// Bash Tool
 	// =========================================================================
-	buddy.registerTool({
+	pi.registerTool({
 		name: "bash",
 		label: "bash",
 		description:
@@ -164,7 +164,7 @@ export default function (buddy: ExtensionAPI) {
 	// =========================================================================
 	// Write Tool
 	// =========================================================================
-	buddy.registerTool({
+	pi.registerTool({
 		name: "write",
 		label: "write",
 		description:
@@ -206,7 +206,7 @@ export default function (buddy: ExtensionAPI) {
 	// =========================================================================
 	// Edit Tool
 	// =========================================================================
-	buddy.registerTool({
+	pi.registerTool({
 		name: "edit",
 		label: "edit",
 		description:
@@ -251,7 +251,7 @@ export default function (buddy: ExtensionAPI) {
 	// =========================================================================
 	// Find Tool
 	// =========================================================================
-	buddy.registerTool({
+	pi.registerTool({
 		name: "find",
 		label: "find",
 		description:
@@ -309,7 +309,7 @@ export default function (buddy: ExtensionAPI) {
 	// =========================================================================
 	// Grep Tool
 	// =========================================================================
-	buddy.registerTool({
+	pi.registerTool({
 		name: "grep",
 		label: "grep",
 		description:
@@ -371,7 +371,7 @@ export default function (buddy: ExtensionAPI) {
 	// =========================================================================
 	// Ls Tool
 	// =========================================================================
-	buddy.registerTool({
+	pi.registerTool({
 		name: "ls",
 		label: "ls",
 		description:

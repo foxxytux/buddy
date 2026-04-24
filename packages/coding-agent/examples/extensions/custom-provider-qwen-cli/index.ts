@@ -5,12 +5,12 @@
  * Uses device code flow with PKCE for secure browser-based authentication.
  *
  * Usage:
- *   buddy -e ./packages/coding-agent/examples/extensions/custom-provider-qwen-cli
+ *   pi -e ./packages/coding-agent/examples/extensions/custom-provider-qwen-cli
  *   # Then /login qwen-cli, or set QWEN_CLI_API_KEY=...
  */
 
-import type { OAuthCredentials, OAuthLoginCallbacks } from "@foxxytux/buddy-ai";
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import type { OAuthCredentials, OAuthLoginCallbacks } from "@mariozechner/pi-ai";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
 // =============================================================================
 // Constants
@@ -294,8 +294,8 @@ function getQwenBaseUrl(resourceUrl?: string): string {
 // Extension Entry Point
 // =============================================================================
 
-export default function (buddy: ExtensionAPI) {
-	buddy.registerProvider("qwen-cli", {
+export default function (pi: ExtensionAPI) {
+	pi.registerProvider("qwen-cli", {
 		baseUrl: QWEN_DEFAULT_BASE_URL,
 		apiKey: "QWEN_CLI_API_KEY",
 		api: "openai-completions",

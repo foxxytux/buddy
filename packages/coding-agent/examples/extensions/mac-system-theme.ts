@@ -2,12 +2,12 @@
  * Syncs pi theme with macOS system appearance (dark/light mode).
  *
  * Usage:
- *   buddy -e examples/extensions/mac-system-theme.ts
+ *   pi -e examples/extensions/mac-system-theme.ts
  */
 
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
 const execAsync = promisify(exec);
 
@@ -22,10 +22,10 @@ async function isDarkMode(): Promise<boolean> {
 	}
 }
 
-export default function (buddy: ExtensionAPI) {
+export default function (pi: ExtensionAPI) {
 	let intervalId: ReturnType<typeof setInterval> | null = null;
 
-	buddy.on("session_start", async (_event, ctx) => {
+	pi.on("session_start", async (_event, ctx) => {
 		let currentTheme = (await isDarkMode()) ? "dark" : "light";
 		ctx.ui.setTheme(currentTheme);
 
@@ -38,7 +38,7 @@ export default function (buddy: ExtensionAPI) {
 		}, 2000);
 	});
 
-	buddy.on("session_shutdown", () => {
+	pi.on("session_shutdown", () => {
 		if (intervalId) {
 			clearInterval(intervalId);
 			intervalId = null;

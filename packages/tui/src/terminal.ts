@@ -6,6 +6,10 @@ import { StdinBuffer } from "./stdin-buffer.js";
 
 const cjsRequire = createRequire(import.meta.url);
 
+const TERMINAL_PROGRESS_KEEPALIVE_MS = 1000;
+const TERMINAL_PROGRESS_ACTIVE_SEQUENCE = "\x1b]9;4;3\x07";
+const TERMINAL_PROGRESS_CLEAR_SEQUENCE = "\x1b]9;4;0;\x07";
+
 /**
  * Minimal terminal interface for TUI
  */
@@ -48,6 +52,9 @@ export interface Terminal {
 
 	// Title operations
 	setTitle(title: string): void; // Set terminal window title
+
+	// Progress indicator (OSC 9;4)
+	setProgress(active: boolean): void;
 }
 
 /**
@@ -61,6 +68,7 @@ export class ProcessTerminal implements Terminal {
 	private _modifyOtherKeysActive = false;
 	private stdinBuffer?: StdinBuffer;
 	private stdinDataHandler?: (data: string) => void;
+	private progressInterval?: ReturnType<typeof setInterval>;
 	private writeLogPath = (() => {
 		const env = process.env.PI_TUI_WRITE_LOG || "";
 		if (!env) return "";
@@ -184,17 +192,6 @@ export class ProcessTerminal implements Terminal {
 	private queryAndEnableKittyProtocol(): void {
 		this.setupStdinBuffer();
 		process.stdin.on("data", this.stdinDataHandler!);
-
-		// Zellij forwards the Kitty query to the outer terminal, which can make
-		// Pi enable its Kitty parser even though Zellij still sends Alt as
-		// legacy ESC-prefixed sequences. Skip the Kitty query there and use
-		// modifyOtherKeys directly instead.
-		if (process.env.ZELLIJ) {
-			process.stdout.write("\x1b[>4;2m");
-			this._modifyOtherKeysActive = true;
-			return;
-		}
-
 		process.stdout.write("\x1b[?u");
 		setTimeout(() => {
 			if (!this._kittyProtocolActive && !this._modifyOtherKeysActive) {
@@ -272,6 +269,10 @@ export class ProcessTerminal implements Terminal {
 	}
 
 	stop(): void {
+		if (this.clearProgressInterval()) {
+			process.stdout.write(TERMINAL_PROGRESS_CLEAR_SEQUENCE);
+		}
+
 		// Disable bracketed paste mode
 		process.stdout.write("\x1b[?2004l");
 
@@ -367,5 +368,28 @@ export class ProcessTerminal implements Terminal {
 	setTitle(title: string): void {
 		// OSC 0;title BEL - set terminal window title
 		process.stdout.write(`\x1b]0;${title}\x07`);
+	}
+
+	setProgress(active: boolean): void {
+		if (active) {
+			// OSC 9;4;3 - indeterminate progress
+			process.stdout.write(TERMINAL_PROGRESS_ACTIVE_SEQUENCE);
+			if (!this.progressInterval) {
+				this.progressInterval = setInterval(() => {
+					process.stdout.write(TERMINAL_PROGRESS_ACTIVE_SEQUENCE);
+				}, TERMINAL_PROGRESS_KEEPALIVE_MS);
+			}
+		} else {
+			this.clearProgressInterval();
+			// OSC 9;4;0 - clear progress
+			process.stdout.write(TERMINAL_PROGRESS_CLEAR_SEQUENCE);
+		}
+	}
+
+	private clearProgressInterval(): boolean {
+		if (!this.progressInterval) return false;
+		clearInterval(this.progressInterval);
+		this.progressInterval = undefined;
+		return true;
 	}
 }

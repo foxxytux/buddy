@@ -2,17 +2,18 @@
  * Credential storage for API keys and OAuth tokens.
  * Handles loading, saving, and refreshing credentials from auth.json.
  *
- * Uses file locking to prevent race conditions when multiple buddy instances
+ * Uses file locking to prevent race conditions when multiple pi instances
  * try to refresh tokens simultaneously.
  */
 
 import {
+	findEnvKeys,
 	getEnvApiKey,
 	type OAuthCredentials,
 	type OAuthLoginCallbacks,
 	type OAuthProviderId,
-} from "@foxxytux/buddy-ai";
-import { getOAuthApiKey, getOAuthProvider, getOAuthProviders } from "@foxxytux/buddy-ai/oauth";
+} from "@mariozechner/pi-ai";
+import { getOAuthApiKey, getOAuthProvider, getOAuthProviders } from "@mariozechner/pi-ai/oauth";
 import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import lockfile from "proper-lockfile";
@@ -31,6 +32,12 @@ export type OAuthCredential = {
 export type AuthCredential = ApiKeyCredential | OAuthCredential;
 
 export type AuthStorageData = Record<string, AuthCredential>;
+
+export type AuthStatus = {
+	configured: boolean;
+	source?: "stored" | "runtime" | "environment" | "fallback" | "models_json_key" | "models_json_command";
+	label?: string;
+};
 
 type LockResult<T> = {
 	result: T;
@@ -327,6 +334,30 @@ export class AuthStorage {
 		if (getEnvApiKey(provider)) return true;
 		if (this.fallbackResolver?.(provider)) return true;
 		return false;
+	}
+
+	/**
+	 * Return auth status without exposing credential values or refreshing tokens.
+	 */
+	getAuthStatus(provider: string): AuthStatus {
+		if (this.data[provider]) {
+			return { configured: true, source: "stored" };
+		}
+
+		if (this.runtimeOverrides.has(provider)) {
+			return { configured: false, source: "runtime", label: "--api-key" };
+		}
+
+		const envKeys = findEnvKeys(provider);
+		if (envKeys?.[0]) {
+			return { configured: false, source: "environment", label: envKeys[0] };
+		}
+
+		if (this.fallbackResolver?.(provider)) {
+			return { configured: false, source: "fallback", label: "custom provider config" };
+		}
+
+		return { configured: false };
 	}
 
 	/**

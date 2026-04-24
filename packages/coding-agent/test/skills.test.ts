@@ -354,6 +354,7 @@ describe("skills", () => {
 				agentDir: emptyAgentDir,
 				cwd: emptyCwd,
 				skillPaths: [join(fixturesDir, "valid-skill")],
+				includeDefaults: true,
 			});
 			expect(skills).toHaveLength(1);
 			expect(skills[0].sourceInfo.scope).toBe("temporary");
@@ -365,22 +366,25 @@ describe("skills", () => {
 				agentDir: emptyAgentDir,
 				cwd: emptyCwd,
 				skillPaths: ["/non/existent/path"],
+				includeDefaults: true,
 			});
 			expect(skills).toHaveLength(0);
 			expect(diagnostics.some((d: ResourceDiagnostic) => d.message.includes("does not exist"))).toBe(true);
 		});
 
 		it("should expand ~ in skillPaths", () => {
-			const homeSkillsDir = join(homedir(), ".buddy/agent/skills");
+			const homeSkillsDir = join(homedir(), ".pi/agent/skills");
 			const { skills: withTilde } = loadSkills({
 				agentDir: emptyAgentDir,
 				cwd: emptyCwd,
-				skillPaths: ["~/.buddy/agent/skills"],
+				skillPaths: ["~/.pi/agent/skills"],
+				includeDefaults: true,
 			});
 			const { skills: withoutTilde } = loadSkills({
 				agentDir: emptyAgentDir,
 				cwd: emptyCwd,
 				skillPaths: [homeSkillsDir],
+				includeDefaults: true,
 			});
 			expect(withTilde.length).toBe(withoutTilde.length);
 		});

@@ -5,12 +5,12 @@
  * Demonstrates how extensions can use ctx.shutdown() to exit pi cleanly.
  */
 
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { Type } from "@sinclair/typebox";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { Type } from "typebox";
 
-export default function (buddy: ExtensionAPI) {
+export default function (pi: ExtensionAPI) {
 	// Register a /quit command that cleanly exits pi
-	buddy.registerCommand("quit", {
+	pi.registerCommand("quit", {
 		description: "Exit pi cleanly",
 		handler: async (_args, ctx) => {
 			ctx.shutdown();
@@ -18,7 +18,7 @@ export default function (buddy: ExtensionAPI) {
 	});
 
 	// You can also create a tool that shuts down after completing work
-	buddy.registerTool({
+	pi.registerTool({
 		name: "finish_and_exit",
 		label: "Finish and Exit",
 		description: "Complete a task and exit pi",
@@ -37,7 +37,7 @@ export default function (buddy: ExtensionAPI) {
 	});
 
 	// You could also create a more complex tool with parameters
-	buddy.registerTool({
+	pi.registerTool({
 		name: "deploy_and_exit",
 		label: "Deploy and Exit",
 		description: "Deploy the application and exit pi",
@@ -48,7 +48,7 @@ export default function (buddy: ExtensionAPI) {
 			onUpdate?.({ content: [{ type: "text", text: `Deploying to ${params.environment}...` }], details: {} });
 
 			// Example deployment logic
-			// const result = await buddy.exec("npm", ["run", "deploy", params.environment], { signal });
+			// const result = await pi.exec("npm", ["run", "deploy", params.environment], { signal });
 
 			// On success, request graceful shutdown
 			onUpdate?.({ content: [{ type: "text", text: "Deployment complete, exiting..." }], details: {} });

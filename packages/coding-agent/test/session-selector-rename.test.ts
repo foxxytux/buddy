@@ -1,4 +1,4 @@
-import { setKeybindings } from "@foxxytux/buddy-tui";
+import { setKeybindings } from "@mariozechner/pi-tui";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { KeybindingsManager } from "../src/core/keybindings.js";
 import type { SessionInfo } from "../src/core/session-manager.js";

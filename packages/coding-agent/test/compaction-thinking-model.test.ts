@@ -11,14 +11,14 @@
 import { existsSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { Agent, type ThinkingLevel } from "@foxxytux/buddy-agent-core";
-import { getModel, type Model } from "@foxxytux/buddy-ai";
+import { Agent, type ThinkingLevel } from "@mariozechner/pi-agent-core";
+import { getModel, type Model } from "@mariozechner/pi-ai";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { AgentSession } from "../src/core/agent-session.js";
 import { ModelRegistry } from "../src/core/model-registry.js";
 import { SessionManager } from "../src/core/session-manager.js";
 import { SettingsManager } from "../src/core/settings-manager.js";
-import { codingTools } from "../src/core/tools/index.js";
+import { createCodingTools } from "../src/core/tools/index.js";
 import {
 	API_KEY,
 	createTestResourceLoader,
@@ -70,7 +70,7 @@ describe.skipIf(!HAS_ANTIGRAVITY_AUTH)("Compaction with thinking models (Antigra
 			initialState: {
 				model,
 				systemPrompt: "You are a helpful assistant. Be concise.",
-				tools: codingTools,
+				tools: createCodingTools(process.cwd()),
 				thinkingLevel,
 			},
 		});
@@ -168,7 +168,7 @@ describe.skipIf(!HAS_ANTHROPIC_AUTH)("Compaction with thinking models (Anthropic
 			initialState: {
 				model,
 				systemPrompt: "You are a helpful assistant. Be concise.",
-				tools: codingTools,
+				tools: createCodingTools(process.cwd()),
 				thinkingLevel,
 			},
 		});

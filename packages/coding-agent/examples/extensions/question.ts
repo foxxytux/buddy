@@ -4,9 +4,9 @@
  * Escape in editor returns to options, Escape in options cancels
  */
 
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { Editor, type EditorTheme, Key, matchesKey, Text, truncateToWidth } from "@foxxytux/buddy-tui";
-import { Type } from "@sinclair/typebox";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { Editor, type EditorTheme, Key, matchesKey, Text, truncateToWidth } from "@mariozechner/pi-tui";
+import { Type } from "typebox";
 
 interface OptionWithDesc {
 	label: string;
@@ -33,8 +33,8 @@ const QuestionParams = Type.Object({
 	options: Type.Array(OptionSchema, { description: "Options for the user to choose from" }),
 });
 
-export default function question(buddy: ExtensionAPI) {
-	buddy.registerTool({
+export default function question(pi: ExtensionAPI) {
+	pi.registerTool({
 		name: "question",
 		label: "Question",
 		description: "Ask the user a question and let them pick from options. Use when you need user input to proceed.",

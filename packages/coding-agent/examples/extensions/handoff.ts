@@ -12,9 +12,9 @@
  * The generated prompt appears as a draft in the editor for review/editing.
  */
 
-import { complete, type Message } from "@foxxytux/buddy-ai";
-import type { ExtensionAPI, SessionEntry } from "@foxxytux/buddy-coding-agent";
-import { BorderedLoader, convertToLlm, serializeConversation } from "@foxxytux/buddy-coding-agent";
+import { complete, type Message } from "@mariozechner/pi-ai";
+import type { ExtensionAPI, SessionEntry } from "@mariozechner/pi-coding-agent";
+import { BorderedLoader, convertToLlm, serializeConversation } from "@mariozechner/pi-coding-agent";
 
 const SYSTEM_PROMPT = `You are a context transfer assistant. Given a conversation history and the user's goal for a new thread, generate a focused prompt that:
 
@@ -38,8 +38,8 @@ Files involved:
 ## Task
 [Clear description of what to do next based on user's goal]`;
 
-export default function (buddy: ExtensionAPI) {
-	buddy.registerCommand("handoff", {
+export default function (pi: ExtensionAPI) {
+	pi.registerCommand("handoff", {
 		description: "Transfer context to a new focused session",
 		handler: async (args, ctx) => {
 			if (!ctx.hasUI) {
@@ -135,19 +135,20 @@ export default function (buddy: ExtensionAPI) {
 				return;
 			}
 
-			// Create new session with parent tracking
+			// Create new session with parent tracking. Use the replacement-session
+			// context for post-switch UI work; the original ctx is stale after a
+			// successful session replacement.
 			const newSessionResult = await ctx.newSession({
 				parentSession: currentSessionFile,
+				withSession: async (replacementCtx) => {
+					replacementCtx.ui.setEditorText(editedPrompt);
+					replacementCtx.ui.notify("Handoff ready. Submit when ready.", "info");
+				},
 			});
 
 			if (newSessionResult.cancelled) {
 				ctx.ui.notify("New session cancelled", "info");
-				return;
 			}
-
-			// Set the edited prompt in the main editor for submission
-			ctx.ui.setEditorText(editedPrompt);
-			ctx.ui.notify("Handoff ready. Submit when ready.", "info");
 		},
 	});
 }

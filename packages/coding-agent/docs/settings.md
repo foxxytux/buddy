@@ -1,11 +1,11 @@
 # Settings
 
-Buddy uses JSON settings files with project settings overriding global settings.
+Pi uses JSON settings files with project settings overriding global settings.
 
 | Location | Scope |
 |----------|-------|
-| `~/.buddy/agent/settings.json` | Global (all projects) |
-| `.buddy/settings.json` | Project (current directory) |
+| `~/.pi/agent/settings.json` | Global (all projects) |
+| `.pi/settings.json` | Project (current directory) |
 
 Edit directly or use `/settings` for common options.
 
@@ -77,12 +77,14 @@ Edit directly or use `/settings` for common options.
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
-| `retry.enabled` | boolean | `true` | Enable automatic retry on transient errors |
-| `retry.maxRetries` | number | `3` | Maximum retry attempts |
-| `retry.baseDelayMs` | number | `2000` | Base delay for exponential backoff (2s, 4s, 8s) |
-| `retry.maxDelayMs` | number | `60000` | Max server-requested delay before failing (60s) |
+| `retry.enabled` | boolean | `true` | Enable automatic agent-level retry on transient errors |
+| `retry.maxRetries` | number | `3` | Maximum agent-level retry attempts |
+| `retry.baseDelayMs` | number | `2000` | Base delay for agent-level exponential backoff (2s, 4s, 8s) |
+| `retry.provider.timeoutMs` | number | SDK default | Provider/SDK request timeout in milliseconds |
+| `retry.provider.maxRetries` | number | SDK default | Provider/SDK retry attempts |
+| `retry.provider.maxRetryDelayMs` | number | `60000` | Max server-requested delay before failing (60s) |
 
-When a provider requests a retry delay longer than `maxDelayMs` (e.g., Google's "quota will reset after 5h"), the request fails immediately with an informative error instead of waiting silently. Set to `0` to disable the cap.
+When a provider requests a retry delay longer than `retry.provider.maxRetryDelayMs` (e.g., Google's "quota will reset after 5h"), the request fails immediately with an informative error instead of waiting silently. Set to `0` to disable the cap.
 
 ```json
 {
@@ -90,7 +92,11 @@ When a provider requests a retry delay longer than `maxDelayMs` (e.g., Google's 
     "enabled": true,
     "maxRetries": 3,
     "baseDelayMs": 2000,
-    "maxDelayMs": 60000
+    "provider": {
+      "timeoutMs": 3600000,
+      "maxRetries": 0,
+      "maxRetryDelayMs": 60000
+    }
   }
 }
 ```
@@ -108,6 +114,7 @@ When a provider requests a retry delay longer than `maxDelayMs` (e.g., Google's 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
 | `terminal.showImages` | boolean | `true` | Show images in terminal (if supported) |
+| `terminal.imageWidthCells` | number | `60` | Preferred inline image width in terminal cells |
 | `terminal.clearOnShrink` | boolean | `false` | Clear empty rows when content shrinks (can cause flicker) |
 | `images.autoResize` | boolean | `true` | Resize images to 2000x2000 max |
 | `images.blockImages` | boolean | `false` | Block all images from being sent to LLM |
@@ -126,16 +133,16 @@ When a provider requests a retry delay longer than `maxDelayMs` (e.g., Google's 
 }
 ```
 
-`npmCommand` is used for all npm package-manager operations, including `npm root -g`, installs, uninstalls, and `npm install` inside git packages. Use argv-style entries exactly as the process should be launched.
+`npmCommand` is used for all npm package-manager operations, including `npm root -g`, installs, uninstalls, and dependency installs inside git packages. Use argv-style entries exactly as the process should be launched. When `npmCommand` is configured, git package dependency installs use plain `install` to avoid npm-specific flags in wrappers or alternate package managers.
 
 ### Sessions
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
-| `sessionDir` | string | - | Directory where session files are stored. Accepts absolute or relative paths. |
+| `sessionDir` | string | - | Directory where session files are stored. Accepts absolute or relative paths, plus `~`. |
 
 ```json
-{ "sessionDir": ".buddy/sessions" }
+{ "sessionDir": ".pi/sessions" }
 ```
 
 When multiple sources specify a session directory, `--session-dir` CLI flag takes precedence over `sessionDir` in settings.json.
@@ -162,7 +169,7 @@ When multiple sources specify a session directory, `--session-dir` CLI flag take
 
 These settings define where to load extensions, skills, prompts, and themes from.
 
-Paths in `~/.buddy/agent/settings.json` resolve relative to `~/.buddy/agent`. Paths in `.buddy/settings.json` resolve relative to `.buddy`. Absolute paths and `~` are supported.
+Paths in `~/.pi/agent/settings.json` resolve relative to `~/.pi/agent`. Paths in `.pi/settings.json` resolve relative to `.pi`. Absolute paths and `~` are supported.
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
@@ -181,7 +188,7 @@ String form loads all resources from a package:
 
 ```json
 {
-  "packages": ["buddy-skills", "@org/my-extension"]
+  "packages": ["pi-skills", "@org/my-extension"]
 }
 ```
 
@@ -191,7 +198,7 @@ Object form filters which resources to load:
 {
   "packages": [
     {
-      "source": "buddy-skills",
+      "source": "pi-skills",
       "skills": ["brave-search", "transcribe"],
       "extensions": []
     }
@@ -219,22 +226,22 @@ See [packages.md](packages.md) for package management details.
     "maxRetries": 3
   },
   "enabledModels": ["claude-*", "gpt-4o"],
-  "packages": ["buddy-skills"]
+  "packages": ["pi-skills"]
 }
 ```
 
 ## Project Overrides
 
-Project settings (`.buddy/settings.json`) override global settings. Nested objects are merged:
+Project settings (`.pi/settings.json`) override global settings. Nested objects are merged:
 
 ```json
-// ~/.buddy/agent/settings.json (global)
+// ~/.pi/agent/settings.json (global)
 {
   "theme": "dark",
   "compaction": { "enabled": true, "reserveTokens": 16384 }
 }
 
-// .buddy/settings.json (project)
+// .pi/settings.json (project)
 {
   "compaction": { "reserveTokens": 8192 }
 }

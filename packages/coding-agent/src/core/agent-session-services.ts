@@ -1,16 +1,14 @@
-import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { ThinkingLevel } from "@foxxytux/buddy-agent-core";
-import type { Model } from "@foxxytux/buddy-ai";
-import { getAgentDir, getPackageDir } from "../config.js";
+import type { ThinkingLevel } from "@mariozechner/pi-agent-core";
+import type { Model } from "@mariozechner/pi-ai";
+import { getAgentDir } from "../config.js";
 import { AuthStorage } from "./auth-storage.js";
 import type { SessionStartEvent, ToolDefinition } from "./extensions/index.js";
 import { ModelRegistry } from "./model-registry.js";
 import { DefaultResourceLoader, type DefaultResourceLoaderOptions, type ResourceLoader } from "./resource-loader.js";
-import { type CreateAgentSessionResult, createAgentSession } from "./sdk.js";
+import { type CreateAgentSessionOptions, type CreateAgentSessionResult, createAgentSession } from "./sdk.js";
 import type { SessionManager } from "./session-manager.js";
 import { SettingsManager } from "./settings-manager.js";
-import type { Tool } from "./tools/index.js";
 
 /**
  * Non-fatal issues collected while creating services or sessions.
@@ -54,7 +52,8 @@ export interface CreateAgentSessionFromServicesOptions {
 	model?: Model<any>;
 	thinkingLevel?: ThinkingLevel;
 	scopedModels?: Array<{ model: Model<any>; thinkingLevel?: ThinkingLevel }>;
-	tools?: Tool[];
+	tools?: string[];
+	noTools?: CreateAgentSessionOptions["noTools"];
 	customTools?: ToolDefinition[];
 }
 
@@ -72,56 +71,6 @@ export interface AgentSessionServices {
 	modelRegistry: ModelRegistry;
 	resourceLoader: ResourceLoader;
 	diagnostics: AgentSessionRuntimeDiagnostic[];
-}
-
-function discoverBundledExtensionEntries(dir: string): string[] {
-	if (!existsSync(dir)) {
-		return [];
-	}
-
-	const entries: string[] = [];
-	for (const dirent of readdirSync(dir, { withFileTypes: true })) {
-		const entryPath = join(dir, dirent.name);
-		if (dirent.isFile() || dirent.isSymbolicLink()) {
-			if (dirent.name.endsWith(".ts") || dirent.name.endsWith(".js")) {
-				entries.push(entryPath);
-			}
-			continue;
-		}
-
-		if (dirent.isDirectory()) {
-			const indexTs = join(entryPath, "index.ts");
-			const indexJs = join(entryPath, "index.js");
-			if (existsSync(indexTs)) {
-				entries.push(indexTs);
-				continue;
-			}
-			if (existsSync(indexJs)) {
-				entries.push(indexJs);
-				continue;
-			}
-
-			const packageJsonPath = join(entryPath, "package.json");
-			if (!existsSync(packageJsonPath)) {
-				continue;
-			}
-
-			try {
-				const content = readFileSync(packageJsonPath, "utf-8");
-				const pkg = JSON.parse(content) as { buddy?: { extensions?: string[] } };
-				for (const extensionPath of pkg.buddy?.extensions ?? []) {
-					const resolved = join(entryPath, extensionPath);
-					if (existsSync(resolved)) {
-						entries.push(resolved);
-					}
-				}
-			} catch {
-				// Ignore malformed package metadata and continue scanning.
-			}
-		}
-	}
-
-	return entries;
 }
 
 function applyExtensionFlagValues(
@@ -182,47 +131,15 @@ export async function createAgentSessionServices(
 ): Promise<AgentSessionServices> {
 	const cwd = options.cwd;
 	const agentDir = options.agentDir ?? getAgentDir();
-	const packageDir = getPackageDir();
-	const bundledBuddyDir = join(packageDir, ".buddy");
-	const bundledExtensionPaths = discoverBundledExtensionEntries(join(bundledBuddyDir, "extensions"));
-	const bundledSkillPaths = existsSync(join(bundledBuddyDir, "skills")) ? [join(bundledBuddyDir, "skills")] : [];
-	const bundledPromptPaths = existsSync(join(bundledBuddyDir, "prompts")) ? [join(bundledBuddyDir, "prompts")] : [];
-	const bundledThemePaths = existsSync(join(bundledBuddyDir, "themes")) ? [join(bundledBuddyDir, "themes")] : [];
 	const authStorage = options.authStorage ?? AuthStorage.create(join(agentDir, "auth.json"));
 	const settingsManager = options.settingsManager ?? SettingsManager.create(cwd, agentDir);
 	const modelRegistry = options.modelRegistry ?? ModelRegistry.create(authStorage, join(agentDir, "models.json"));
-	// Load resource loader with built-in extension factories including buddy-setup-search
-	const extraFactories = [] as any[];
-	try {
-		// Keep import dynamic so this file still loads even if extension file is missing in some forks
-		// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
-		const setupFactory = require("../extensions/buddy-setup-search.js").default;
-		if (typeof setupFactory === "function") {
-			extraFactories.push(setupFactory);
-		}
-	} catch {
-		// No-op when extension file isn't present (shouldn't happen in this repo)
-	}
-
-	const mergedResourceLoaderOptions = {
+	const resourceLoader = new DefaultResourceLoader({
 		...(options.resourceLoaderOptions ?? {}),
 		cwd,
 		agentDir,
 		settingsManager,
-		additionalExtensionPaths: [
-			...bundledExtensionPaths,
-			...(options.resourceLoaderOptions?.additionalExtensionPaths ?? []),
-		],
-		additionalSkillPaths: [...bundledSkillPaths, ...(options.resourceLoaderOptions?.additionalSkillPaths ?? [])],
-		additionalPromptTemplatePaths: [
-			...bundledPromptPaths,
-			...(options.resourceLoaderOptions?.additionalPromptTemplatePaths ?? []),
-		],
-		additionalThemePaths: [...bundledThemePaths, ...(options.resourceLoaderOptions?.additionalThemePaths ?? [])],
-		extensionFactories: [...(options.resourceLoaderOptions?.extensionFactories ?? []), ...extraFactories],
-	};
-
-	const resourceLoader = new DefaultResourceLoader(mergedResourceLoaderOptions);
+	});
 	await resourceLoader.reload();
 
 	const diagnostics: AgentSessionRuntimeDiagnostic[] = [];
@@ -274,6 +191,7 @@ export async function createAgentSessionFromServices(
 		thinkingLevel: options.thinkingLevel,
 		scopedModels: options.scopedModels,
 		tools: options.tools,
+		noTools: options.noTools,
 		customTools: options.customTools,
 		sessionStartEvent: options.sessionStartEvent,
 	});

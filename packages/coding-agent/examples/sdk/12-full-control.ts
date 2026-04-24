@@ -2,24 +2,18 @@
  * Full Control
  *
  * Replace everything - no discovery, explicit configuration.
- *
- * IMPORTANT: When providing `tools` with a custom `cwd`, use the tool factory
- * functions (createReadTool, createBashTool, etc.) to ensure tools resolve
- * paths relative to your cwd.
  */
 
-import { getModel } from "@foxxytux/buddy-ai";
+import { getModel } from "@mariozechner/pi-ai";
 import {
 	AuthStorage,
 	createAgentSession,
-	createBashTool,
 	createExtensionRuntime,
-	createReadTool,
 	ModelRegistry,
 	type ResourceLoader,
 	SessionManager,
 	SettingsManager,
-} from "@foxxytux/buddy-coding-agent";
+} from "@mariozechner/pi-coding-agent";
 
 // Custom auth storage location
 const authStorage = AuthStorage.create("/tmp/my-agent/auth.json");
@@ -41,7 +35,6 @@ const settingsManager = SettingsManager.inMemory({
 	retry: { enabled: true, maxRetries: 2 },
 });
 
-// When using a custom cwd with explicit tools, use the factory functions
 const cwd = process.cwd();
 
 const resourceLoader: ResourceLoader = {
@@ -65,9 +58,8 @@ const { session } = await createAgentSession({
 	authStorage,
 	modelRegistry,
 	resourceLoader,
-	// Use factory functions with the same cwd to ensure path resolution works correctly
-	tools: [createReadTool(cwd), createBashTool(cwd)],
-	sessionManager: SessionManager.inMemory(),
+	tools: ["read", "bash"],
+	sessionManager: SessionManager.inMemory(cwd),
 	settingsManager,
 });
 

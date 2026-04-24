@@ -5,9 +5,9 @@
  * and after compaction the session is reloaded.
  */
 
-import type { AgentMessage } from "@foxxytux/buddy-agent-core";
-import type { AssistantMessage, Model, Usage } from "@foxxytux/buddy-ai";
-import { completeSimple } from "@foxxytux/buddy-ai";
+import type { AgentMessage, ThinkingLevel } from "@mariozechner/pi-agent-core";
+import type { AssistantMessage, Model, Usage } from "@mariozechner/pi-ai";
+import { completeSimple } from "@mariozechner/pi-ai";
 import {
 	convertToLlm,
 	createBranchSummaryMessage,
@@ -484,10 +484,6 @@ Use this EXACT format:
 
 Keep each section concise. Preserve exact file paths, function names, and error messages.`;
 
-const MAX_SUMMARY_TOKENS = 4096;
-const MAX_TURN_PREFIX_SUMMARY_TOKENS = 2048;
-const SUMMARIZATION_REASONING = "minimal" as const;
-
 const UPDATE_SUMMARIZATION_PROMPT = `The messages above are NEW conversation messages to incorporate into the existing summary provided in <previous-summary> tags.
 
 Update the existing structured summary with new information. RULES:
@@ -540,8 +536,9 @@ export async function generateSummary(
 	signal?: AbortSignal,
 	customInstructions?: string,
 	previousSummary?: string,
+	thinkingLevel?: ThinkingLevel,
 ): Promise<string> {
-	const maxTokens = Math.min(MAX_SUMMARY_TOKENS, Math.floor(0.5 * reserveTokens));
+	const maxTokens = Math.floor(0.8 * reserveTokens);
 
 	// Use update prompt if we have a previous summary, otherwise initial prompt
 	let basePrompt = previousSummary ? UPDATE_SUMMARIZATION_PROMPT : SUMMARIZATION_PROMPT;
@@ -569,9 +566,10 @@ export async function generateSummary(
 		},
 	];
 
-	const completionOptions = model.reasoning
-		? { maxTokens, signal, apiKey, headers, reasoning: SUMMARIZATION_REASONING }
-		: { maxTokens, signal, apiKey, headers };
+	const completionOptions =
+		model.reasoning && thinkingLevel && thinkingLevel !== "off"
+			? { maxTokens, signal, apiKey, headers, reasoning: thinkingLevel }
+			: { maxTokens, signal, apiKey, headers };
 
 	const response = await completeSimple(
 		model,
@@ -723,6 +721,7 @@ export async function compact(
 	headers?: Record<string, string>,
 	customInstructions?: string,
 	signal?: AbortSignal,
+	thinkingLevel?: ThinkingLevel,
 ): Promise<CompactionResult> {
 	const {
 		firstKeptEntryId,
@@ -751,9 +750,18 @@ export async function compact(
 						signal,
 						customInstructions,
 						previousSummary,
+						thinkingLevel,
 					)
 				: Promise.resolve("No prior history."),
-			generateTurnPrefixSummary(turnPrefixMessages, model, settings.reserveTokens, apiKey, headers, signal),
+			generateTurnPrefixSummary(
+				turnPrefixMessages,
+				model,
+				settings.reserveTokens,
+				apiKey,
+				headers,
+				signal,
+				thinkingLevel,
+			),
 		]);
 		// Merge into single summary
 		summary = `${historyResult}\n\n---\n\n**Turn Context (split turn):**\n\n${turnPrefixResult}`;
@@ -768,6 +776,7 @@ export async function compact(
 			signal,
 			customInstructions,
 			previousSummary,
+			thinkingLevel,
 		);
 	}
 
@@ -797,8 +806,9 @@ async function generateTurnPrefixSummary(
 	apiKey: string,
 	headers?: Record<string, string>,
 	signal?: AbortSignal,
+	thinkingLevel?: ThinkingLevel,
 ): Promise<string> {
-	const maxTokens = Math.min(MAX_TURN_PREFIX_SUMMARY_TOKENS, Math.floor(0.25 * reserveTokens));
+	const maxTokens = Math.floor(0.5 * reserveTokens); // Smaller budget for turn prefix
 	const llmMessages = convertToLlm(messages);
 	const conversationText = serializeConversation(llmMessages);
 	const promptText = `<conversation>\n${conversationText}\n</conversation>\n\n${TURN_PREFIX_SUMMARIZATION_PROMPT}`;
@@ -813,8 +823,8 @@ async function generateTurnPrefixSummary(
 	const response = await completeSimple(
 		model,
 		{ systemPrompt: SUMMARIZATION_SYSTEM_PROMPT, messages: summarizationMessages },
-		model.reasoning
-			? { maxTokens, signal, apiKey, headers, reasoning: SUMMARIZATION_REASONING }
+		model.reasoning && thinkingLevel && thinkingLevel !== "off"
+			? { maxTokens, signal, apiKey, headers, reasoning: thinkingLevel }
 			: { maxTokens, signal, apiKey, headers },
 	);
 

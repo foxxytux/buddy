@@ -5,28 +5,28 @@
  * When forking, offers to restore code to that point in history.
  */
 
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
-export default function (buddy: ExtensionAPI) {
+export default function (pi: ExtensionAPI) {
 	const checkpoints = new Map<string, string>();
 	let currentEntryId: string | undefined;
 
 	// Track the current entry ID when user messages are saved
-	buddy.on("tool_result", async (_event, ctx) => {
+	pi.on("tool_result", async (_event, ctx) => {
 		const leaf = ctx.sessionManager.getLeafEntry();
 		if (leaf) currentEntryId = leaf.id;
 	});
 
-	buddy.on("turn_start", async () => {
+	pi.on("turn_start", async () => {
 		// Create a git stash entry before LLM makes changes
-		const { stdout } = await buddy.exec("git", ["stash", "create"]);
+		const { stdout } = await pi.exec("git", ["stash", "create"]);
 		const ref = stdout.trim();
 		if (ref && currentEntryId) {
 			checkpoints.set(currentEntryId, ref);
 		}
 	});
 
-	buddy.on("session_before_fork", async (event, ctx) => {
+	pi.on("session_before_fork", async (event, ctx) => {
 		const ref = checkpoints.get(event.entryId);
 		if (!ref) return;
 
@@ -41,12 +41,12 @@ export default function (buddy: ExtensionAPI) {
 		]);
 
 		if (choice?.startsWith("Yes")) {
-			await buddy.exec("git", ["stash", "apply", ref]);
+			await pi.exec("git", ["stash", "apply", ref]);
 			ctx.ui.notify("Code restored to checkpoint", "info");
 		}
 	});
 
-	buddy.on("agent_end", async () => {
+	pi.on("agent_end", async () => {
 		// Clear checkpoints after agent completes
 		checkpoints.clear();
 	});

@@ -1,6 +1,6 @@
 # Custom Providers
 
-Extensions can register custom model providers via `buddy.registerProvider()`. This enables:
+Extensions can register custom model providers via `pi.registerProvider()`. This enables:
 
 - **Proxies** - Route requests through corporate proxies or API gateways
 - **Custom endpoints** - Use self-hosted or private model deployments
@@ -31,16 +31,16 @@ See these complete provider examples:
 ## Quick Reference
 
 ```typescript
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
-export default function (buddy: ExtensionAPI) {
+export default function (pi: ExtensionAPI) {
   // Override baseUrl for existing provider
-  buddy.registerProvider("anthropic", {
+  pi.registerProvider("anthropic", {
     baseUrl: "https://proxy.example.com"
   });
 
   // Register new provider with models
-  buddy.registerProvider("my-provider", {
+  pi.registerProvider("my-provider", {
     baseUrl: "https://api.example.com",
     apiKey: "MY_API_KEY",
     api: "openai-completions",
@@ -59,25 +59,27 @@ export default function (buddy: ExtensionAPI) {
 }
 ```
 
+The extension factory can also be `async`. For dynamic model discovery, fetch and register models in the factory instead of `session_start`. pi waits for the factory before startup continues, so the provider is available during interactive startup and to `pi --list-models`.
+
 ## Override Existing Provider
 
 The simplest use case: redirect an existing provider through a proxy.
 
 ```typescript
 // All Anthropic requests now go through your proxy
-buddy.registerProvider("anthropic", {
+pi.registerProvider("anthropic", {
   baseUrl: "https://proxy.example.com"
 });
 
 // Add custom headers to OpenAI requests
-buddy.registerProvider("openai", {
+pi.registerProvider("openai", {
   headers: {
     "X-Custom-Header": "value"
   }
 });
 
 // Both baseUrl and headers
-buddy.registerProvider("google", {
+pi.registerProvider("google", {
   baseUrl: "https://ai-gateway.corp.com/google",
   headers: {
     "X-Corp-Auth": "CORP_AUTH_TOKEN"  // env var or literal
@@ -91,8 +93,43 @@ When only `baseUrl` and/or `headers` are provided (no `models`), all existing mo
 
 To add a completely new provider, specify `models` along with the required configuration.
 
+If the model list comes from a remote endpoint, use an async extension factory:
+
 ```typescript
-buddy.registerProvider("my-llm", {
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+
+export default async function (pi: ExtensionAPI) {
+  const response = await fetch("http://localhost:1234/v1/models");
+  const payload = (await response.json()) as {
+    data: Array<{
+      id: string;
+      name?: string;
+      context_window?: number;
+      max_tokens?: number;
+    }>;
+  };
+
+  pi.registerProvider("local-openai", {
+    baseUrl: "http://localhost:1234/v1",
+    apiKey: "LOCAL_OPENAI_API_KEY",
+    api: "openai-completions",
+    models: payload.data.map((model) => ({
+      id: model.id,
+      name: model.name ?? model.id,
+      reasoning: false,
+      input: ["text"],
+      cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+      contextWindow: model.context_window ?? 128000,
+      maxTokens: model.max_tokens ?? 4096,
+    })),
+  });
+}
+```
+
+This registers the fetched models before startup finishes.
+
+```typescript
+pi.registerProvider("my-llm", {
   baseUrl: "https://api.my-llm.com/v1",
   apiKey: "MY_LLM_API_KEY",  // env var name or literal value
   api: "openai-completions",  // which streaming API to use
@@ -119,11 +156,11 @@ When `models` is provided, it **replaces** all existing models for that provider
 
 ## Unregister Provider
 
-Use `buddy.unregisterProvider(name)` to remove a provider that was previously registered via `buddy.registerProvider(name, ...)`:
+Use `pi.unregisterProvider(name)` to remove a provider that was previously registered via `pi.registerProvider(name, ...)`:
 
 ```typescript
 // Register
-buddy.registerProvider("my-llm", {
+pi.registerProvider("my-llm", {
   baseUrl: "https://api.my-llm.com/v1",
   apiKey: "MY_LLM_API_KEY",
   api: "openai-completions",
@@ -141,7 +178,7 @@ buddy.registerProvider("my-llm", {
 });
 
 // Later, remove it
-buddy.unregisterProvider("my-llm");
+pi.unregisterProvider("my-llm");
 ```
 
 Unregistering removes that provider's dynamic models, API key fallback, OAuth provider registration, and custom stream handler registrations. Any built-in models or provider behavior that were overridden are restored.
@@ -174,7 +211,7 @@ models: [{
   compat: {
     supportsDeveloperRole: false,      // use "system" instead of "developer"
     supportsReasoningEffort: true,
-    reasoningEffortMap: {              // map buddy-ai levels to provider values
+    reasoningEffortMap: {              // map pi-ai levels to provider values
       minimal: "default",
       low: "default",
       medium: "default",
@@ -183,12 +220,14 @@ models: [{
     },
       maxTokensField: "max_tokens",      // instead of "max_completion_tokens"
       requiresToolResultName: true,      // tool results need name field
-      thinkingFormat: "qwen"            // top-level enable_thinking: true
+      thinkingFormat: "qwen",           // top-level enable_thinking: true
+      cacheControlFormat: "anthropic"   // Anthropic-style cache_control markers
     }
   }]
 ```
 
 Use `qwen-chat-template` instead for local Qwen-compatible servers that read `chat_template_kwargs.enable_thinking`.
+Use `cacheControlFormat: "anthropic"` for OpenAI-compatible providers that expose Anthropic-style prompt caching via `cache_control` on the system prompt, last tool definition, and last user/assistant text content.
 
 > Migration note: Mistral moved from `openai-completions` to `mistral-conversations`.
 > Use `mistral-conversations` for native Mistral models.
@@ -199,7 +238,7 @@ Use `qwen-chat-template` instead for local Qwen-compatible servers that read `ch
 If your provider expects `Authorization: Bearer <key>` but doesn't use a standard API, set `authHeader: true`:
 
 ```typescript
-buddy.registerProvider("custom-api", {
+pi.registerProvider("custom-api", {
   baseUrl: "https://api.example.com",
   apiKey: "MY_API_KEY",
   authHeader: true,  // adds Authorization: Bearer header
@@ -213,9 +252,9 @@ buddy.registerProvider("custom-api", {
 Add OAuth/SSO authentication that integrates with `/login`:
 
 ```typescript
-import type { OAuthCredentials, OAuthLoginCallbacks } from "@foxxytux/buddy-ai";
+import type { OAuthCredentials, OAuthLoginCallbacks } from "@mariozechner/pi-ai";
 
-buddy.registerProvider("corporate-ai", {
+pi.registerProvider("corporate-ai", {
   baseUrl: "https://ai.corp.com/v1",
   api: "openai-responses",
   models: [...],
@@ -291,7 +330,7 @@ interface OAuthLoginCallbacks {
 
 ### OAuthCredentials
 
-Credentials are persisted in `~/.buddy/agent/auth.json`:
+Credentials are persisted in `~/.pi/agent/auth.json`:
 
 ```typescript
 interface OAuthCredentials {
@@ -306,12 +345,12 @@ interface OAuthCredentials {
 For providers with non-standard APIs, implement `streamSimple`. Study the existing provider implementations before writing your own:
 
 **Reference implementations:**
-- [anthropic.ts](https://github.com/badlogic/buddy-mono/blob/main/packages/ai/src/providers/anthropic.ts) - Anthropic Messages API
-- [mistral.ts](https://github.com/badlogic/buddy-mono/blob/main/packages/ai/src/providers/mistral.ts) - Mistral Conversations API
-- [openai-completions.ts](https://github.com/badlogic/buddy-mono/blob/main/packages/ai/src/providers/openai-completions.ts) - OpenAI Chat Completions
-- [openai-responses.ts](https://github.com/badlogic/buddy-mono/blob/main/packages/ai/src/providers/openai-responses.ts) - OpenAI Responses API
-- [google.ts](https://github.com/badlogic/buddy-mono/blob/main/packages/ai/src/providers/google.ts) - Google Generative AI
-- [amazon-bedrock.ts](https://github.com/badlogic/buddy-mono/blob/main/packages/ai/src/providers/amazon-bedrock.ts) - AWS Bedrock
+- [anthropic.ts](https://github.com/badlogic/pi-mono/blob/main/packages/ai/src/providers/anthropic.ts) - Anthropic Messages API
+- [mistral.ts](https://github.com/badlogic/pi-mono/blob/main/packages/ai/src/providers/mistral.ts) - Mistral Conversations API
+- [openai-completions.ts](https://github.com/badlogic/pi-mono/blob/main/packages/ai/src/providers/openai-completions.ts) - OpenAI Chat Completions
+- [openai-responses.ts](https://github.com/badlogic/pi-mono/blob/main/packages/ai/src/providers/openai-responses.ts) - OpenAI Responses API
+- [google.ts](https://github.com/badlogic/pi-mono/blob/main/packages/ai/src/providers/google.ts) - Google Generative AI
+- [amazon-bedrock.ts](https://github.com/badlogic/pi-mono/blob/main/packages/ai/src/providers/amazon-bedrock.ts) - AWS Bedrock
 
 ### Stream Pattern
 
@@ -326,7 +365,7 @@ import {
   type SimpleStreamOptions,
   calculateCost,
   createAssistantMessageEventStream,
-} from "@foxxytux/buddy-ai";
+} from "@mariozechner/pi-ai";
 
 function streamMyProvider(
   model: Model<any>,
@@ -472,7 +511,7 @@ calculateCost(model, output.usage);
 Register your stream function:
 
 ```typescript
-buddy.registerProvider("my-provider", {
+pi.registerProvider("my-provider", {
   baseUrl: "https://api.example.com",
   apiKey: "MY_API_KEY",
   api: "my-custom-api",
@@ -483,7 +522,7 @@ buddy.registerProvider("my-provider", {
 
 ## Testing Your Implementation
 
-Test your provider against the same test suites used by built-in providers. Copy and adapt these test files from [packages/ai/test/](https://github.com/badlogic/buddy-mono/tree/main/packages/ai/test):
+Test your provider against the same test suites used by built-in providers. Copy and adapt these test files from [packages/ai/test/](https://github.com/badlogic/pi-mono/tree/main/packages/ai/test):
 
 | Test | Purpose |
 |------|---------|
@@ -588,9 +627,12 @@ interface ProviderModelConfig {
     requiresToolResultName?: boolean;
     requiresAssistantAfterToolResult?: boolean;
     requiresThinkingAsText?: boolean;
-    thinkingFormat?: "openai" | "zai" | "qwen" | "qwen-chat-template";
+    requiresReasoningContentOnAssistantMessages?: boolean;
+    thinkingFormat?: "openai" | "deepseek" | "zai" | "qwen" | "qwen-chat-template";
+    cacheControlFormat?: "anthropic";
   };
 }
 ```
 
-`qwen` is for DashScope-style top-level `enable_thinking`. Use `qwen-chat-template` for local Qwen-compatible servers that read `chat_template_kwargs.enable_thinking`.
+`deepseek` sends `thinking: { type: "enabled" | "disabled" }` and `reasoning_effort` when enabled. `qwen` is for DashScope-style top-level `enable_thinking`. Use `qwen-chat-template` for local Qwen-compatible servers that read `chat_template_kwargs.enable_thinking`.
+`cacheControlFormat: "anthropic"` applies Anthropic-style `cache_control` markers to the system prompt, last tool definition, and last user/assistant text content.

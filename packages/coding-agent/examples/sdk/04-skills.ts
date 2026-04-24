@@ -9,9 +9,10 @@ import {
 	createAgentSession,
 	createSyntheticSourceInfo,
 	DefaultResourceLoader,
+	getAgentDir,
 	SessionManager,
 	type Skill,
-} from "@foxxytux/buddy-coding-agent";
+} from "@mariozechner/pi-coding-agent";
 
 // Or define custom skills inline
 const customSkill: Skill = {
@@ -24,6 +25,8 @@ const customSkill: Skill = {
 };
 
 const loader = new DefaultResourceLoader({
+	cwd: process.cwd(),
+	agentDir: getAgentDir(),
 	skillsOverride: (current) => {
 		const filteredSkills = current.skills.filter((s) => s.name.includes("browser") || s.name.includes("search"));
 		return {
@@ -34,7 +37,7 @@ const loader = new DefaultResourceLoader({
 });
 await loader.reload();
 
-// Discover all skills from cwd/.buddy/skills, ~/.buddy/agent/skills, etc.
+// Discover all skills from cwd/.pi/skills, ~/.pi/agent/skills, etc.
 const { skills: allSkills, diagnostics } = loader.getSkills();
 console.log(
 	"Discovered skills:",

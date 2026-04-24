@@ -5,8 +5,8 @@ See [AGENTS.md](../../../AGENTS.md) for additional guidelines.
 ## Setup
 
 ```bash
-git clone https://github.com/badlogic/buddy-mono
-cd buddy-mono
+git clone https://github.com/badlogic/pi-mono
+cd pi-mono
 npm install
 npm run build
 ```
@@ -14,10 +14,10 @@ npm run build
 Run from source:
 
 ```bash
-/path/to/buddy-mono/buddy-test.sh
+/path/to/pi-mono/pi-test.sh
 ```
 
-The script can be run from any directory. Buddy keeps the caller's current working directory.
+The script can be run from any directory. Pi keeps the caller's current working directory.
 
 ## Forking / Rebranding
 
@@ -26,8 +26,8 @@ Configure via `package.json`:
 ```json
 {
   "piConfig": {
-    "name": "buddy",
-    "configDir": ".buddy"
+    "name": "pi",
+    "configDir": ".pi"
   }
 }
 ```
@@ -48,7 +48,7 @@ Never use `__dirname` directly for package assets.
 
 ## Debug Command
 
-`/debug` (hidden) writes to `~/.buddy/agent/buddy-debug.log`:
+`/debug` (hidden) writes to `~/.pi/agent/pi-debug.log`:
 - Rendered TUI lines with ANSI codes
 - Last messages sent to the LLM
 

@@ -5,8 +5,8 @@
  * (logo + keybinding hints) with a custom component showing the pi mascot.
  */
 
-import type { ExtensionAPI, Theme } from "@foxxytux/buddy-coding-agent";
-import { VERSION } from "@foxxytux/buddy-coding-agent";
+import type { ExtensionAPI, Theme } from "@mariozechner/pi-coding-agent";
+import { VERSION } from "@mariozechner/pi-coding-agent";
 
 // --- PI MASCOT ---
 // Based on pi_mascot.ts - the pi agent character
@@ -44,9 +44,9 @@ function getPiMascot(theme: Theme): string[] {
 	return ["", lineEyes, lineBar, lineLeg, lineLeg, lineLeg, lineLeg, ""];
 }
 
-export default function (buddy: ExtensionAPI) {
+export default function (pi: ExtensionAPI) {
 	// Set custom header immediately on load (if UI is available)
-	buddy.on("session_start", async (_event, ctx) => {
+	pi.on("session_start", async (_event, ctx) => {
 		if (ctx.hasUI) {
 			ctx.ui.setHeader((_tui, theme) => {
 				return {
@@ -63,7 +63,7 @@ export default function (buddy: ExtensionAPI) {
 	});
 
 	// Command to restore built-in header
-	buddy.registerCommand("builtin-header", {
+	pi.registerCommand("builtin-header", {
 		description: "Restore built-in header with keybinding hints",
 		handler: async (_args, ctx) => {
 			ctx.ui.setHeader(undefined);

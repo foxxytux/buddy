@@ -5,9 +5,9 @@
 import { chmodSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { Agent } from "@foxxytux/buddy-agent-core";
-import { getModel, type OAuthCredentials, type OAuthProvider } from "@foxxytux/buddy-ai";
-import { getOAuthApiKey } from "@foxxytux/buddy-ai/oauth";
+import { Agent } from "@mariozechner/pi-agent-core";
+import { getModel, type OAuthCredentials, type OAuthProvider } from "@mariozechner/pi-ai";
+import { getOAuthApiKey } from "@mariozechner/pi-ai/oauth";
 import { AgentSession } from "../src/core/agent-session.js";
 import { AuthStorage } from "../src/core/auth-storage.js";
 import { createEventBus } from "../src/core/event-bus.js";
@@ -17,7 +17,7 @@ import { ModelRegistry } from "../src/core/model-registry.js";
 import type { ResourceLoader } from "../src/core/resource-loader.js";
 import { SessionManager } from "../src/core/session-manager.js";
 import { SettingsManager } from "../src/core/settings-manager.js";
-import { codingTools } from "../src/core/tools/index.js";
+import { createCodingTools } from "../src/index.js";
 
 /**
  * API key for authenticated tests. Tests using this should be wrapped in
@@ -26,7 +26,7 @@ import { codingTools } from "../src/core/tools/index.js";
 export const API_KEY = process.env.ANTHROPIC_OAUTH_TOKEN || process.env.ANTHROPIC_API_KEY;
 
 // ============================================================================
-// OAuth API key resolution from ~/.buddy/agent/auth.json
+// OAuth API key resolution from ~/.pi/agent/auth.json
 // ============================================================================
 
 const AUTH_PATH = join(homedir(), ".pi", "agent", "auth.json");
@@ -66,7 +66,7 @@ function saveAuthStorage(storage: AuthStorageData): void {
 }
 
 /**
- * Resolve API key for a provider from ~/.buddy/agent/auth.json
+ * Resolve API key for a provider from ~/.pi/agent/auth.json
  *
  * For API key credentials, returns the key directly.
  * For OAuth credentials, returns the access token (refreshing if expired and saving back).
@@ -107,7 +107,7 @@ export async function resolveApiKey(provider: string): Promise<string | undefine
 }
 
 /**
- * Check if a provider has credentials in ~/.buddy/agent/auth.json
+ * Check if a provider has credentials in ~/.pi/agent/auth.json
  */
 export function hasAuthForProvider(provider: string): boolean {
 	const storage = loadAuthStorage();
@@ -118,7 +118,7 @@ export function hasAuthForProvider(provider: string): boolean {
 export const PI_AGENT_DIR = join(homedir(), ".pi", "agent");
 
 /**
- * Get an AuthStorage instance backed by ~/.buddy/agent/auth.json
+ * Get an AuthStorage instance backed by ~/.pi/agent/auth.json
  * Use this for tests that need real OAuth credentials.
  */
 export function getRealAuthStorage(): AuthStorage {
@@ -242,7 +242,7 @@ export function createTestSession(options: TestSessionOptions = {}): TestSession
 		initialState: {
 			model,
 			systemPrompt: options.systemPrompt ?? "You are a helpful assistant. Be extremely concise.",
-			tools: codingTools,
+			tools: createCodingTools(process.cwd()),
 		},
 	});
 

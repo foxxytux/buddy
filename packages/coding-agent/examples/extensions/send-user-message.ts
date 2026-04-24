@@ -1,8 +1,8 @@
 /**
  * Send User Message Example
  *
- * Demonstrates buddy.sendUserMessage() for sending user messages from extensions.
- * Unlike buddy.sendMessage() which sends custom messages, sendUserMessage() sends
+ * Demonstrates pi.sendUserMessage() for sending user messages from extensions.
+ * Unlike pi.sendMessage() which sends custom messages, sendUserMessage() sends
  * actual user messages that appear in the conversation as if typed by the user.
  *
  * Usage:
@@ -11,11 +11,11 @@
  *   /followup And then?   - Sends while streaming with followUp delivery
  */
 
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
-export default function (buddy: ExtensionAPI) {
+export default function (pi: ExtensionAPI) {
 	// Simple command that sends a user message
-	buddy.registerCommand("ask", {
+	pi.registerCommand("ask", {
 		description: "Send a user message to the agent",
 		handler: async (args, ctx) => {
 			if (!args.trim()) {
@@ -30,12 +30,12 @@ export default function (buddy: ExtensionAPI) {
 				return;
 			}
 
-			buddy.sendUserMessage(args);
+			pi.sendUserMessage(args);
 		},
 	});
 
 	// Command that steers the agent mid-conversation
-	buddy.registerCommand("steer", {
+	pi.registerCommand("steer", {
 		description: "Send a steering message (interrupts current processing)",
 		handler: async (args, ctx) => {
 			if (!args.trim()) {
@@ -45,16 +45,16 @@ export default function (buddy: ExtensionAPI) {
 
 			if (ctx.isIdle()) {
 				// Not streaming, just send normally
-				buddy.sendUserMessage(args);
+				pi.sendUserMessage(args);
 			} else {
 				// Streaming - use steer to interrupt
-				buddy.sendUserMessage(args, { deliverAs: "steer" });
+				pi.sendUserMessage(args, { deliverAs: "steer" });
 			}
 		},
 	});
 
 	// Command that queues a follow-up message
-	buddy.registerCommand("followup", {
+	pi.registerCommand("followup", {
 		description: "Queue a follow-up message (waits for current processing)",
 		handler: async (args, ctx) => {
 			if (!args.trim()) {
@@ -64,17 +64,17 @@ export default function (buddy: ExtensionAPI) {
 
 			if (ctx.isIdle()) {
 				// Not streaming, just send normally
-				buddy.sendUserMessage(args);
+				pi.sendUserMessage(args);
 			} else {
 				// Streaming - queue as follow-up
-				buddy.sendUserMessage(args, { deliverAs: "followUp" });
+				pi.sendUserMessage(args, { deliverAs: "followUp" });
 				ctx.ui.notify("Follow-up queued", "info");
 			}
 		},
 	});
 
 	// Example with content array (text + images would go here)
-	buddy.registerCommand("askwith", {
+	pi.registerCommand("askwith", {
 		description: "Send a user message with structured content",
 		handler: async (args, ctx) => {
 			if (!args.trim()) {
@@ -88,7 +88,7 @@ export default function (buddy: ExtensionAPI) {
 			}
 
 			// sendUserMessage accepts string or (TextContent | ImageContent)[]
-			buddy.sendUserMessage([
+			pi.sendUserMessage([
 				{ type: "text", text: `User request: ${args}` },
 				{ type: "text", text: "Please respond concisely." },
 			]);

@@ -176,7 +176,7 @@ interface UserInfo {
 MomAgent wraps `AgentSession` from coding-agent. Agent is platform-agnostic; it just forwards events to the adapter.
 
 ```typescript
-import { type AgentSessionEvent } from "@foxxytux/buddy-coding-agent";
+import { type AgentSessionEvent } from "@mariozechner/pi-coding-agent";
 
 interface MomAgent {
   /**
@@ -645,9 +645,9 @@ Mom runs bash commands inside a sandbox (Docker container), but sometimes you ne
 
 ```typescript
 // data/tools/gmail/index.ts
-import type { MomCustomTool, ToolAPI } from "@foxxytux/buddy-mom";
-import { Type } from "@sinclair/typebox";
-import { StringEnum } from "@foxxytux/buddy-ai";
+import type { MomCustomTool, ToolAPI } from "@mariozechner/pi-mom";
+import { Type } from "typebox";
+import { StringEnum } from "@mariozechner/pi-ai";
 
 const tool: MomCustomTool = {
   name: "gmail",
@@ -691,7 +691,7 @@ export default tool;
 ### MomCustomTool Type
 
 ```typescript
-import type { TSchema, Static } from "@sinclair/typebox";
+import type { TSchema, Static } from "typebox";
 
 export interface MomToolResult<TDetails = any> {
   content: Array<{ type: "text"; text: string } | { type: "image"; data: string; mimeType: string }>;
@@ -744,7 +744,7 @@ export interface ToolAPI {
 
 Tools are discovered from:
 1. `data/tools/**/index.ts` (workspace-local, recursive)
-2. `~/.buddy/mom/tools/**/index.ts` (global, recursive)
+2. `~/.pi/mom/tools/**/index.ts` (global, recursive)
 
 ```typescript
 // loader.ts
@@ -798,7 +798,7 @@ async function loadCustomTools(dataDir: string): Promise<LoadedTool[]> {
 Mom has a single `invoke_tool` tool that dispatches to custom tools:
 
 ```typescript
-import { Type } from "@sinclair/typebox";
+import { Type } from "typebox";
 
 function createInvokeToolTool(loadedTools: LoadedTool[]): AgentTool {
   const toolMap = new Map(loadedTools.map(t => [t.tool.name, t.tool]));
@@ -888,9 +888,9 @@ function schemaToSimpleJson(schema: TSchema): object {
 
 ```typescript
 // data/tools/gmail/index.ts
-import type { MomCustomTool, ToolAPI } from "@foxxytux/buddy-mom";
-import { Type } from "@sinclair/typebox";
-import { StringEnum } from "@foxxytux/buddy-ai";
+import type { MomCustomTool, ToolAPI } from "@mariozechner/pi-mom";
+import { Type } from "typebox";
+import { StringEnum } from "@mariozechner/pi-ai";
 import Imap from "imap";
 import nodemailer from "nodemailer";
 
@@ -922,7 +922,7 @@ export default async function(api: ToolAPI): Promise<MomCustomTool> {
 
 ### Loading
 
-Tools are loaded via jiti. They can import any 3rd party dependencies (install in the tool directory). Imports of `@foxxytux/buddy-ai` and `@foxxytux/buddy-mom` are aliased to the running mom bundle.
+Tools are loaded via jiti. They can import any 3rd party dependencies (install in the tool directory). Imports of `@mariozechner/pi-ai` and `@mariozechner/pi-mom` are aliased to the running mom bundle.
 
 **Live reload**: In dev mode, tools are watched and reloaded on change. No restart needed.
 

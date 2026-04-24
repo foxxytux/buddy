@@ -1,10 +1,10 @@
-> buddy can create TUI components. Ask it to build one for your use case.
+> pi can create TUI components. Ask it to build one for your use case.
 
 # TUI Components
 
 Extensions and custom tools can render custom TUI components for interactive user interfaces. This page covers the component system and available building blocks.
 
-**Source:** [`@foxxytux/buddy-tui`](https://github.com/badlogic/buddy-mono/tree/main/packages/tui)
+**Source:** [`@mariozechner/pi-tui`](https://github.com/badlogic/pi-mono/tree/main/packages/tui)
 
 ## Component Interface
 
@@ -33,7 +33,7 @@ The TUI appends a full SGR reset and OSC 8 reset at the end of each rendered lin
 Components that display a text cursor and need IME (Input Method Editor) support should implement the `Focusable` interface:
 
 ```typescript
-import { CURSOR_MARKER, type Component, type Focusable } from "@foxxytux/buddy-tui";
+import { CURSOR_MARKER, type Component, type Focusable } from "@mariozechner/pi-tui";
 
 class MyInput implements Component, Focusable {
   focused: boolean = false;  // Set by TUI when focus changes
@@ -59,7 +59,7 @@ This enables IME candidate windows to appear at the correct position for CJK inp
 When a container component (dialog, selector, etc.) contains an `Input` or `Editor` child, the container must implement `Focusable` and propagate the focus state to the child. Otherwise, the hardware cursor won't be positioned correctly for IME input.
 
 ```typescript
-import { Container, type Focusable, Input } from "@foxxytux/buddy-tui";
+import { Container, type Focusable, Input } from "@mariozechner/pi-tui";
 
 class SearchDialog extends Container implements Focusable {
   private searchInput: Input;
@@ -89,18 +89,18 @@ Without this propagation, typing with an IME (Chinese, Japanese, Korean, etc.) w
 **In extensions** via `ctx.ui.custom()`:
 
 ```typescript
-buddy.on("session_start", async (_event, ctx) => {
+pi.on("session_start", async (_event, ctx) => {
   const handle = ctx.ui.custom(myComponent);
   // handle.requestRender() - trigger re-render
   // handle.close() - restore normal UI
 });
 ```
 
-**In custom tools** via `buddy.ui.custom()`:
+**In custom tools** via `pi.ui.custom()`:
 
 ```typescript
 async execute(toolCallId, params, onUpdate, ctx, signal) {
-  const handle = buddy.ui.custom(myComponent);
+  const handle = pi.ui.custom(myComponent);
   // ...
   handle.close();
 }
@@ -179,10 +179,10 @@ See [overlay-qa-tests.ts](../examples/extensions/overlay-qa-tests.ts) for compre
 
 ## Built-in Components
 
-Import from `@foxxytux/buddy-tui`:
+Import from `@mariozechner/pi-tui`:
 
 ```typescript
-import { Text, Box, Container, Spacer, Markdown } from "@foxxytux/buddy-tui";
+import { Text, Box, Container, Spacer, Markdown } from "@mariozechner/pi-tui";
 ```
 
 ### Text
@@ -264,7 +264,7 @@ const image = new Image(
 Use `matchesKey()` for key detection:
 
 ```typescript
-import { matchesKey, Key } from "@foxxytux/buddy-tui";
+import { matchesKey, Key } from "@mariozechner/pi-tui";
 
 handleInput(data: string) {
   if (matchesKey(data, Key.up)) {
@@ -290,7 +290,7 @@ handleInput(data: string) {
 **Critical:** Each line from `render()` must not exceed the `width` parameter.
 
 ```typescript
-import { visibleWidth, truncateToWidth } from "@foxxytux/buddy-tui";
+import { visibleWidth, truncateToWidth } from "@mariozechner/pi-tui";
 
 render(width: number): string[] {
   // Truncate long lines
@@ -311,7 +311,7 @@ Example: Interactive selector
 import {
   matchesKey, Key,
   truncateToWidth, visibleWidth
-} from "@foxxytux/buddy-tui";
+} from "@mariozechner/pi-tui";
 
 class MySelector {
   private items: string[];
@@ -363,7 +363,7 @@ class MySelector {
 Usage in an extension:
 
 ```typescript
-buddy.registerCommand("pick", {
+pi.registerCommand("pick", {
   description: "Pick an item",
   handler: async (args, ctx) => {
     const items = ["Option A", "Option B", "Option C"];
@@ -425,8 +425,8 @@ renderResult(result, options, theme, context) {
 **For Markdown**, use `getMarkdownTheme()`:
 
 ```typescript
-import { getMarkdownTheme } from "@foxxytux/buddy-coding-agent";
-import { Markdown } from "@foxxytux/buddy-tui";
+import { getMarkdownTheme } from "@mariozechner/pi-coding-agent";
+import { Markdown } from "@mariozechner/pi-tui";
 
 renderResult(result, options, theme, context) {
   const mdTheme = getMarkdownTheme();
@@ -587,14 +587,14 @@ These patterns cover the most common UI needs in extensions. **Copy these patter
 
 ### Pattern 1: Selection Dialog (SelectList)
 
-For letting users pick from a list of options. Use `SelectList` from `@foxxytux/buddy-tui` with `DynamicBorder` for framing.
+For letting users pick from a list of options. Use `SelectList` from `@mariozechner/pi-tui` with `DynamicBorder` for framing.
 
 ```typescript
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { DynamicBorder } from "@foxxytux/buddy-coding-agent";
-import { Container, type SelectItem, SelectList, Text } from "@foxxytux/buddy-tui";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { DynamicBorder } from "@mariozechner/pi-coding-agent";
+import { Container, type SelectItem, SelectList, Text } from "@mariozechner/pi-tui";
 
-buddy.registerCommand("pick", {
+pi.registerCommand("pick", {
   handler: async (_args, ctx) => {
     const items: SelectItem[] = [
       { value: "opt1", label: "Option 1", description: "First option" },
@@ -650,9 +650,9 @@ buddy.registerCommand("pick", {
 For operations that take time and should be cancellable. `BorderedLoader` shows a spinner and handles escape to cancel.
 
 ```typescript
-import { BorderedLoader } from "@foxxytux/buddy-coding-agent";
+import { BorderedLoader } from "@mariozechner/pi-coding-agent";
 
-buddy.registerCommand("fetch", {
+pi.registerCommand("fetch", {
   handler: async (_args, ctx) => {
     const result = await ctx.ui.custom<string | null>((tui, theme, _kb, done) => {
       const loader = new BorderedLoader(tui, theme, "Fetching data...");
@@ -679,13 +679,13 @@ buddy.registerCommand("fetch", {
 
 ### Pattern 3: Settings/Toggles (SettingsList)
 
-For toggling multiple settings. Use `SettingsList` from `@foxxytux/buddy-tui` with `getSettingsListTheme()`.
+For toggling multiple settings. Use `SettingsList` from `@mariozechner/pi-tui` with `getSettingsListTheme()`.
 
 ```typescript
-import { getSettingsListTheme } from "@foxxytux/buddy-coding-agent";
-import { Container, type SettingItem, SettingsList, Text } from "@foxxytux/buddy-tui";
+import { getSettingsListTheme } from "@mariozechner/pi-coding-agent";
+import { Container, type SettingItem, SettingsList, Text } from "@mariozechner/pi-tui";
 
-buddy.registerCommand("settings", {
+pi.registerCommand("settings", {
   handler: async (_args, ctx) => {
     const items: SettingItem[] = [
       { id: "verbose", label: "Verbose mode", currentValue: "off", values: ["on", "off"] },
@@ -734,6 +734,36 @@ ctx.ui.setStatus("my-ext", undefined);
 ```
 
 **Examples:** [status-line.ts](../examples/extensions/status-line.ts), [plan-mode.ts](../examples/extensions/plan-mode.ts), [preset.ts](../examples/extensions/preset.ts)
+
+### Pattern 4b: Working Indicator Customization
+
+Customize the inline working indicator shown while pi is streaming a response.
+
+```typescript
+// Static indicator
+ctx.ui.setWorkingIndicator({ frames: [ctx.ui.theme.fg("accent", "●")] });
+
+// Custom animated indicator
+ctx.ui.setWorkingIndicator({
+  frames: [
+    ctx.ui.theme.fg("dim", "·"),
+    ctx.ui.theme.fg("muted", "•"),
+    ctx.ui.theme.fg("accent", "●"),
+    ctx.ui.theme.fg("muted", "•"),
+  ],
+  intervalMs: 120,
+});
+
+// Hide the indicator entirely
+ctx.ui.setWorkingIndicator({ frames: [] });
+
+// Restore pi's default spinner
+ctx.ui.setWorkingIndicator();
+```
+
+This only affects the normal streaming working indicator. Compaction and retry loaders keep their built-in styling. Custom frames are rendered verbatim, so extensions must add their own colors when needed.
+
+**Examples:** [working-indicator.ts](../examples/extensions/working-indicator.ts)
 
 ### Pattern 5: Widgets Above/Below Editor
 
@@ -792,8 +822,8 @@ Token stats available via `ctx.sessionManager.getBranch()` and `ctx.model`.
 Replace the main input editor with a custom implementation. Useful for modal editing (vim), different keybindings (emacs), or specialized input handling.
 
 ```typescript
-import { CustomEditor, type ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { matchesKey, truncateToWidth } from "@foxxytux/buddy-tui";
+import { CustomEditor, type ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { matchesKey, truncateToWidth } from "@mariozechner/pi-tui";
 
 type Mode = "normal" | "insert";
 
@@ -844,8 +874,8 @@ class VimEditor extends CustomEditor {
   }
 }
 
-export default function (buddy: ExtensionAPI) {
-  buddy.on("session_start", (_event, ctx) => {
+export default function (pi: ExtensionAPI) {
+  pi.on("session_start", (_event, ctx) => {
     // Factory receives theme and keybindings from the app
     ctx.ui.setEditorComponent((tui, theme, keybindings) =>
       new VimEditor(theme, keybindings)
@@ -881,6 +911,7 @@ export default function (buddy: ExtensionAPI) {
 - **Async with cancel**: [examples/extensions/qna.ts](../examples/extensions/qna.ts) - BorderedLoader for LLM calls
 - **Settings toggles**: [examples/extensions/tools.ts](../examples/extensions/tools.ts) - SettingsList for tool enable/disable
 - **Status indicators**: [examples/extensions/plan-mode.ts](../examples/extensions/plan-mode.ts) - setStatus and setWidget
+- **Working indicator**: [examples/extensions/working-indicator.ts](../examples/extensions/working-indicator.ts) - setWorkingIndicator
 - **Custom footer**: [examples/extensions/custom-footer.ts](../examples/extensions/custom-footer.ts) - setFooter with stats
 - **Custom editor**: [examples/extensions/modal-editor.ts](../examples/extensions/modal-editor.ts) - Vim-like modal editing
 - **Snake game**: [examples/extensions/snake.ts](../examples/extensions/snake.ts) - Full game with keyboard input, game loop

@@ -7,12 +7,12 @@
  * Usage: /status [message] - sends a status message with custom rendering
  */
 
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { Box, Text } from "@foxxytux/buddy-tui";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { Box, Text } from "@mariozechner/pi-tui";
 
-export default function (buddy: ExtensionAPI) {
+export default function (pi: ExtensionAPI) {
 	// Register custom renderer for "status-update" messages
-	buddy.registerMessageRenderer("status-update", (message, { expanded }, theme) => {
+	pi.registerMessageRenderer("status-update", (message, { expanded }, theme) => {
 		const details = message.details as { level: string; timestamp: number } | undefined;
 		const level = details?.level ?? "info";
 
@@ -35,7 +35,7 @@ export default function (buddy: ExtensionAPI) {
 	});
 
 	// Command to send status messages
-	buddy.registerCommand("status", {
+	pi.registerCommand("status", {
 		description: "Send a status message (usage: /status [warn|error] message)",
 		handler: async (args, _ctx) => {
 			const parts = args.trim().split(/\s+/);
@@ -48,7 +48,7 @@ export default function (buddy: ExtensionAPI) {
 				content = parts.slice(1).join(" ") || "Status update";
 			}
 
-			buddy.sendMessage({
+			pi.sendMessage({
 				customType: "status-update",
 				content,
 				display: true,

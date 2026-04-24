@@ -10,10 +10,10 @@
  * correct for that point in history.
  */
 
-import { StringEnum } from "@foxxytux/buddy-ai";
-import type { ExtensionAPI, ExtensionContext, Theme } from "@foxxytux/buddy-coding-agent";
-import { matchesKey, Text, truncateToWidth } from "@foxxytux/buddy-tui";
-import { Type } from "@sinclair/typebox";
+import { StringEnum } from "@mariozechner/pi-ai";
+import type { ExtensionAPI, ExtensionContext, Theme } from "@mariozechner/pi-coding-agent";
+import { matchesKey, Text, truncateToWidth } from "@mariozechner/pi-tui";
+import { Type } from "typebox";
 
 interface Todo {
 	id: number;
@@ -102,7 +102,7 @@ class TodoListComponent {
 	}
 }
 
-export default function (buddy: ExtensionAPI) {
+export default function (pi: ExtensionAPI) {
 	// In-memory state (reconstructed from session on load)
 	let todos: Todo[] = [];
 	let nextId = 1;
@@ -129,11 +129,11 @@ export default function (buddy: ExtensionAPI) {
 	};
 
 	// Reconstruct state on session events
-	buddy.on("session_start", async (_event, ctx) => reconstructState(ctx));
-	buddy.on("session_tree", async (_event, ctx) => reconstructState(ctx));
+	pi.on("session_start", async (_event, ctx) => reconstructState(ctx));
+	pi.on("session_tree", async (_event, ctx) => reconstructState(ctx));
 
 	// Register the todo tool for the LLM
-	buddy.registerTool({
+	pi.registerTool({
 		name: "todo",
 		label: "Todo",
 		description: "Manage a todo list. Actions: list, add (text), toggle (id), clear",
@@ -281,7 +281,7 @@ export default function (buddy: ExtensionAPI) {
 	});
 
 	// Register the /todos command for users
-	buddy.registerCommand("todos", {
+	pi.registerCommand("todos", {
 		description: "Show all todos on the current branch",
 		handler: async (_args, ctx) => {
 			if (!ctx.hasUI) {

@@ -1,4 +1,4 @@
-# @foxxytux/buddy-ai
+# @mariozechner/pi-ai
 
 Unified LLM API with automatic model discovery, provider configuration, token and cost tracking, and simple context persistence and hand-off to other models mid-session.
 
@@ -50,6 +50,7 @@ Unified LLM API with automatic model discovery, provider configuration, token an
 - **OpenAI**
 - **Azure OpenAI (Responses)**
 - **OpenAI Codex** (ChatGPT Plus/Pro subscription, requires OAuth, see below)
+- **DeepSeek**
 - **Anthropic**
 - **Google**
 - **Vertex AI** (Gemini via Vertex AI)
@@ -66,21 +67,22 @@ Unified LLM API with automatic model discovery, provider configuration, token an
 - **Amazon Bedrock**
 - **OpenCode Zen**
 - **OpenCode Go**
+- **Fireworks** (uses Anthropic-compatible API)
 - **Kimi For Coding** (Moonshot AI, uses Anthropic-compatible API)
 - **Any OpenAI-compatible API**: Ollama, vLLM, LM Studio, etc.
 
 ## Installation
 
 ```bash
-npm install @foxxytux/buddy-ai
+npm install @mariozechner/pi-ai
 ```
 
-TypeBox exports are re-exported from `@foxxytux/buddy-ai`: `Type`, `Static`, and `TSchema`.
+TypeBox exports are re-exported from `@mariozechner/pi-ai`: `Type`, `Static`, and `TSchema`.
 
 ## Quick Start
 
 ```typescript
-import { Type, getModel, stream, complete, Context, Tool, StringEnum } from '@foxxytux/buddy-ai';
+import { Type, getModel, stream, complete, Context, Tool, StringEnum } from '@mariozechner/pi-ai';
 
 // Fully typed with auto-complete support for both providers and models
 const model = getModel('openai', 'gpt-4o-mini');
@@ -201,12 +203,12 @@ for (const block of response.content) {
 
 ## Tools
 
-Tools enable LLMs to interact with external systems. This library uses TypeBox schemas for type-safe tool definitions with automatic validation using AJV. TypeBox schemas can be serialized and deserialized as plain JSON, making them ideal for distributed systems.
+Tools enable LLMs to interact with external systems. This library uses TypeBox schemas for type-safe tool definitions with automatic validation using TypeBox's built-in validator and value conversion utilities. TypeBox schemas can be serialized and deserialized as plain JSON, making them ideal for distributed systems.
 
 ### Defining Tools
 
 ```typescript
-import { Type, Tool, StringEnum } from '@foxxytux/buddy-ai';
+import { Type, Tool, StringEnum } from '@mariozechner/pi-ai';
 
 // Define tool parameters with TypeBox
 const weatherTool: Tool = {
@@ -332,7 +334,7 @@ When using `agentLoop`, tool arguments are automatically validated against your 
 When implementing your own tool execution loop with `stream()` or `complete()`, use `validateToolCall` to validate arguments before passing them to your tools:
 
 ```typescript
-import { stream, validateToolCall, Tool } from '@foxxytux/buddy-ai';
+import { stream, validateToolCall, Tool } from '@mariozechner/pi-ai';
 
 const tools: Tool[] = [weatherTool, calculatorTool];
 const s = stream(model, { messages, tools });
@@ -386,7 +388,7 @@ Models with vision capabilities can process images. You can check if a model sup
 
 ```typescript
 import { readFileSync } from 'fs';
-import { getModel, complete } from '@foxxytux/buddy-ai';
+import { getModel, complete } from '@mariozechner/pi-ai';
 
 const model = getModel('openai', 'gpt-4o-mini');
 
@@ -423,7 +425,7 @@ Many models support thinking/reasoning capabilities where they can show their in
 ### Unified Interface (streamSimple/completeSimple)
 
 ```typescript
-import { getModel, streamSimple, completeSimple } from '@foxxytux/buddy-ai';
+import { getModel, streamSimple, completeSimple } from '@mariozechner/pi-ai';
 
 // Many models across providers support thinking/reasoning
 const model = getModel('anthropic', 'claude-sonnet-4-20250514');
@@ -461,7 +463,7 @@ for (const block of response.content) {
 For fine-grained control, use the provider-specific options:
 
 ```typescript
-import { getModel, complete } from '@foxxytux/buddy-ai';
+import { getModel, complete } from '@mariozechner/pi-ai';
 
 // OpenAI Reasoning (o1, o3, gpt-5)
 const openaiModel = getModel('openai', 'gpt-5-mini');
@@ -550,7 +552,7 @@ if (message.stopReason === 'error' || message.stopReason === 'aborted') {
 The abort signal allows you to cancel in-progress requests. Aborted requests have `stopReason === 'aborted'`:
 
 ```typescript
-import { getModel, stream } from '@foxxytux/buddy-ai';
+import { getModel, stream } from '@mariozechner/pi-ai';
 
 const model = getModel('openai', 'gpt-4o-mini');
 const controller = new AbortController();
@@ -649,7 +651,7 @@ import {
   fauxToolCall,
   registerFauxProvider,
   stream,
-} from '@foxxytux/buddy-ai';
+} from '@mariozechner/pi-ai';
 
 const registration = registerFauxProvider({
   tokensPerSecond: 50 // optional
@@ -734,7 +736,7 @@ A **provider** offers models through a specific API. For example:
 ### Querying Providers and Models
 
 ```typescript
-import { getProviders, getModels, getModel } from '@foxxytux/buddy-ai';
+import { getProviders, getModels, getModel } from '@mariozechner/pi-ai';
 
 // Get all available providers
 const providers = getProviders();
@@ -760,7 +762,7 @@ console.log(`Using ${model.name} via ${model.api} API`);
 You can create custom models for local inference servers or custom endpoints:
 
 ```typescript
-import { Model, stream } from '@foxxytux/buddy-ai';
+import { Model, stream } from '@mariozechner/pi-ai';
 
 // Example: Ollama using OpenAI-compatible API
 const ollamaModel: Model<'openai-completions'> = {
@@ -851,11 +853,14 @@ interface OpenAICompletionsCompat {
   supportsReasoningEffort?: boolean; // Whether provider supports `reasoning_effort` (default: true)
   supportsUsageInStreaming?: boolean; // Whether provider supports `stream_options: { include_usage: true }` (default: true)
   supportsStrictMode?: boolean;      // Whether provider supports `strict` in tool definitions (default: true)
+  sendSessionAffinityHeaders?: boolean; // Whether to send `session_id`, `x-client-request-id`, and `x-session-affinity` from `sessionId` when caching is enabled (default: false)
   maxTokensField?: 'max_completion_tokens' | 'max_tokens';  // Which field name to use (default: max_completion_tokens)
   requiresToolResultName?: boolean;  // Whether tool results require the `name` field (default: false)
   requiresAssistantAfterToolResult?: boolean; // Whether tool results must be followed by an assistant message (default: false)
   requiresThinkingAsText?: boolean;  // Whether thinking blocks must be converted to text (default: false)
-  thinkingFormat?: 'openai' | 'zai' | 'qwen'; // Format for reasoning param: 'openai' uses reasoning_effort, 'zai' uses thinking: { type: "enabled" }, 'qwen' uses enable_thinking: boolean (default: openai)
+  requiresReasoningContentOnAssistantMessages?: boolean; // Whether all replayed assistant messages must include empty reasoning_content when reasoning is enabled (default: auto-detected for DeepSeek)
+  thinkingFormat?: 'openai' | 'deepseek' | 'zai' | 'qwen' | 'qwen-chat-template'; // Format for reasoning param: 'openai' uses reasoning_effort, 'deepseek' uses thinking: { type } plus reasoning_effort, 'zai' uses enable_thinking, 'qwen' uses enable_thinking, 'qwen-chat-template' uses chat_template_kwargs.enable_thinking (default: openai)
+  cacheControlFormat?: 'anthropic';  // Anthropic-style cache_control on system prompt, last tool, and last user/assistant text content
   openRouterRouting?: OpenRouterRouting; // OpenRouter routing preferences (default: {})
   vercelGatewayRouting?: VercelGatewayRouting; // Vercel AI Gateway routing preferences (default: {})
 }
@@ -876,7 +881,7 @@ If `compat` is not set, the library falls back to URL-based detection. If `compa
 Models are typed by their API, which keeps the model metadata accurate. Provider-specific option types are enforced when you call the provider functions directly. The generic `stream` and `complete` functions accept `StreamOptions` with additional provider fields.
 
 ```typescript
-import { streamAnthropic, type AnthropicOptions } from '@foxxytux/buddy-ai';
+import { streamAnthropic, type AnthropicOptions } from '@mariozechner/pi-ai';
 
 // TypeScript knows this is an Anthropic model
 const claude = getModel('anthropic', 'claude-sonnet-4-20250514');
@@ -905,7 +910,7 @@ When messages from one provider are sent to a different provider, the library au
 ### Example: Multi-Provider Conversation
 
 ```typescript
-import { getModel, complete, Context } from '@foxxytux/buddy-ai';
+import { getModel, complete, Context } from '@mariozechner/pi-ai';
 
 // Start with Claude
 const claude = getModel('anthropic', 'claude-sonnet-4-20250514');
@@ -950,7 +955,7 @@ This enables flexible workflows where you can:
 The `Context` object can be easily serialized and deserialized using standard JSON methods, making it simple to persist conversations, implement chat history, or transfer contexts between services:
 
 ```typescript
-import { Context, getModel, complete } from '@foxxytux/buddy-ai';
+import { Context, getModel, complete } from '@mariozechner/pi-ai';
 
 // Create and use a context
 const context: Context = {
@@ -987,7 +992,7 @@ const continuation = await complete(newModel, restored);
 The library supports browser environments. You must pass the API key explicitly since environment variables are not available in browsers:
 
 ```typescript
-import { getModel, complete } from '@foxxytux/buddy-ai';
+import { getModel, complete } from '@mariozechner/pi-ai';
 
 // API key must be passed explicitly in browser
 const model = getModel('anthropic', 'claude-3-5-haiku-20241022');
@@ -1004,7 +1009,7 @@ const response = await complete(model, {
 ### Browser Compatibility Notes
 
 - Amazon Bedrock (`bedrock-converse-stream`) is not supported in browser environments.
-- OAuth login flows are not supported in browser environments. Use the `@foxxytux/buddy-ai/oauth` entry point in Node.js.
+- OAuth login flows are not supported in browser environments. Use the `@mariozechner/pi-ai/oauth` entry point in Node.js.
 - In browser builds, Bedrock can still appear in model lists. Calls to Bedrock models fail at runtime.
 - Use a server-side proxy or backend service if you need Bedrock or OAuth-based auth from a web app.
 
@@ -1017,12 +1022,14 @@ In Node.js environments, you can set environment variables to avoid passing API 
 | OpenAI | `OPENAI_API_KEY` |
 | Azure OpenAI | `AZURE_OPENAI_API_KEY` + `AZURE_OPENAI_BASE_URL` or `AZURE_OPENAI_RESOURCE_NAME` (optional `AZURE_OPENAI_API_VERSION`, `AZURE_OPENAI_DEPLOYMENT_NAME_MAP` like `model=deployment,model2=deployment2`) |
 | Anthropic | `ANTHROPIC_API_KEY` or `ANTHROPIC_OAUTH_TOKEN` |
+| DeepSeek | `DEEPSEEK_API_KEY` |
 | Google | `GEMINI_API_KEY` |
 | Vertex AI | `GOOGLE_CLOUD_API_KEY` or `GOOGLE_CLOUD_PROJECT` (or `GCLOUD_PROJECT`) + `GOOGLE_CLOUD_LOCATION` + ADC |
 | Mistral | `MISTRAL_API_KEY` |
 | Groq | `GROQ_API_KEY` |
 | Cerebras | `CEREBRAS_API_KEY` |
 | xAI | `XAI_API_KEY` |
+| Fireworks | `FIREWORKS_API_KEY` |
 | OpenRouter | `OPENROUTER_API_KEY` |
 | Vercel AI Gateway | `AI_GATEWAY_API_KEY` |
 | zAI | `ZAI_API_KEY` |
@@ -1068,7 +1075,7 @@ This only affects direct API calls to `api.anthropic.com` and `api.openai.com`. 
 ### Checking Environment Variables
 
 ```typescript
-import { getEnvApiKey } from '@foxxytux/buddy-ai';
+import { getEnvApiKey } from '@mariozechner/pi-ai';
 
 // Check if an API key is set in environment variables
 const key = getEnvApiKey('openai');  // checks OPENAI_API_KEY
@@ -1109,7 +1116,7 @@ export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service-account.json"
 ```
 
 ```typescript
-import { getModel, complete } from '@foxxytux/buddy-ai';
+import { getModel, complete } from '@mariozechner/pi-ai';
 
 (async () => {
   const model = getModel('google-vertex', 'gemini-2.5-flash');
@@ -1132,16 +1139,16 @@ Official docs: [Application Default Credentials](https://cloud.google.com/docs/a
 The quickest way to authenticate:
 
 ```bash
-npx @foxxytux/buddy-ai login              # interactive provider selection
-npx @foxxytux/buddy-ai login anthropic    # login to specific provider
-npx @foxxytux/buddy-ai list               # list available providers
+npx @mariozechner/pi-ai login              # interactive provider selection
+npx @mariozechner/pi-ai login anthropic    # login to specific provider
+npx @mariozechner/pi-ai list               # list available providers
 ```
 
 Credentials are saved to `auth.json` in the current directory.
 
 ### Programmatic OAuth
 
-The library provides login and token refresh functions via the `@foxxytux/buddy-ai/oauth` entry point. Credential storage is the caller's responsibility.
+The library provides login and token refresh functions via the `@mariozechner/pi-ai/oauth` entry point. Credential storage is the caller's responsibility.
 
 ```typescript
 import {
@@ -1159,13 +1166,13 @@ import {
   // Types
   type OAuthProvider,  // 'anthropic' | 'openai-codex' | 'github-copilot' | 'google-gemini-cli' | 'google-antigravity'
   type OAuthCredentials,
-} from '@foxxytux/buddy-ai/oauth';
+} from '@mariozechner/pi-ai/oauth';
 ```
 
 ### Login Flow Example
 
 ```typescript
-import { loginGitHubCopilot } from '@foxxytux/buddy-ai/oauth';
+import { loginGitHubCopilot } from '@mariozechner/pi-ai/oauth';
 import { writeFileSync } from 'fs';
 
 const credentials = await loginGitHubCopilot({
@@ -1189,8 +1196,8 @@ writeFileSync('auth.json', JSON.stringify(auth, null, 2));
 Use `getOAuthApiKey()` to get an API key, automatically refreshing if expired:
 
 ```typescript
-import { getModel, complete } from '@foxxytux/buddy-ai';
-import { getOAuthApiKey } from '@foxxytux/buddy-ai/oauth';
+import { getModel, complete } from '@mariozechner/pi-ai';
+import { getOAuthApiKey } from '@mariozechner/pi-ai/oauth';
 import { readFileSync, writeFileSync } from 'fs';
 
 // Load your stored credentials
@@ -1249,7 +1256,7 @@ Create a new provider file (for example `amazon-bedrock.ts`) that exports:
 - Register the API with `registerApiProvider()`
 - Add a package subpath export in `package.json` for the provider module (`./dist/providers/<provider>.js`)
 - Add lazy loader wrappers in `src/providers/register-builtins.ts`, do not statically import provider implementation modules there
-- Add any root-level `export type` re-exports in `src/index.ts` that should remain available from `@foxxytux/buddy-ai`
+- Add any root-level `export type` re-exports in `src/index.ts` that should remain available from `@mariozechner/pi-ai`
 - Add credential detection in `env-api-keys.ts` for the new provider
 - Ensure `streamSimple` handles auth lookup via `getEnvApiKey()` or provider-specific auth
 

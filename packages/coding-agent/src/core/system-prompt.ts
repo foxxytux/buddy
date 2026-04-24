@@ -16,8 +16,8 @@ export interface BuildSystemPromptOptions {
 	promptGuidelines?: string[];
 	/** Text to append to system prompt. */
 	appendSystemPrompt?: string;
-	/** Working directory. Default: process.cwd() */
-	cwd?: string;
+	/** Working directory. */
+	cwd: string;
 	/** Pre-loaded context files. */
 	contextFiles?: Array<{ path: string; content: string }>;
 	/** Pre-loaded skills. */
@@ -25,7 +25,7 @@ export interface BuildSystemPromptOptions {
 }
 
 /** Build the system prompt with tools, guidelines, and context */
-export function buildSystemPrompt(options: BuildSystemPromptOptions = {}): string {
+export function buildSystemPrompt(options: BuildSystemPromptOptions): string {
 	const {
 		customPrompt,
 		selectedTools,
@@ -36,10 +36,14 @@ export function buildSystemPrompt(options: BuildSystemPromptOptions = {}): strin
 		contextFiles: providedContextFiles,
 		skills: providedSkills,
 	} = options;
-	const resolvedCwd = cwd ?? process.cwd();
+	const resolvedCwd = cwd;
 	const promptCwd = resolvedCwd.replace(/\\/g, "/");
 
-	const date = new Date().toISOString().slice(0, 10);
+	const now = new Date();
+	const year = now.getFullYear();
+	const month = String(now.getMonth() + 1).padStart(2, "0");
+	const day = String(now.getDate()).padStart(2, "0");
+	const date = `${year}-${month}-${day}`;
 
 	const appendSection = appendSystemPrompt ? `\n\n${appendSystemPrompt}` : "";
 
@@ -103,7 +107,6 @@ export function buildSystemPrompt(options: BuildSystemPromptOptions = {}): strin
 	const hasFind = tools.includes("find");
 	const hasLs = tools.includes("ls");
 	const hasRead = tools.includes("read");
-	const hasTodoUpdate = tools.includes("todo_update");
 
 	// File exploration guidelines
 	if (hasBash && !hasGrep && !hasFind && !hasLs) {
@@ -119,25 +122,13 @@ export function buildSystemPrompt(options: BuildSystemPromptOptions = {}): strin
 		}
 	}
 
-	if (hasTodoUpdate) {
-		addGuideline(
-			"Use todo_update to track multi-step work, keep progress visible, and update the list as you complete tasks",
-		);
-	}
-	addGuideline(
-		"Be proactive: plan briefly, then execute the necessary steps without waiting for unnecessary confirmation",
-	);
-	addGuideline(
-		"Prefer using available tools to inspect, verify, and modify the workspace instead of describing what you would do",
-	);
-
 	// Always include these
 	addGuideline("Be concise in your responses");
 	addGuideline("Show file paths clearly when working with files");
 
 	const guidelines = guidelinesList.map((g) => `- ${g}`).join("\n");
 
-	let prompt = `You are a proactive autopilot coding assistant operating inside Buddy, a coding agent harness. You anticipate user needs, autonomously analyze situations, and proactively execute tasks with minimal user input.
+	let prompt = `You are an expert coding assistant operating inside pi, a coding agent harness. You help users by reading files, executing commands, editing code, and writing new files.
 
 Available tools:
 ${toolsList}
@@ -145,19 +136,15 @@ ${toolsList}
 In addition to the tools above, you may have access to other custom tools depending on the project.
 
 Guidelines:
-- Operate as an autopilot coding assistant: understand the task, make a short plan when useful, then execute it end-to-end
-- Take initiative by suggesting next steps and actions when appropriate
-- Simplify user workflows by automating repetitive or dependent tasks
-- Use tools actively to inspect the codebase, validate assumptions, apply changes, and verify results
 ${guidelines}
 
-Buddy documentation (read only when the user asks about buddy itself, its SDK, extensions, themes, skills, or TUI):
+Pi documentation (read only when the user asks about pi itself, its SDK, extensions, themes, skills, or TUI):
 - Main documentation: ${readmePath}
 - Additional docs: ${docsPath}
 - Examples: ${examplesPath} (extensions, custom tools, SDK)
-- When asked about: extensions (docs/extensions.md, examples/extensions/), themes (docs/themes.md), skills (docs/skills.md), prompt templates (docs/prompt-templates.md), TUI components (docs/tui.md), keybindings (docs/keybindings.md), SDK integrations (docs/sdk.md), custom providers (docs/custom-provider.md), adding models (docs/models.md), buddy packages (docs/packages.md)
-- When working on buddy topics, read the docs and examples, and follow .md cross-references before implementing
-- Always read buddy .md files completely and follow links to related docs (e.g., tui.md for TUI API details)`;
+- When asked about: extensions (docs/extensions.md, examples/extensions/), themes (docs/themes.md), skills (docs/skills.md), prompt templates (docs/prompt-templates.md), TUI components (docs/tui.md), keybindings (docs/keybindings.md), SDK integrations (docs/sdk.md), custom providers (docs/custom-provider.md), adding models (docs/models.md), pi packages (docs/packages.md)
+- When working on pi topics, read the docs and examples, and follow .md cross-references before implementing
+- Always read pi .md files completely and follow links to related docs (e.g., tui.md for TUI API details)`;
 
 	if (appendSection) {
 		prompt += appendSection;

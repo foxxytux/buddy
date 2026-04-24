@@ -10,15 +10,15 @@
  * which can be cheaper/faster than the main conversation model.
  *
  * Usage:
- *   buddy --extension examples/extensions/custom-compaction.ts
+ *   pi --extension examples/extensions/custom-compaction.ts
  */
 
-import { complete } from "@foxxytux/buddy-ai";
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { convertToLlm, serializeConversation } from "@foxxytux/buddy-coding-agent";
+import { complete } from "@mariozechner/pi-ai";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { convertToLlm, serializeConversation } from "@mariozechner/pi-coding-agent";
 
-export default function (buddy: ExtensionAPI) {
-	buddy.on("session_before_compact", async (event, ctx) => {
+export default function (pi: ExtensionAPI) {
+	pi.on("session_before_compact", async (event, ctx) => {
 		ctx.ui.notify("Custom compaction extension triggered", "info");
 
 		const { preparation, branchEntries: _, signal } = event;

@@ -1,6 +1,6 @@
 # Termux (Android) Setup
 
-Buddy runs on Android via [Termux](https://termux.dev/), a terminal emulator and Linux environment for Android.
+Pi runs on Android via [Termux](https://termux.dev/), a terminal emulator and Linux environment for Android.
 
 ## Prerequisites
 
@@ -16,14 +16,14 @@ pkg update && pkg upgrade
 # Install dependencies
 pkg install nodejs termux-api git
 
-# Install buddy
-npm install -g @foxxytux/buddy-coding-agent
+# Install pi
+npm install -g @mariozechner/pi-coding-agent
 
 # Create config directory
-mkdir -p ~/.buddy/agent
+mkdir -p ~/.pi/agent
 
-# Run buddy
-buddy
+# Run pi
+pi
 ```
 
 ## Clipboard Support
@@ -34,7 +34,7 @@ Image clipboard is not supported on Termux (the `ctrl+v` image paste feature wil
 
 ## Example AGENTS.md for Termux
 
-Create `~/.buddy/agent/AGENTS.md` to help the agent understand the Termux environment:
+Create `~/.pi/agent/AGENTS.md` to help the agent understand the Termux environment:
 
 ```markdown
 # Agent Environment: Termux on Android

@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { registerOAuthProvider } from "@foxxytux/buddy-ai/oauth";
+import { registerOAuthProvider } from "@mariozechner/pi-ai/oauth";
 import lockfile from "proper-lockfile";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { AuthStorage } from "../src/core/auth-storage.js";
@@ -428,6 +428,26 @@ describe("AuthStorage", () => {
 
 			const secondDrain = authStorage.drainErrors();
 			expect(secondDrain).toHaveLength(0);
+		});
+	});
+
+	describe("auth status", () => {
+		test("does not expose stored API keys or OAuth tokens", () => {
+			authStorage = AuthStorage.inMemory({
+				anthropic: { type: "api_key", key: "secret-api-key" },
+				openai: {
+					type: "oauth",
+					access: "secret-access-token",
+					refresh: "secret-refresh-token",
+					expires: Date.now() + 1000,
+				},
+			});
+
+			expect(authStorage.getAuthStatus("anthropic")).toEqual({ configured: true, source: "stored" });
+			expect(authStorage.getAuthStatus("openai")).toEqual({ configured: true, source: "stored" });
+			expect(JSON.stringify(authStorage.getAuthStatus("anthropic"))).not.toContain("secret-api-key");
+			expect(JSON.stringify(authStorage.getAuthStatus("openai"))).not.toContain("secret-access-token");
+			expect(JSON.stringify(authStorage.getAuthStatus("openai"))).not.toContain("secret-refresh-token");
 		});
 	});
 

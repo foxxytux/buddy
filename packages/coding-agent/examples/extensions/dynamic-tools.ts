@@ -7,8 +7,8 @@
  * - Registers additional tools at runtime via /add-echo-tool <name>
  */
 
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
-import { Type } from "@sinclair/typebox";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
+import { Type } from "typebox";
 
 const ECHO_PARAMS = Type.Object({
 	message: Type.String({ description: "Message to echo" }),
@@ -21,7 +21,7 @@ function normalizeToolName(input: string): string | undefined {
 	return trimmed;
 }
 
-export default function dynamicToolsExtension(buddy: ExtensionAPI) {
+export default function dynamicToolsExtension(pi: ExtensionAPI) {
 	const registeredToolNames = new Set<string>();
 
 	const registerEchoTool = (name: string, label: string, prefix: string): boolean => {
@@ -30,12 +30,12 @@ export default function dynamicToolsExtension(buddy: ExtensionAPI) {
 		}
 
 		registeredToolNames.add(name);
-		buddy.registerTool({
+		pi.registerTool({
 			name,
 			label,
 			description: `Echo a message with prefix: ${prefix}`,
 			promptSnippet: `Echo back user-provided text with ${prefix.trim()} prefix`,
-			promptGuidelines: ["Use this tool when the user asks for exact echo output."],
+			promptGuidelines: ["Use echo_session when the user asks for exact echo output."],
 			parameters: ECHO_PARAMS,
 			async execute(_toolCallId, params) {
 				return {
@@ -48,12 +48,12 @@ export default function dynamicToolsExtension(buddy: ExtensionAPI) {
 		return true;
 	};
 
-	buddy.on("session_start", (_event, ctx) => {
+	pi.on("session_start", (_event, ctx) => {
 		registerEchoTool("echo_session", "Echo Session", "[session] ");
 		ctx.ui.notify("Registered dynamic tool: echo_session", "info");
 	});
 
-	buddy.registerCommand("add-echo-tool", {
+	pi.registerCommand("add-echo-tool", {
 		description: "Register a new echo tool dynamically: /add-echo-tool <tool_name>",
 		handler: async (args, ctx) => {
 			const toolName = normalizeToolName(args);

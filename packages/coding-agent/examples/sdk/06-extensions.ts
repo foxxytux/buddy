@@ -5,24 +5,26 @@
  * They provide a unified system for extensions, custom tools, commands, and more.
  *
  * By default, extension files are discovered from:
- * - ~/.buddy/agent/extensions/
- * - <cwd>/.buddy/extensions/
+ * - ~/.pi/agent/extensions/
+ * - <cwd>/.pi/extensions/
  * - Paths specified in settings.json "extensions" array
  *
  * An extension is a TypeScript file that exports a default function:
- *   export default function (buddy: ExtensionAPI) { ... }
+ *   export default function (pi: ExtensionAPI) { ... }
  */
 
-import { createAgentSession, DefaultResourceLoader, SessionManager } from "@foxxytux/buddy-coding-agent";
+import { createAgentSession, DefaultResourceLoader, getAgentDir, SessionManager } from "@mariozechner/pi-coding-agent";
 
 // Extensions are discovered automatically from standard locations.
 // You can also add paths via settings.json or DefaultResourceLoader options.
 
 const resourceLoader = new DefaultResourceLoader({
+	cwd: process.cwd(),
+	agentDir: getAgentDir(),
 	additionalExtensionPaths: ["./my-logging-extension.ts", "./my-safety-extension.ts"],
 	extensionFactories: [
-		(buddy) => {
-			buddy.on("agent_start", () => {
+		(pi) => {
+			pi.on("agent_start", () => {
 				console.log("[Inline Extension] Agent starting");
 			});
 		},
@@ -46,25 +48,25 @@ console.log();
 
 // Example extension file (./my-logging-extension.ts):
 /*
-import type { ExtensionAPI } from "@foxxytux/buddy-coding-agent";
+import type { ExtensionAPI } from "@mariozechner/pi-coding-agent";
 
-export default function (buddy: ExtensionAPI) {
-	buddy.on("agent_start", async () => {
+export default function (pi: ExtensionAPI) {
+	pi.on("agent_start", async () => {
 		console.log("[Extension] Agent starting");
 	});
 
-	buddy.on("tool_call", async (event) => {
+	pi.on("tool_call", async (event) => {
 		console.log(\`[Extension] Tool: \${event.toolName}\`);
 		// Return { block: true, reason: "..." } to block execution
 		return undefined;
 	});
 
-	buddy.on("agent_end", async (event) => {
+	pi.on("agent_end", async (event) => {
 		console.log(\`[Extension] Done, \${event.messages.length} messages\`);
 	});
 
 	// Register a custom tool
-	buddy.registerTool({
+	pi.registerTool({
 		name: "my_tool",
 		label: "My Tool",
 		description: "Does something useful",
@@ -78,7 +80,7 @@ export default function (buddy: ExtensionAPI) {
 	});
 
 	// Register a command
-	buddy.registerCommand("mycommand", {
+	pi.registerCommand("mycommand", {
 		description: "Do something",
 		handler: async (args, ctx) => {
 			ctx.ui.notify(\`Command executed with: \${args}\`);

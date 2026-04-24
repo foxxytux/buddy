@@ -3,7 +3,7 @@
  * Displays a list of string options with keyboard navigation.
  */
 
-import { Container, getKeybindings, Spacer, Text, type TUI } from "@foxxytux/buddy-tui";
+import { Container, getKeybindings, Spacer, Text, type TUI } from "@mariozechner/pi-tui";
 import { theme } from "../theme/theme.js";
 import { CountdownTimer } from "./countdown-timer.js";
 import { DynamicBorder } from "./dynamic-border.js";
@@ -41,7 +41,7 @@ export class ExtensionSelectorComponent extends Container {
 		this.addChild(new DynamicBorder());
 		this.addChild(new Spacer(1));
 
-		this.titleText = new Text(theme.fg("accent", title), 1, 0);
+		this.titleText = new Text(theme.fg("accent", theme.bold(title)), 1, 0);
 		this.addChild(this.titleText);
 		this.addChild(new Spacer(1));
 
@@ -49,7 +49,7 @@ export class ExtensionSelectorComponent extends Container {
 			this.countdown = new CountdownTimer(
 				opts.timeout,
 				opts.tui,
-				(s) => this.titleText.setText(theme.fg("accent", `${this.baseTitle} (${s}s)`)),
+				(s) => this.titleText.setText(theme.fg("accent", theme.bold(`${this.baseTitle} (${s}s)`))),
 				() => this.onCancelCallback(),
 			);
 		}
